@@ -1,0 +1,57 @@
+/* RESET I PODSTAWY */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body,
+  html {
+    font-family: 'Helvetica Neue', sans-serif;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    color: #111;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* HEADER */
+  .header {
+    background-color: #111;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .nav a {
+    color: white;
+    margin-left: 1rem;
+    text-decoration: none;
+  }
+  
+  .nav a:hover,
+  .nav a.active {
+    color: #c8102e;
+  }
+  
+  /* MAIN CONTAINER (margin top for fixed header) */
+  main {
+    margin-top: 80px;
+    /* for header space */
+    flex: 1; /* Ensure main takes up remaining vertical space */
+  }
