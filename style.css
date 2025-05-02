@@ -199,3 +199,146 @@ main {
       grid-template-columns: 1fr;
   }
 }
+/* PASEK WYSZUKIWANIA */
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 1rem;
+  gap: 0.5rem;
+}
+
+.search-bar input {
+  padding: 0.6rem 1rem;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-bar button {
+  padding: 0.6rem 1.2rem;
+  background-color: #c8102e;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+  background-color: #a50e25;
+}
+
+/* SEKCJA DLACZEGO MY */
+.why-us {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.why-us h2 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  color: #222;
+}
+
+.why-us ul {
+  list-style: none;
+  padding: 0;
+}
+
+.why-us li {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+  color: #444;
+}
+
+/* PARTNERZY */
+.partners {
+  text-align: center;
+  margin-bottom: 2rem;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.partners h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #222;
+}
+
+.partner-logos {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.partner-logos img {
+  height: 50px;
+  opacity: 0.75;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.partner-logos img:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+/* FILTRY */
+.filters {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.filters h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.filters form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.filters select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-top: 0.5rem;
+}
+
+.filters button {
+  padding: 0.6rem 1rem;
+  background-color: #c8102e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 1.2rem;
+}
+
+.filters button:hover {
+  background-color: #a50e25;
+}
+
