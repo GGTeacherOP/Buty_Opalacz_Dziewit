@@ -1,84 +1,90 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sklep z Butami – Strona główna</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="img/fav.png" type="image/png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sklep z Butami – Air Jordan 1 Mocha</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="img/fav.png" type="image/png">
 </head>
-
 <body>
-    <header class="header">
-        <div class="logo">
-      <img src="img/logo.png" alt="Logo Buty.pl" style="height: 60px;">
-    </div>
-        <nav class="nav">
-            <a href="index.html" class="active">Strona główna</a>
+  <div class="wrapper">
+    <header>
+        <a href="index.html" class="active">Strona_główna</a>
             <a href="sklep.html">Sklep</a>
             <a href="koszyk.html">Koszyk</a>
             <a href="opinie.html">Opinie</a>
             <a href="aktualnosci.html">Aktualności</a>
-        </nav>
-        <div class="auth">
-          <a href="login.php">Zaloguj</a>
-          <a href="register.php">Zarejestruj</a>
-        </div>
+                <a href="login.php" class="zg">Zaloguj</a>
+                <a href="register.php" class="zg">Zarejestruj</a>   
     </header>
-    
-    <main class="product-page">
-        <div class="product-container">
-          <div class="gallery">
-            <img src="img/AF1white.jpg" alt="Nike Air Force 1" class="main-img" />
-            <div class="thumbnails">
-                <img src="img/AF1white.jpg">
-              <img src="img/AF1white2.jpg" alt="" />
-              <img src="img/AF1white3.jpg" alt="" />
-              <img src="img/AF1white4.jpg" alt="" />
-            </div>
-          </div>
-          <div class="product-details">
-            <h1>Nike Air Force 1</h1>
-            <p class="price">499 zł</p>
-            <p>Klasyczne sneakersy Nike Air Force 1 – ponadczasowy design, wygoda i styl. Idealne na co dzień.</p>
-    
-            <label>Rozmiar:
-              <select>
-                <option>Wybierz rozmiar</option>
-                <option>38</option>
-                <option>39</option>
-                <option>40</option>
-                <option>41</option>
-                <option>42</option>
-              </select>
-            </label>
-    
-            <label>Kolor:
-              <select>
-                <option>Biały</option>
-                <option>Czarny</option>
-              </select>
-            </label>
-    
-            <div class="buttons">
-              <button class="add-cart">Dodaj do koszyka</button>
-              <button class="buy-now">Kup teraz</button>
-            </div>
-          </div>
+
+  <main class="product-page">
+    <div class="product-container">
+      <div class="gallery">
+        <img src="img/AF1white.jpg" alt="Nike air force 1 " class="main-img" />
+        <div class="thumbnails">
+          <img src="img/AF1white.jpg" alt="Zdjęcie 1" />
+          <img src="img/AF1white2.jpg" alt="Zdjęcie 2" />
+          <img src="img/AF1white3.jpg" alt="Zdjęcie 3" />
+          <img src="img/AF1white4.jpg" alt="Zdjęcie 4" />
         </div>
-        <section class="opinie-produktu">
-            <h2>Opinie</h2>
-            <blockquote>⭐️⭐️⭐️⭐️⭐️ "Mega wygodne, kupuję już trzeci raz!" – Kasia</blockquote>
-            <blockquote>⭐️⭐️⭐️⭐️ "Szybka dostawa i super kontakt." – Michał</blockquote>
-          </section>
-        </main>
-    <footer class="footer">
-        <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
-    </footer>
+      </div>
+      <div class="product-details">
+        <h1>Nike Air Force 1 </h1>
+        <p class="price">699 zł</p>
+        <p>Stylowe sneakersy Ktore pasuja do kazdego codziennego outfitu bardzo wygodne i stylowe</p>
+
+        <label>Rozmiar:
+          <select id="product-size">
+            <option value="">Wybierz rozmiar</option>
+            <option>38</option>
+            <option>39</option>
+            <option>40</option>
+            <option>41</option>
+            <option>42</option>
+          </select>
+        </label>
+
+        <label>Kolor:
+          <select>
+            <option>Brązowy</option>
+            <option>Czarny</option>
+          </select>
+        </label>
+
+        <div class="buttons">
+          <button class="add-to-cart" data-name="Nike Air Jordan 1 High Mocha" data-price="699">Dodaj do koszyka</button>
+          <button class="buy-now">Kup teraz</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="opinie-produktu">
+      <h2>Opinie</h2>
+      <blockquote>⭐️⭐️⭐️⭐️⭐️ "Wyglądają świetnie, bardzo wygodne!" – Ania</blockquote>
+      <blockquote>⭐️⭐️⭐️⭐️ "Polecam, szybka wysyłka i super jakość." – Kuba</blockquote>
+    </section>
+  </main>
+</div>
+  <footer class="footer">
+    <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const thumbnails = document.querySelectorAll(".thumbnails img");
+      const mainImg = document.querySelector(".main-img");
   
-  
+      thumbnails.forEach((thumb) => {
+        thumb.addEventListener("click", () => {
+          if (mainImg && thumb.src) {
+            mainImg.src = thumb.src;
+          }
+        });
+      });
+    });
+  </script>
   
 </body>
-
 </html>
