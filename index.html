@@ -6,16 +6,17 @@
     <title>Document</title>
     <title>Sklep z Butami – Strona główna</title>
     <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="fav.png" type="image/png">
+    <link rel="icon" href="favi2.png" type="image/png">
 </head>
 <body>
     <header>
-        <img src="logo.png" alt="logo witryny">
-        <a href="index.html" class="active">Strona główna</a>
+        <a href="index.html" class="active">Strona_główna</a>
             <a href="sklep.html">Sklep</a>
             <a href="koszyk.html">Koszyk</a>
             <a href="opinie.html">Opinie</a>
             <a href="aktualnosci.html">Aktualności</a>
+                <a href="login.php" class="zg">Zaloguj</a>
+                <a href="register.php" class="zg">Zarejestruj</a>   
     </header>
     <nav>
         <p class="prz">Buty</p>
@@ -29,14 +30,37 @@
           <a href="zim.html">Buty zimowe</a>
           <a href="trap.html">Trapery</a>
         </div>
-        <div id="aa">
-        <p class="mar">Marka</p>
-        <div class="rr">
-          <a href="adidas.html">Adidas</a>
-        </div>
-        </div>
     </nav>
     <main>
+        <div class="pokaz">
+            <button onclick="plus(-1)">&#10094;</button>
+            <a href="prd50.html"><img class="pokazslajdow" src="baner1.jpg" style="width:100%"></a>
+            <a href="underar.html"><img class="pokazslajdow" src="baner2.jpg" style="width:100%"></a>
+            <a href="underar.html"><img class="pokazslajdow" src="baner3.jpg" style="width:100%"></a>
+          
+            
+            <button onclick="plus(1)">&#10095;</button>
+          </div>
+          <script>
+                var indeks = 1;
+                    pok(indeks);
+
+                        function plus(n) {
+                            pok(indeks += n);
+                        }
+
+                    function pok(n) {
+                        var i;
+                        var x = document.getElementsByClassName("pokazslajdow");
+                        if (n > x.length) {indeks = 1}
+                        if (n < 1) {indeks = x.length} ;
+                        for (i = 0; i < x.length; i++) {
+                            x[i].style.display = "none";
+                        }
+                        x[indeks-1].style.display = "block";
+                    }
+            </script>
+        </section>
 
         
     <footer>
