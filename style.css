@@ -20,6 +20,7 @@ header {
   justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+  padding: 20px;
 }
 
 header a {
@@ -397,5 +398,50 @@ footer.footer {
   text-align: center;
 }
 
+.filtry-container {
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.filtry-container input[type="text"],
+.filtry-container select {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.produkty-filtr {
+  padding-top: 1rem;
+}
+
+.filtry-container {
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.filtry-container input,
+.filtry-container select {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.produkty-filtr {
+  padding-top: 1rem;
+}
 
 
