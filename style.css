@@ -1,5 +1,18 @@
 header{
-    background-color: white;
+    background-color: gray;
+    font-style: italic;
+    font-weight: bold;
+    font-size:larger;
+    word-spacing: 100px;
+    padding: 20px;
+    text-align: center;
+    
+}
+header img{
+}
+
+header a{
+  color: white;
 }
 
 nav p:hover{
@@ -7,6 +20,7 @@ nav p:hover{
     font-weight: bold;
 }
 nav{
+    font-size: large;
     position: relative;
     display: inline-block;
   }
@@ -43,37 +57,49 @@ nav{
     background: #f3f4f6;
   }
 
-  .rr {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: white;
-    min-width: 160px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s;
-    pointer-events: none;
-    border-radius: 0.5rem;
-    float: left;
-  }
-
-  nav:hover .rr {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .rr a {
-    color: #374151;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    display: block;
-  }
-
-  .rr a:hover {
-    background: #f3f4f6;
-  }
   #aa{
     float: right;
   }
+
+  /* Do zaloguj, zarejestruj się w headerze*/
+  .zg{
+    color: rgb(233, 233, 233);
+    background-color: rgba(156, 156, 154, 0.966);
+    border: 1px solid rgb(255, 255, 255);
+    border-width: 2px;
+    padding: 3px;
+    margin: 2px;
+  }
+  /* Do zaloguj, zarejestruj się w headerze*/
+  .zg:hover{
+    
+    color: rgb(233, 233, 233);
+    background-color: rgba(156, 156, 154, 0.966);
+    border: 1px solid rgb(255, 255, 255);
+  }
+  nav{
+    background-color: #ffffff;
+    width:100%;
+    height: 50px;
+    text-align: center ;
+  }
+
+  /* Stopka strony*/
+  footer{
+    background-color: gray;
+    color: white;
+    font-size: large;
+  }
+  /* Do baneru */
+  .pokaz{
+    display: flex;
+  }
+  .pokazslajdow {
+    display:none;
+    
+  }
+  .pokaz button{
+    background-color: rgb(82, 82, 82);
+    color: white;
+  }
+  
