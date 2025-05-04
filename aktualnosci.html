@@ -6,20 +6,61 @@
     <title>Document</title>
     <title>Sklep z Butami – Strona główna</title>
     <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="favi2.png" type="image/png">
+    <link rel="icon" href="img/favi2.png" type="image/png">
     <style>
-        .nowosc{
-            float: left;
-            width: 200px;  
-            height: 300px;
-        }
-        section{
-            padding: 20px;
-            margin: 20px;
-            width: 90%;
-            height: 50%;
-            text-align: center;
-        }
+        .news-section {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .news-title {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+    }
+
+    
+
+    .news-card {
+      background-color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 0;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+
+    .news-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .news-card img {
+      width: 200px;
+      height: 300px;
+      object-fit: cover;
+      float: left;
+    }
+
+    .news-card-content {
+      padding: 1rem;
+    }
+
+    .news-card-content h3 {
+      margin-bottom: 0.5rem;
+      color: #111;
+    }
+
+    .news-card-content p {
+      font-size: 1rem;
+      color: #444;
+    }
+
+    .news-card-content .date {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #999;
+    }
     </style>
 </head>
 <body>
@@ -36,23 +77,40 @@
     <nav>
         <p>Sprawdź co nowego u nas!</p>
     </nav>
-    <main>
-      <section clas="aa1">
-        <img src="akt1.png" class="nowosc">
+    <main class="news-section">
+        <h1 class="news-title">📰 Najnowsze aktualności</h1>
+        <div class="news-cards">
+      <div class="news-card">
+        <img src="img/akt1.png" class="nowosc" alt="Przykładowe zdjęcie">
+        <div class="news-card-content">
         <h3>Już od 25 maja do 3 czerwca – promocja na dowonly drugi kupiony produkt.</h3>
-        <p>Hit cenowy, już od 25 maja można będzie załapać sie na zniżkę nawet do 75%.<br> Promocja ta obowiązuje dowolny drugi kupiony produkt,
-            pierwszy produkt musi<br> zostać zakupiony w minimalnej cenie od 300 zł żeby ta promocja obowiązywała.
+        <p>Hit cenowy, już od 25 maja można będzie załapać sie na zniżkę nawet do 75%. Promocja ta obowiązuje<br> dowolny drugi kupiony produkt,
+            pierwszy produkt musi zostać zakupiony w minimalnej cenie od 300 zł żeby ta promocja obowiązywała.
         </p>
-      </section>
-      <section>
-        <img src="akt2.jpg" class="nowosc">
+        <span class="date">2 maja 2025</span>
+        </div>
+    </div>
+      <div class="news-card">
+        <img src="img/akt2.jpg" class="nowosc" alt="Buty damskie OLAVOGA">
+        <div class="news-card-content">
         <h3>Nowość - buty damskie OLAVOGA Atlethic beżowe</h3>
-        <p>Sportowe sneakersy na platformie wykonane z najlepszej jakości eko skóry.<br> Podeszwa
+        <p>Sportowe sneakersy na platformie wykonane z najlepszej jakości eko skóry. Podeszwa
         gwarantująca doskonałą amortyzację. Na języku wytłoczone logo marki<br> OLAVOGA z nazwą modelu. 
         Oddychający i miękki materiał, logowane sznurówki.
         </p>
-      </section>
+        <span class="date">28 kwietnia 2025</span>
+        </div>
+    </div>
+    <div class="news-card">
+        <img src="img/sklep-nowosc.jpg" alt="Nowy punkt odbioru">
+        <div class="news-card-content">
+          <h3>📍 Nowy punkt odbioru</h3>
+          <p>Otworzyliśmy nowy punkt w Warszawie – ul. Przykładowa 12. Odbierz zamówienie lokalnie!</p>
+          <span class="date">28 kwietnia 2025</span>
+        </div>
+      </div>
       </main>
+    </div>
     <footer>
         <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
     </footer>
