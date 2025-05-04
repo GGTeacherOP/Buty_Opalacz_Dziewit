@@ -1,58 +1,56 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <title>Sklep z Butami – Strona główna</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="favi2.png" type="image/png">
-    <style>
-       section{
-          padding: 20px;
-          width:33%;
-          text-align: center;
-      }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opinie</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="img/favi2.png" type="image/png">
 </head>
 <body>
-  <div class="wrapper">
-    <header>
-        <a href="index.html" class="active">Strona_główna</a>
-            <a href="sklep.html">Sklep</a>
-            <a href="koszyk.html">Koszyk</a>
-            <a href="opinie.html">Opinie</a>
-            <a href="aktualnosci.html">Aktualności</a>
-                <a href="login.php" class="zg">Zaloguj</a>
-                <a href="register.php" class="zg">Zarejestruj</a>   
-    </header>
-    <nav>
-        <p>Pamiętaj o zostawieniu opinii jeśli ten sklep się podobał 😉</p>
-    </nav>
-    <main>
-      <section class="aa">
-        <h2>Opinie o sklepie</h2>
-        <p>Gorąco polecam - Agnieszka</p>
-        Dodaj własny komentarz: <input type="text" name="opinia1">
-        <button name="jed">Opublikuj</button>
-      </section>
-      <section class="bb">
-        <h2>Opinie o produktach</h2>
-        <p>Wyśmienite produkty, zachęcam do kupna - Michał</p>
+    <div class="wrapper">
+  <header>
+    <a href="index.html">Strona Główna</a>
+    <a href="sklep.html">Sklep</a>
+    <a href="koszyk.html">Koszyk</a>
+    <a href="kontakt.html">Kontakt</a>
+    <a href="opinie.html" class="active">Opinie</a>
+    <a href="aktualnosci.html">Aktualności</a>
+    <a href="#" class="zg">Zaloguj się</a>
+  </header>
+  <nav> <p>Pamiętaj o zostawieniu opinii jeśli ten sklep się podobał 😉</p> </nav>
+  <main class="container opinie">
+    <h1>Opinie naszych klientów</h1>
 
-        Dodaj własny komentarz: <input type="text" name="opinia2">
-        <button name="dwa">Opublikuj</button>
-      </section>
-      <section class="cc">
-        <h2>Opinie o dostawie</h2>
-        <p>Wysyłka natychmiastowa, buty dotarły nieuszkodzone - Mieczysław</p>
-        Dodaj własny komentarz: <input type="text" name="opinia3">
-        <button name="trz">Opublikuj</button>
-      </section>
-      </main>
-    <footer>
-        <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
-    </footer>
-    </div>
+    <section class="lista-opinii">
+      <article class="opinia">
+        <h3>Anna K.</h3>
+        <p>Super obsługa i szybka dostawa. Buty są oryginalne i dobrze zapakowane. Polecam!</p>
+      </article>
+
+      <article class="opinia">
+        <h3>Mateusz W.</h3>
+        <p>Kupiłem Jordany – przyszły w 2 dni. Wszystko zgodne z opisem.</p>
+      </article>
+
+      <article class="opinia">
+        <h3>Karolina M.</h3>
+        <p>Duży wybór modeli i dobre ceny. Na pewno wrócę po więcej!</p>
+      </article>
+    </section>
+
+    <section class="formularz-opinii">
+      <h2>Dodaj swoją opinię</h2>
+      <form>
+        <input type="text" placeholder="Twoje imię" required>
+        <textarea placeholder="Twoja opinia..." required></textarea>
+        <button type="submit">Wyślij</button>
+      </form>
+    </section>
+  </main>
+</div>
+  <footer class="footer">
+    <p>&copy; 2025 Sklep z Butami. Wszystkie prawa zastrzeżone.</p>
+  </footer>
 </body>
 </html>
