@@ -445,4 +445,27 @@ footer.footer {
   padding-top: 1rem;
 }
 
+/*Do pliku z aktualnościami*/
+#nowosc1{
+  width: 200px;  
+  float: left;
+  height: 300px;
+}
+.aa1{
+    padding: 20px;
+    margin: 20px;
+    width: 90%;
+    text-align: center;
+    height: 50%;
+}
 
+/*Opinie*/
+.aa{
+  float:left;
+}
+.bb{
+  float:left;
+}
+.cc{
+  float:left;
+}
