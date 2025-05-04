@@ -121,16 +121,67 @@
     </footer>
   </div>
   <script>
-    const searchInput = document.getElementById("searchInput");
-    const filterBrand = document.getElementById("filterBrand");
-    const filterType = document.getElementById("filterType");
-    const priceRange = document.getElementById("priceRange");
-    const priceValue = document.getElementById("priceValue");
-    const sortOrder = document.getElementById("sortOrder");
-    const productList = document.getElementById("productList");
-    const products = Array.from(productList.querySelectorAll(".produkt"));
-</script>
- 
+    // Pobieranie elementów filtrów
+    const poleWyszukiwania = document.getElementById("searchInput");
+    const filtrMarka = document.getElementById("filterBrand");
+    const filtrRodzaj = document.getElementById("filterType");
+    const suwakCeny = document.getElementById("priceRange");
+    const wartoscCeny = document.getElementById("priceValue");
+    const sortowanieCeny = document.getElementById("sortOrder");
+  
+    const listaProduktow = document.getElementById("productList");
+    const wszystkieProdukty = Array.from(listaProduktow.querySelectorAll(".produkt"));
+  
+    // Aktualizacja tekstu przy suwaku
+    suwakCeny.addEventListener("input", () => {
+      wartoscCeny.textContent = suwakCeny.value + " zł";
+      filtrujProdukty();
+    });
+  
+    // Nasłuchiwanie zmian na filtrach
+    [poleWyszukiwania, filtrMarka, filtrRodzaj, sortowanieCeny].forEach(element => {
+      element.addEventListener("input", filtrujProdukty);
+    });
+  
+    // Główna funkcja filtrująca
+    function filtrujProdukty() {
+      const tekstWyszukiwania = poleWyszukiwania.value.toLowerCase();
+      const wybranaMarka = filtrMarka.value;
+      const wybranyRodzaj = filtrRodzaj.value;
+      const maksCena = parseInt(suwakCeny.value);
+      const kolejnoscSortowania = sortowanieCeny.value;
+  
+      // Filtrowanie produktów
+      let pasujaceProdukty = wszystkieProdukty.filter(produkt => {
+        const nazwa = produkt.querySelector("p").textContent.toLowerCase();
+        const marka = produkt.dataset.brand;
+        const rodzaj = produkt.dataset.type;
+        const cena = parseInt(produkt.dataset.price);
+  
+        return (
+          nazwa.includes(tekstWyszukiwania) &&
+          (!wybranaMarka || marka === wybranaMarka) &&
+          (!wybranyRodzaj || rodzaj === wybranyRodzaj) &&
+          cena <= maksCena
+        );
+      });
+  
+      // Sortowanie cen
+      if (kolejnoscSortowania === "asc") {
+        pasujaceProdukty.sort((a, b) => a.dataset.price - b.dataset.price);
+      } else if (kolejnoscSortowania === "desc") {
+        pasujaceProdukty.sort((a, b) => b.dataset.price - a.dataset.price);
+      }
+  
+      // Aktualizacja widoku
+      listaProduktow.innerHTML = "";
+      pasujaceProdukty.forEach(produkt => listaProduktow.appendChild(produkt));
+    }
+  
+    // Pierwsze wywołanie na starcie
+    filtrujProdukty();
+  </script>
+  
 </body>
 </html>
 
