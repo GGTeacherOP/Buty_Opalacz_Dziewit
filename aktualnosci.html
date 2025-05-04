@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aktualności</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .news-section {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <title>Sklep z Butami – Strona główna</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="img/favi2.png" type="image/png">
+    <style>
+        .news-section {
       max-width: 1200px;
       margin: 2rem auto;
       padding: 0 1rem;
+      font-size: 25px;
     }
 
     .news-title {
@@ -18,19 +21,15 @@
       margin-bottom: 2rem;
     }
 
-    .news-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
+    
 
     .news-card {
       background-color: #fff;
-      border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       padding: 0;
       overflow: hidden;
       transition: transform 0.3s;
+      border-radius: 20px;
     }
 
     .news-card:hover {
@@ -38,9 +37,10 @@
     }
 
     .news-card img {
-      width: 100%;
-      height: 200px;
+      width: 200px;
+      height: 250px;
       object-fit: cover;
+      float: left;
     }
 
     .news-card-content {
@@ -63,57 +63,66 @@
       font-size: 0.85rem;
       color: #999;
     }
-  </style>
+    </style>
 </head>
 <body>
-    <div class="wrapper">
-  <header>
-    <a href="index.html">Strona Główna</a>
-    <a href="sklep.html">Sklep</a>
-    <a href="koszyk.html">Koszyk</a>
-    <a href="kontakt.html">Kontakt</a>
-    <a href="opinie.html">Opinie</a>
-    <a href="aktualnosci.html" class="active">Aktualności</a>
-    <a href="#" class="zg">Zaloguj się</a>
-  </header>
-
-  <main class="news-section">
-    <h1 class="news-title">📰 Najnowsze aktualności</h1>
-
-    <div class="news-cards">
-
+  <div class="wrapper">
+    <header>
+        <a href="index.html">Strona główna</a>
+            <a href="sklep.html">Sklep</a>
+            <a href="koszyk.html">Koszyk</a>
+            <a href="kontakt.html">Kontakt</a>
+            <a href="opinie.html">Opinie</a>
+            <a href="aktualnosci.html" class="active">Aktualności</a>
+                <a href="login.php" class="zg">Zaloguj</a>
+                <a href="register.php" class="zg">Zarejestruj</a>   
+    </header>
+    <nav>
+        <p>Sprawdź co nowego u nas!</p>
+    </nav>
+    <main class="news-section">
+        <h1 class="news-title">📰 Najnowsze aktualności</h1>
+        <div class="news-cards">
       <div class="news-card">
-        <img src="img/nike-drop.jpg" alt="Nowa kolekcja Nike">
+        <img src="img/aktualnosci/2.png" class="nowosc" alt="Przykładowe zdjęcie">
         <div class="news-card-content">
-          <h3>🔥 Nowa kolekcja Nike</h3>
-          <p>Właśnie dodaliśmy najnowsze modele Air Max i Dunk Low. Nowe kolory i edycje limitowane!</p>
-          <span class="date">2 maja 2025</span>
+          <h3>👟 Nowa Kolekcja Campusów</h3>
+          <p>Przedstawiamy najnowszą kolekcję butów Adidas Campus – klasyka w nowoczesnym wydaniu! Idealne na co dzień, wykonane z wysokiej jakości materiałów, zapewniają maksymalny komfort i styl. Dostępne w wielu wariantach kolorystycznych.</p>
+          <p class="date">2 maja 2025</p>
+        </div>
+        </div>
+    </div><br>
+    <a href="aktualnosciJordany.html" style="text-decoration: none; color: inherit; display: block;">
+      <div class="news-card">
+        <img src="img/aktualnosci/3.png" class="nowosc" alt="Buty Jordan">
+        <div class="news-card-content">
+          <h3>🔥 Nowa kolekcja Jordan & Nike</h3>
+          <p>Do oferty trafiły limitowane modele Air Jordan 1, Air Jordan 1 High oraz nowości od Nike! Wyjątkowy design, precyzja wykonania i wygoda – to cechy, które wyróżniają tę kolekcję. Idealne dla fanów streetwearu i sneakerheadów.</p>
+          <p class="date">28 kwietnia 2025</p>
         </div>
       </div>
-
-      <div class="news-card">
-        <img src="img/jordan-event.jpg" alt="Wydarzenie Jordan">
+    </a>
+    
+  <br>
+    <div class="news-card">
+        <img src="img/aktualnosci/5.png" alt="klapki">
         <div class="news-card-content">
-          <h3>👟 Premiera Jordan 6</h3>
-          <p>Już dostępne w sprzedaży. Sprawdź wyjątkowy design i komfort. Ilość ograniczona!</p>
-          <span class="date">1 maja 2025</span>
+          <h3>👟 Nowa kolekcja klapkow</h3>
+          <p>Nowa kolekcja Klapkow Obczaj co nowego czekaja na ciebie Klapki z roznych marek NIKE ADIDASA I JORDANA bardzo Korzystnych cenach zobaczcie sami!!!</p>
+          <span class="date">29 kwietnia 2025</span>
         </div>
       </div>
-
-      <div class="news-card">
-        <img src="img/sklep-nowosc.jpg" alt="Nowy punkt odbioru">
-        <div class="news-card-content">
-          <h3>📍 Nowy punkt odbioru</h3>
-          <p>Otworzyliśmy nowy punkt w Warszawie – ul. Przykładowa 12. Odbierz zamówienie lokalnie!</p>
-          <span class="date">28 kwietnia 2025</span>
-        </div>
-      </div>
-
+      </main>
     </div>
-  </main>
-</div>
-  <footer class="footer">
-    <p>&copy; 2025 Sklep z Butami. Wszystkie prawa zastrzeżone.</p>
-  </footer>
+    <footer>
+        <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
+    </footer>
+    </div>
 </body>
 </html>
+
+
+
+
+    
+  
