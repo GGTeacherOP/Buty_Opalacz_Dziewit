@@ -12,6 +12,7 @@
       max-width: 1200px;
       margin: 2rem auto;
       padding: 0 1rem;
+      font-size: 25px;
     }
 
     .news-title {
@@ -28,6 +29,7 @@
       padding: 0;
       overflow: hidden;
       transition: transform 0.3s;
+      border-radius: 20px;
     }
 
     .news-card:hover {
@@ -36,7 +38,7 @@
 
     .news-card img {
       width: 200px;
-      height: 300px;
+      height: 250px;
       object-fit: cover;
       float: left;
     }
@@ -66,11 +68,12 @@
 <body>
   <div class="wrapper">
     <header>
-        <a href="index.html" class="active">Strona_główna</a>
+        <a href="index.html">Strona główna</a>
             <a href="sklep.html">Sklep</a>
             <a href="koszyk.html">Koszyk</a>
+            <a href="kontakt.html">Kontakt</a>
             <a href="opinie.html">Opinie</a>
-            <a href="aktualnosci.html">Aktualności</a>
+            <a href="aktualnosci.html" class="active">Aktualności</a>
                 <a href="login.php" class="zg">Zaloguj</a>
                 <a href="register.php" class="zg">Zarejestruj</a>   
     </header>
@@ -81,28 +84,25 @@
         <h1 class="news-title">📰 Najnowsze aktualności</h1>
         <div class="news-cards">
       <div class="news-card">
-        <img src="img/akt1.png" class="nowosc" alt="Przykładowe zdjęcie">
+        <img src="img/aktualnosci/1.png" class="nowosc" alt="Przykładowe zdjęcie">
         <div class="news-card-content">
-        <h3>Już od 25 maja do 3 czerwca – promocja na dowonly drugi kupiony produkt.</h3>
-        <p>Hit cenowy, już od 25 maja można będzie załapać sie na zniżkę nawet do 75%. Promocja ta obowiązuje<br> dowolny drugi kupiony produkt,
-            pierwszy produkt musi zostać zakupiony w minimalnej cenie od 300 zł żeby ta promocja obowiązywała.
+        <h3>Promocja 25 maja - 3 czerwca</h3>
+        <p>Promocja na drugi kupiony produkt - rabat do 75%! Dotyczy to jedynie zakupu powyżej 300zł. Obowiązuje to od dnia 25 maja do 3 czerwca 2025. Nie przegap tej okazji!
         </p>
-        <span class="date">2 maja 2025</span>
+        <span class="date">23 maja 2025</span>
         </div>
-    </div>
+    </div><br>
       <div class="news-card">
-        <img src="img/akt2.jpg" class="nowosc" alt="Buty damskie OLAVOGA">
+        <img src="img/aktualnosci/2.png" class="nowosc" alt="Buty damskie OLAVOGA">
         <div class="news-card-content">
-        <h3>Nowość - buty damskie OLAVOGA Atlethic beżowe</h3>
-        <p>Sportowe sneakersy na platformie wykonane z najlepszej jakości eko skóry. Podeszwa
-        gwarantująca doskonałą amortyzację. Na języku wytłoczone logo marki<br> OLAVOGA z nazwą modelu. 
-        Oddychający i miękki materiał, logowane sznurówki.
+        <h3>Nowa kolekcja Jordan & Nike</h3>
+        <p>Wprowadziliśmy nowe modele Air Jordan i OLAVOGA. Limitowane edycje i najnowsze kolory już dostępne w sklepie online i stacjonarnym.
         </p>
         <span class="date">28 kwietnia 2025</span>
         </div>
-    </div>
+    </div><br>
     <div class="news-card">
-        <img src="img/sklep-nowosc.jpg" alt="Nowy punkt odbioru">
+        <img src="img/sklep.jpg" alt="Nowy punkt odbioru">
         <div class="news-card-content">
           <h3>📍 Nowy punkt odbioru</h3>
           <p>Otworzyliśmy nowy punkt w Warszawie – ul. Przykładowa 12. Odbierz zamówienie lokalnie!</p>
