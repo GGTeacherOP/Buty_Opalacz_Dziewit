@@ -12,7 +12,7 @@
     <header>
         <a href="index.html" class="active">Strona główna</a>
             <a href="sklep.html">Sklep</a>
-            <a href="koszyk.html">Koszyk</a>
+            <a href="koszyk.php">Koszyk</a>
             <a href="kontakt.html">Kontakt</a>
             <a href="opinie.html">Opinie</a>
             <a href="aktualnosci.html">Aktualności</a>
@@ -33,7 +33,7 @@
       </div>
       <div class="product-details">
         <h1>Nike Air Force 1 </h1>
-        <p class="price">699 zł</p>
+        <p class="price">499 zł</p>
         <p>Stylowe sneakersy Ktore pasuja do kazdego codziennego outfitu bardzo wygodne i stylowe</p>
 
         <label>Rozmiar:
@@ -58,7 +58,13 @@
         </label>
 
         <div class="buttons">
-          <button class="add-to-cart" data-name="Nike Air Force 1" data-price="699">Dodaj do koszyka</button>
+          <form action="koszyk.php" method="POST">
+  <input type="hidden" name="nazwa" value="Nike Air Force 1">
+  <input type="hidden" name="cena" value="499">
+  <input type="hidden" name="zdjecie" value="img/Nike/AF1/AF1white.jpg">
+  <button type="submit">Dodaj do koszyka</button>
+</form>
+
           <button class="buy-now">Kup teraz</button>
         </div>
       </div>

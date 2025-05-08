@@ -544,3 +544,18 @@ footer.footer {
   color: #d11111;
   margin-bottom: 1rem;
 }
+
+
+.usun-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.usun-btn:hover {
+    background-color: #c82333;
+}

@@ -50,7 +50,7 @@
     <header>
       <a href="index.html">Strona główna</a>
       <a href="sklep.html">Sklep</a>
-      <a href="koszyk.html">Koszyk</a>
+      <a href="koszyk.php">Koszyk</a>
       <a href="kontakt.html">Kontakt</a>
       <a href="opinie.html">Opinie</a>
       <a href="aktualnosci.html">Aktualności</a>
