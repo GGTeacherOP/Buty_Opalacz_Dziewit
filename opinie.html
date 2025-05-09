@@ -5,8 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Opinie</title>
   <link rel="stylesheet" href="css/style.css">
+  
 </head>
 <body>
+  <style>
+/* Styl sekcji z opiniami */
+.lista-opinii {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  margin-bottom: 40px;
+}
+
+.opinia {
+  padding: 15px 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-left: 4px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.opinia h3 {
+  margin-top: 0;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.opinia p {
+  margin: 8px 0 0;
+  color: #555;
+}
+
+/* Styl formularza dodawania opinii */
+.formularz-opinii {
+  padding: 20px;
+  background-color: #eef1f5;
+  border-radius: 12px;
+}
+
+.formularz-opinii h2 {
+  margin-top: 0;
+  font-size: 1.4em;
+}
+
+.formularz-opinii form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.formularz-opinii input,
+.formularz-opinii textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+  width: 100%;
+}
+
+.formularz-opinii button {
+  width: fit-content;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.formularz-opinii button:hover {
+  background-color: #0056b3;
+}
+
+</style>
     <div class="wrapper">
   <header>
     <a href="index.html">Strona Główna</a>
@@ -15,7 +91,7 @@
     <a href="kontakt.html">Kontakt</a>
     <a href="opinie.html" class="active">Opinie</a>
     <a href="aktualnosci.html">Aktualności</a>
-    <a href="login.php" class="zg">Zaloguj się</a>
+    <a href="login.php" class="zg">Zaloguj</a>
     <a href="register.php" class="zg">Zarejestruj</a>   
   </header>
 
