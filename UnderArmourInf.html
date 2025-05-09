@@ -50,10 +50,15 @@
 
       
 
-        <div class="buttons">
-          <button class="add-to-cart" data-name="Under Armour Infinite" data-price="699">Dodaj do koszyka</button>
-          <button class="buy-now">Kup teraz</button>
-        </div>
+                      <div class="buttons">
+  <form action="koszyk.php" method="POST">
+    <input type="hidden" name="nazwa" value="Under Armour Infinite">
+    <input type="hidden" name="cena" value="699">
+    <input type="hidden" name="zdjecie" value="img/UnderArmour/Infinite/UA_W_Infinite_Elite_2_1.png">
+    <button type="submit" class="buy-now">Dodaj do koszyka</button>
+  </form>
+  <button class="buy-now">Kup teraz</button>
+</div>
       </div>
     </div>
 

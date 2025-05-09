@@ -50,10 +50,16 @@
 
       
 
-        <div class="buttons">
-          <button class="add-to-cart" data-name="Nike Air Force 1" data-price="499">Dodaj do koszyka</button>
-          <button class="buy-now">Kup teraz</button>
-        </div>
+      <div class="buttons">
+  <form action="koszyk.php" method="POST">
+    <input type="hidden" name="nazwa" value="Nike Air Force 1">
+    <input type="hidden" name="cena" value="499">
+    <input type="hidden" name="zdjecie" value="img/Nike/AF1/AF1white.jpg">
+    <button type="submit" class="buy-now">Dodaj do koszyka</button>
+  </form>
+  <button class="buy-now">Kup teraz</button>
+</div>
+
       </div>
     </div>
 

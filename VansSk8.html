@@ -50,10 +50,15 @@
 
       
 
-        <div class="buttons">
-          <button class="add-to-cart" data-name="Vans Sk8-Hi Bialo-Czarne" data-price="429">Dodaj do koszyka</button>
-          <button class="buy-now">Kup teraz</button>
-        </div>
+                           <div class="buttons">
+  <form action="koszyk.php" method="POST">
+    <input type="hidden" name="nazwa" value="Vans Sk8-Hi Biało-Czarne">
+    <input type="hidden" name="cena" value="429">
+    <input type="hidden" name="zdjecie" value="img/VANS/VansSk8/VansSk81.avif">
+    <button type="submit" class="buy-now">Dodaj do koszyka</button>
+  </form>
+  <button class="buy-now">Kup teraz</button>
+</div>
       </div>
     </div>
 

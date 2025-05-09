@@ -50,10 +50,15 @@
 
       
 
-        <div class="buttons">
-          <button class="add-to-cart" data-name="Under Armour Magnetico" data-price="299">Dodaj do koszyka</button>
-          <button class="buy-now">Kup teraz</button>
-        </div>
+              <div class="buttons">
+  <form action="koszyk.php" method="POST">
+    <input type="hidden" name="nazwa" value="Under Armour Magnetico">
+    <input type="hidden" name="cena" value="299">
+    <input type="hidden" name="zdjecie" value="img/UnderArmour/Magnetico/UA_Magnetico_Elite_4Fg_1.png">
+    <button type="submit" class="buy-now">Dodaj do koszyka</button>
+  </form>
+  <button class="buy-now">Kup teraz</button>
+</div>
       </div>
     </div>
 

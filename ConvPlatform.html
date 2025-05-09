@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="product-details">
-        <h1>Converse All Star Platform Czarny</h1>
+        <h1>Converse All Star Platform </h1>
         <p class="price">399 zł</p>
         <p>Stylowe tenisówki</p>
 
@@ -50,10 +50,15 @@
 
       
 
-        <div class="buttons">
-          <button class="add-to-cart" data-name="Converse All Star Platform Czarny" data-price="399">Dodaj do koszyka</button>
-          <button class="buy-now">Kup teraz</button>
-        </div>
+             <div class="buttons">
+  <form action="koszyk.php" method="POST">
+    <input type="hidden" name="nazwa" value="Converse All Star Platform ">
+    <input type="hidden" name="cena" value="399">
+    <input type="hidden" name="zdjecie" value="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg">
+    <button type="submit" class="buy-now">Dodaj do koszyka</button>
+  </form>
+  <button class="buy-now">Kup teraz</button>
+</div>
       </div>
     </div>
 

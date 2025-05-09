@@ -50,10 +50,15 @@
 
       
 
-        <div class="buttons">
-          <button class="add-to-cart" data-name="Jordan 4 Military Black" data-price="1399">Dodaj do koszyka</button>
-          <button class="buy-now">Kup teraz</button>
-        </div>
+            <div class="buttons">
+  <form action="koszyk.php" method="POST">
+    <input type="hidden" name="nazwa" value="Jordan 4 Military Black">
+    <input type="hidden" name="cena" value="1399">
+    <input type="hidden" name="zdjecie" value="img/Jordan/Military/Military1.jpg">
+    <button type="submit" class="buy-now">Dodaj do koszyka</button>
+  </form>
+  <button class="buy-now">Kup teraz</button>
+</div>
       </div>
     </div>
 

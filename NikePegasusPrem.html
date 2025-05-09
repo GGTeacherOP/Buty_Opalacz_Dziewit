@@ -50,10 +50,15 @@
 
       
 
-        <div class="buttons">
-          <button class="add-to-cart" data-name="Nike Pegasus Premium" data-price="899">Dodaj do koszyka</button>
-          <button class="buy-now">Kup teraz</button>
-        </div>
+                    <div class="buttons">
+  <form action="koszyk.php" method="POST">
+    <input type="hidden" name="nazwa" value="Nike Pegasus Premum">
+    <input type="hidden" name="cena" value="899">
+    <input type="hidden" name="zdjecie" value="img/Nike/Nike Pegasus Premium/pegasusprem1.png">
+    <button type="submit" class="buy-now">Dodaj do koszyka</button>
+  </form>
+  <button class="buy-now">Kup teraz</button>
+</div>
       </div>
     </div>
 

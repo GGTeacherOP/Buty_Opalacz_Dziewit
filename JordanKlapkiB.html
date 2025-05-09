@@ -50,10 +50,16 @@
 
       
 
-        <div class="buttons">
-          <button class="add-to-cart" data-name="Jordan Klapki Biale" data-price="250">Dodaj do koszyka</button>
-          <button class="buy-now">Kup teraz</button>
-        </div>
+       
+      <div class="buttons">
+  <form action="koszyk.php" method="POST">
+    <input type="hidden" name="nazwa" value="Jordan Klapki Białe">
+    <input type="hidden" name="cena" value="250">
+    <input type="hidden" name="zdjecie" value="img/Jordan/KlapkiBiale/1.avif">
+    <button type="submit" class="buy-now">Dodaj do koszyka</button>
+  </form>
+  <button class="buy-now">Kup teraz</button>
+</div>
       </div>
     </div>
 
