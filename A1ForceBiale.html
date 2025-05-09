@@ -3,17 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sklep z Butami – Air Jordan 1 Mocha</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" href="img/fav.png" type="image/png">
+  <title>Sklep z Butami – Nike Air Force 1</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="img/favi2.png" type="image/png">
 </head>
 <body>
-  <div class="wrapper">
+    <div class="wrapper">
     <header>
-        <a href="index.html" class="active">Strona główna</a>
-            <a href="sklep.html">Sklep</a>
+        <a href="index.html">Strona główna</a>
+            <a href="sklep.html" class="active">Sklep</a>
             <a href="koszyk.php">Koszyk</a>
-            <a href="kontakt.html">Kontakt</a>
             <a href="opinie.html">Opinie</a>
             <a href="aktualnosci.html">Aktualności</a>
                 <a href="login.php" class="zg">Zaloguj</a>
@@ -23,18 +22,18 @@
   <main class="product-page">
     <div class="product-container">
       <div class="gallery">
-        <img src="img/Nike/AF1/AF1white.jpg" alt="Nike air force 1 " class="main-img" />
+        <img src="img/Nike/Af1/AF1white.jpg" alt="Nike Air Force 1" class="main-img" />
         <div class="thumbnails">
-          <img src="img/Nike/AF1/AF1white.jpg" alt="Zdjęcie 1" />
-          <img src="img/Nike/AF1/AF1white2.jpg" alt="Zdjęcie 2" />
-          <img src="img/Nike/AF1/AF1white3.jpg" alt="Zdjęcie 3" />
-          <img src="img/Nike/AF1/AF1white4.jpg" alt="Zdjęcie 4" />
+          <img src="img/Nike/Af1/AF1white.jpg" alt="Zdjęcie 1" />
+          <img src="img/Nike/Af1/AF1white2.jpg" alt="Zdjęcie 2" />
+          <img src="img/Nike/Af1/AF1white3.jpg" alt="Zdjęcie 3" />
+          <img src="img/Nike/Af1/AF1white4.jpg" alt="Zdjęcie 4" />
         </div>
       </div>
       <div class="product-details">
-        <h1>Nike Air Force 1 </h1>
+        <h1>Nike Air Force 1</h1>
         <p class="price">499 zł</p>
-        <p>Stylowe sneakersy Ktore pasuja do kazdego codziennego outfitu bardzo wygodne i stylowe</p>
+        <p>Stylowe sneakersy</p>
 
         <label>Rozmiar:
           <select id="product-size">
@@ -46,25 +45,13 @@
             <option>42</option>
             <option>43</option>
             <option>44</option>
-            <option>45</option>
           </select>
         </label>
 
-        <label>Kolor:
-          <select>
-            <option>Brązowy</option>
-            <option>Czarny</option>
-          </select>
-        </label>
+      
 
         <div class="buttons">
-          <form action="koszyk.php" method="POST">
-  <input type="hidden" name="nazwa" value="Nike Air Force 1">
-  <input type="hidden" name="cena" value="499">
-  <input type="hidden" name="zdjecie" value="img/Nike/AF1/AF1white.jpg">
-  <button type="submit">Dodaj do koszyka</button>
-</form>
-
+          <button class="add-to-cart" data-name="Nike Air Force 1" data-price="499">Dodaj do koszyka</button>
           <button class="buy-now">Kup teraz</button>
         </div>
       </div>
@@ -72,14 +59,15 @@
 
     <section class="opinie-produktu">
       <h2>Opinie</h2>
-      <blockquote>⭐️⭐️⭐️⭐️⭐️ "Wyglądają świetnie, bardzo wygodne!" – Ania</blockquote>
-      <blockquote>⭐️⭐️⭐️⭐️ "Polecam, szybka wysyłka i super jakość." – Kuba</blockquote>
+      <blockquote>⭐️⭐️⭐️⭐️⭐️ "Cudnie wyglądają, bardzo polecam!" – Agnieszka</blockquote>
+      <blockquote>⭐️⭐️⭐️⭐️ "But dotarł w idealnym stanie, dostawa natychmiastowa." – Elżbieta</blockquote>
     </section>
   </main>
 </div>
   <footer class="footer">
     <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
   </footer>
+
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
