@@ -1,9 +1,7 @@
-<?php
-session_start(); // Uruchomienie sesji
-$zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest zalogowany
-?>
+
 <?php
 session_start(); // Rozpoczęcie sesji
+$zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest zalogowany
 
 $host = 'localhost'; // Adres hosta bazy danych
 $uzytkownik = 'root'; // Nazwa użytkownika bazy danych
@@ -162,7 +160,7 @@ $polaczenie->close(); // Zamknięcie połączenia z bazą danych
             <button type="submit">Zaloguj</button>
         </form>
     </div>
-
+        </div>
     <footer class="footer">
         <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
     </footer>

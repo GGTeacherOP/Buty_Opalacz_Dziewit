@@ -1,6 +1,7 @@
+
 <?php
 session_start();
-
+$zalogowany = isset($_SESSION['username']);
 // Dodanie produktu do koszyka
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $produkt = [
@@ -135,15 +136,25 @@ if (!empty($_SESSION['koszyk'])) {
 <body>
 
 <div class="wrapper">
-    <header>
-        <a href="index.html">Strona główna</a>
-        <a href="sklep.html">Sklep</a>
-        <a href="koszyk.php" class="active">Koszyk</a>
-        <a href="kontakt.html">Kontakt</a>
-        <a href="opinie.html">Opinie</a>
-        <a href="aktualnosci.html">Aktualności</a>
-        <a href="login.php" class="zg">Zaloguj</a>
-        <a href="register.php" class="zg">Zarejestruj</a>
+   <header>
+        <a href="index.php">Strona Główna</a>
+            <a href="sklep.php">Sklep</a>
+            <a href="koszyk.php" class="active">Koszyk</a>
+            <a href="kontakt.php">Kontakt</a>
+            <a href="opinie.php">Opinie</a>
+            <a href="aktualnosci.php">Aktualności</a>
+                      <?php if ($zalogowany): ?>
+            <!-- Powitanie zalogowanego użytkownika -->
+            <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
+                Witaj, <?= htmlspecialchars($_SESSION['username']) ?>!
+            </span>
+            <!-- Przycisk wylogowania -->
+            <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
+        <?php else: ?>
+            <!-- Linki logowania i rejestracji -->
+            <a href="login.php" class="zg">Zaloguj</a>
+            <a href="register.php" class="zg">Zarejestruj</a>  
+        <?php endif; ?>
     </header>
 
     <main>
