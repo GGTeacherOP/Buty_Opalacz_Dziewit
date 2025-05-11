@@ -99,7 +99,28 @@ if ($zalogowany && isset($_SESSION['id_uzytkownika'])) {
     <input type="hidden" name="zdjecie" value="img/Adidas/Campus/campus1.jpg">
     <button type="submit" class="buy-now">Dodaj do koszyka</button>
   </form>
-  <button class="buy-now">Kup teraz</button>
+    <form action="zapis_zamowienia.php" method="POST">
+    <input type="hidden" name="nazwa" value="Adidas Campus 00s Czarne">
+    <input type="hidden" name="cena" value="529">
+    <input type="hidden" name="zdjecie" value="img/Adidas/Campus/1.jpg">
+    <input type="hidden" name="rozmiar" id="product-size" value=""> <?php if ($zalogowany && isset($_SESSION['id_uzytkownika'])): ?>
+        <input type="hidden" name="id_uzytkownika" value="<?= $_SESSION['id_uzytkownika'] ?>">
+    <?php endif; ?>
+    <button type="submit" class="buy-now">Kup teraz</button>
+  </form>
+
+<script>
+    // Skrypt JavaScript do obsługi wyboru rozmiaru przed zakupem
+    document.querySelector('form[action="zapis_zamowienia.php"] .buy-now').addEventListener('click', function(event) {
+        var rozmiar = document.getElementById('product-size').value; // Pobranie wybranego rozmiaru
+        if (rozmiar === '') {
+            alert('Wybierz rozmiar!');  // Wyświetlenie alertu, jeśli nie wybrano rozmiaru
+            event.preventDefault(); // Zatrzymaj wysyłanie formularza
+        } else {
+            document.querySelector('form[action="zapis_zamowienia.php"] input[name="rozmiar"]').value = rozmiar; // Wypełnienie ukrytego pola rozmiar
+        }
+    });
+</script>
 </div>
         
       </div>
