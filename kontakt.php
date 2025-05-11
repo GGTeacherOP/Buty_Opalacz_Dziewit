@@ -19,7 +19,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
             padding: 0 1rem;
         }
         #wstep{
-            background-color: rgb(134, 134, 134);
+           background-color: #191970;
             height: 60px;
             font-size: large;
             margin-bottom: 2rem;
@@ -29,7 +29,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
             border-radius: 22px;
         }
         .uwaga{
-            background-color: rgb(247, 255, 173);
+            background-color: lightblue;
             font-size: 20px;
             padding: 10px;
             border-radius: 10px;

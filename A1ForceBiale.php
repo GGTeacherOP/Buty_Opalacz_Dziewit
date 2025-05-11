@@ -38,7 +38,7 @@ if ($zalogowany && isset($_SESSION['id_uzytkownika'])) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sklep z Butami – Nike Air Force 1</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css"/>
     <link rel="icon" href="img/favi2.png" type="image/png">
     <style>
        
@@ -134,12 +134,12 @@ if ($zalogowany && isset($_SESSION['id_uzytkownika'])) {
     <section class="opinie-produktu">
       <h2>Opinie</h2>
       <blockquote>⭐️⭐️⭐️⭐️⭐️ "Cudnie wyglądają, bardzo polecam!" – Agnieszka</blockquote>
-      <blockquote>⭐️⭐️⭐️⭐️ "But dotarł w idealnym stanie, dostawa natychmiastowa." – Elżbieta</blockquote>>
+      <blockquote>⭐️⭐️⭐️⭐️ "But dotarł w idealnym stanie, dostawa natychmiastowa." – Elżbieta</blockquote>
     </section>
   </main>
 </div>
   <footer class="footer">
-    <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
+    <p>&copy; 2025 Sklep z Butami. Wszystkie prawa zastrzeżone.</p>
   </footer>
 
 

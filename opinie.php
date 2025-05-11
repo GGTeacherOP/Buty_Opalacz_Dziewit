@@ -96,6 +96,13 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
     .usun-opinie:hover {
       background-color: #c82333;
     }
+    footer {
+  background-color: #191970;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 3rem;
+}
   </style>
 </head>
 <body>

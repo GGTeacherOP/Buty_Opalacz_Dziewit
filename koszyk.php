@@ -193,20 +193,6 @@ if (!empty($_SESSION['koszyk'])) {
         <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
     </footer>
 </div>
-<?php
-    //Niesokńczone
-    $con = mysqli_connect('localhost','buty','root','');
-    $sql1 = mysqli_query($con, "SELECT id_uzytkownika FROM uzytkownicy");
-    while($row=mysqli_fetch_assoc($sql1)){
-        
-    }
-    if(isset($_POST['kup'])){
-        $id_uzytkownika = $sql1;
-        $dataa = date('Y-m-d H:i:s');
-        $kwota = $suma;
-        $sql = "INSERT INTO zamowienia (id_zamowienia, id_uzytkownika, data_zamowienia, kwota_calkowita) VALUES (NULL,'" . $id_uzytkownika . "','" . $dataa . "','" . $kwota ."')";
-        $que2=mysqli_query($con,$sql);
-    }
-?>
+
 </body>
 </html>
