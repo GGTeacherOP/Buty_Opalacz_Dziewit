@@ -2,7 +2,36 @@
 <?php
 session_start(); // Uruchomienie sesji
 $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest zalogowany
-?><!DOCTYPE html>
+// Dane do połączenia z bazą danych
+$host = "localhost";       // Adres serwera bazy danych
+$uzytkownik_db = "root";        // Nazwa użytkownika bazy danych
+$haslo_db = "";            // Hasło do bazy danych
+$nazwa_bazy = "buty";         // Nazwa bazy danych
+
+// Połączenie z bazą danych przy użyciu mysqli
+$polaczenie = new mysqli($host, $uzytkownik_db, $haslo_db, $nazwa_bazy);
+
+// Sprawdzenie, czy połączenie się udało
+if ($polaczenie->connect_error) {
+    die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error); // Jeśli wystąpił błąd, skrypt zostaje zatrzymany i wyświetla komunikat
+}
+
+// Sprawdzenie, czy użytkownik jest zalogowany i czy istnieje ID użytkownika w sesji
+if ($zalogowany && isset($_SESSION['id_uzytkownika'])) {
+    $id_uzytkownika = $_SESSION['id_uzytkownika']; // Pobranie ID użytkownika z sesji
+} else if ($zalogowany) {
+    // Użytkownik zalogowany, ale brak id_uzytkownika w sesji - BŁĄD!
+    // Wyświetlenie komunikatu błędu i przekierowanie na stronę główną
+    echo "<script>alert('Błąd: Brak ID użytkownika w sesji. Skontaktuj się z administratorem.'); window.location.href='index.php';</script>";
+    exit; // Zakończenie skryptu
+} else {
+    // Użytkownik niezalogowany
+    // Wyświetlenie komunikatu i przekierowanie na stronę logowania
+    echo "<script>alert('Musisz być zalogowany, aby dokonać zakupu.'); window.location.href='login.php';</script>";
+    exit; // Zakończenie skryptu
+}
+?>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
@@ -67,12 +96,33 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
 
           <div class="buttons">
   <form action="koszyk.php" method="POST">
-    <input type="hidden" name="nazwa" value="Adidas Klpaki Białe">
+    <input type="hidden" name="nazwa" value="Adidas Klapki Białe">
     <input type="hidden" name="cena" value="179">
     <input type="hidden" name="zdjecie" value="img/Adidas/KlapkiBiale/1.avif">
     <button type="submit" class="buy-now">Dodaj do koszyka</button>
   </form>
-  <button class="buy-now">Kup teraz</button>
+ <form action="zapis_zamowienia.php" method="POST">
+    <input type="hidden" name="nazwa" value="Adidas Klapki Białe">
+    <input type="hidden" name="cena" value="179">
+    <input type="hidden" name="zdjecie" value="img/Adidas/KlapkiBiale/1.avif">
+    <input type="hidden" name="rozmiar" id="product-size" value=""> <?php if ($zalogowany && isset($_SESSION['id_uzytkownika'])): ?>
+        <input type="hidden" name="id_uzytkownika" value="<?= $_SESSION['id_uzytkownika'] ?>">
+    <?php endif; ?>
+    <button type="submit" class="buy-now">Kup teraz</button>
+  </form>
+
+<script>
+    // Skrypt JavaScript do obsługi wyboru rozmiaru przed zakupem
+    document.querySelector('form[action="zapis_zamowienia.php"] .buy-now').addEventListener('click', function(event) {
+        var rozmiar = document.getElementById('product-size').value; // Pobranie wybranego rozmiaru
+        if (rozmiar === '') {
+            alert('Wybierz rozmiar!');  // Wyświetlenie alertu, jeśli nie wybrano rozmiaru
+            event.preventDefault(); // Zatrzymaj wysyłanie formularza
+        } else {
+            document.querySelector('form[action="zapis_zamowienia.php"] input[name="rozmiar"]').value = rozmiar; // Wypełnienie ukrytego pola rozmiar
+        }
+    });
+</script>
 </div>
       </div>
     </div>
