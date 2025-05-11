@@ -37,12 +37,12 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
   <main class="product-page">
     <div class="product-container">
       <div class="gallery">
-        <img src="img/Nike/KlapkiCzarne/1.avif" alt="Nike Klapki Czarne" class="main-img" />
+        <img src="img/Nike/KlpakiCzarne/1.avif" alt="Nike Klapki Czarne" class="main-img" />
         <div class="thumbnails">
-          <img src="img/Nike/KlapkiCzarne/1.avif" alt="Zdjęcie 1" />
-          <img src="img/Nike/KlapkiCzarne/2.avif" alt="Zdjęcie 2" />
-          <img src="img/Nike/KlapkiCzarne/3.avif" alt="Zdjęcie 3" />
-          <img src="img/Nike/KlapkiCzarne/4.avif" alt="Zdjęcie 4" />
+          <img src="img/Nike/KlpakiCzarne/1.avif" alt="Zdjęcie 1" />
+          <img src="img/Nike/KlpakiCzarne/2.avif" alt="Zdjęcie 2" />
+          <img src="img/Nike/KlpakiCzarne/3.avif" alt="Zdjęcie 3" />
+          <img src="img/Nike/KlpakiCzarne/4.avif" alt="Zdjęcie 4" />
         </div>
       </div>
       <div class="product-details">
@@ -68,7 +68,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
   <form action="koszyk.php" method="POST">
     <input type="hidden" name="nazwa" value="Nike Klapki Czarne">
     <input type="hidden" name="cena" value="199">
-    <input type="hidden" name="zdjecie" value="img/Nike/KlapkiCzarne/1.avif">
+    <input type="hidden" name="zdjecie" value="img/Nike/KlpakiCzarne/1.avif">
     <button type="submit" class="buy-now">Dodaj do koszyka</button>
   </form>
   <button class="buy-now">Kup teraz</button>

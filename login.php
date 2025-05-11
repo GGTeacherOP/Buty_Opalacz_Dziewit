@@ -1,37 +1,39 @@
-
 <?php
-session_start(); // Rozpoczęcie sesji
-$zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest zalogowany
+session_start();
+$zalogowany = isset($_SESSION['username']);
 
-$host = 'localhost'; // Adres hosta bazy danych
-$uzytkownik = 'root'; // Nazwa użytkownika bazy danych
-$haslo_db = ''; // Hasło do bazy danych
-$nazwa_bazy = 'buty'; // Nazwa bazy danych
+$host = 'localhost';
+$uzytkownik = 'root';
+$haslo_db = '';
+$nazwa_bazy = 'buty';
 
-$polaczenie = new mysqli($host, $uzytkownik, $haslo_db, $nazwa_bazy); // Utworzenie połączenia z bazą danych
-if ($polaczenie->connect_error) { // Sprawdzenie, czy wystąpił błąd połączenia
-    die("Błąd połączenia: " . $polaczenie->connect_error); // Wyświetlenie komunikatu o błędzie i zakończenie skryptu
+$polaczenie = new mysqli($host, $uzytkownik, $haslo_db, $nazwa_bazy);
+if ($polaczenie->connect_error) {
+    die("Błąd połączenia: " . $polaczenie->connect_error);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") { // Sprawdzenie, czy metoda żądania to POST
-    $username = $_POST["username"]; // Pobranie nazwy użytkownika z danych POST
-    $password = $_POST["password"]; // Pobranie hasła z danych POST
+$wiadomosc_bledu = ""; // Inicjalizacja zmiennej na komunikaty błędów
 
-    $sql = "SELECT * FROM uzytkownicy WHERE nazwa_uzytkownika = ? AND haslo = ?"; // Zapytanie SQL do pobrania użytkownika po nazwie i haśle
-    $stmt = $polaczenie->prepare($sql); // Przygotowanie zapytania SQL
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
 
-    if (!$stmt) { // Sprawdzenie, czy przygotowanie zapytania się powiodło
-        die("Błąd zapytania: " . $polaczenie->error); // Wyświetlenie komunikatu o błędzie i zakończenie skryptu
+    $sql = "SELECT * FROM uzytkownicy WHERE nazwa_uzytkownika = ? AND haslo = ?";
+    $stmt = $polaczenie->prepare($sql);
+
+    if (!$stmt) {
+        die("Błąd zapytania: " . $polaczenie->error);
     }
 
-    $stmt->bind_param("ss", $username, $password); // Powiązanie parametrów z zapytaniem SQL
-    $stmt->execute(); // Wykonanie zapytania SQL
-    $wynik = $stmt->get_result(); // Pobranie wyniku zapytania
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $wynik = $stmt->get_result();
 
-    if ($wynik->num_rows === 1) { // Sprawdzenie, czy znaleziono dokładnie jednego użytkownika
-        $uzytkownik = $wynik->fetch_assoc(); // Pobranie danych użytkownika jako asocjacyjna tablica
-        $_SESSION['username'] = $uzytkownik['nazwa_uzytkownika']; // Zapisanie nazwy użytkownika w sesji
-        $_SESSION['rola'] = $uzytkownik['rola']; // Zapisanie roli użytkownika w sesji
+    if ($wynik->num_rows === 1) {
+        $uzytkownik = $wynik->fetch_assoc();
+        $_SESSION['username'] = $uzytkownik['nazwa_uzytkownika'];
+        $_SESSION['rola'] = $uzytkownik['rola'];
+        $_SESSION['id_uzytkownika'] = $uzytkownik['id_uzytkownika'];  // ***KLUCZOWA POPRAWKA***
 
         // Ładne powitanie + przekierowanie
         echo "<!DOCTYPE html>
@@ -58,20 +60,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // Sprawdzenie, czy metoda żądania
             </style>
         </head>
         <body>
-        <div class='box'>
-            <h2>Zalogowano jako <span style='color:#007bff;'>".htmlspecialchars($uzytkownik['nazwa_uzytkownika'])."</span></h2>
-            <p>Za chwilę zostaniesz przekierowany na stronę główną...</p>
-        </div>
+            <div class='box'>
+                <h2>Zalogowano jako <span style='color:#007bff;'>".htmlspecialchars($uzytkownik['nazwa_uzytkownika'])."</span>!</h2>
+                <p>Za chwilę nastąpi przekierowanie...</p>
+            </div>
         </body>
-        </html>"; // Wyświetlenie komunikatu powitalnego i przekierowanie na stronę główną
+        </html>";
+        exit;
+
     } else {
-        echo "Nieprawidłowa nazwa użytkownika lub hasło."; // Wyświetlenie komunikatu o nieprawidłowych danych logowania
+        $wiadomosc_bledu = "Nieprawidłowa nazwa użytkownika lub hasło.";
     }
 
-    $stmt->close(); // Zamknięcie przygotowanego zapytania
+    $stmt->close();
 }
 
-$polaczenie->close(); // Zamknięcie połączenia z bazą danych
+$polaczenie->close();
 ?>
 
 <!DOCTYPE html>
@@ -136,14 +140,11 @@ $polaczenie->close(); // Zamknięcie połączenia z bazą danych
         <a href="opinie.php">Opinie</a>
         <a href="aktualnosci.php">Aktualności</a>
         <?php if ($zalogowany): ?>
-            <!-- Powitanie zalogowanego użytkownika -->
             <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
                 Witaj, <?= htmlspecialchars($_SESSION['username']) ?>!
             </span>
-            <!-- Przycisk wylogowania -->
             <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
         <?php else: ?>
-            <!-- Linki logowania i rejestracji -->
             <a href="login.php" class="zg">Zaloguj</a>
             <a href="register.php" class="zg">Zarejestruj</a>  
         <?php endif; ?>
@@ -159,11 +160,11 @@ $polaczenie->close(); // Zamknięcie połączenia z bazą danych
             <input type="password" name="password" placeholder="Hasło" required />
             <button type="submit">Zaloguj</button>
         </form>
+        <p>Nie masz konta? <a href="register.php">Zarejestruj się</a></p>
     </div>
         </div>
     <footer class="footer">
         <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
     </footer>
-</div>
 </body>
 </html>
