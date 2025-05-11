@@ -8,8 +8,9 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sklep z Butami – Strona główna</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
+  
 </head>
 <body>
   <div class="wrapper">
