@@ -9,7 +9,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sklep z Butami – Strona główna</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="icon" href="favi2.png" type="image/png">
+    <link rel="icon" href="img/favi2.png" type="image/png">
 </head>
 <body>
   <div class="wrapper">
@@ -53,7 +53,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
       <div class="pokaz">
         <button onclick="plus(-1)">&#10094;</button>
 
-        <a href="aktualnosciJordany.php"><img class="pokazslajdow" src="img/slider/coss.png" style="height:1000px" style="width:100%" ></a>
+        <a href="aktualnosciJordany.php"><img class="pokazslajdow" src="img/slider/jord.jpg"  style="width:100%" ></a>
         <a href="aktualnosciCampusy.php"><img class="pokazslajdow" src="img/slider/elo.jpg" style="width:100%"></a>
         <a href="aktualnosciKlapki.php"><img class="pokazslajdow" src="img/slider/klapki.png" style="height:1000px" style="width:100%"></a>
 

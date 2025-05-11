@@ -91,7 +91,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
         <div class="product-grid">
       
           <div class="product-card">
-            <a href="klapkiNikeB.html" style="text-decoration: none; color: inherit; display: block;">
+            <a href="klapkiNikeB.php" style="text-decoration: none; color: inherit; display: block;">
             <img src="img/Nike/KlapkiBiale/1.avif" alt="Jordan czerwone">
             <h3>Klapki Nike Białe</h3>
             <p>Klapki Fajne!</p>
@@ -119,7 +119,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
           
       
           <div class="product-card">
-            <a href="AdidasKlapkiC.html" style="text-decoration: none; color: inherit; display: block;">
+            <a href="AdidasKlapkiC.php" style="text-decoration: none; color: inherit; display: block;">
             <img src="img/Adidas/KlapkiCzarne/1.avif" alt="Jordan czerwone">
             <h3>Klapki Adidas Czarne</h3>
             <p>Klapki Fajne!</p>
@@ -129,7 +129,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
 
 
             <div class="product-card">
-            <a href="JordanKlapkiB.html" style="text-decoration: none; color: inherit; display: block;">
+            <a href="JordanKlapkiB.php" style="text-decoration: none; color: inherit; display: block;">
             <img src="img/Jordan/KlapkiBiale/1.avif" alt="Jordan czerwone">
             <h3>Klapki Jordan Białe</h3>
             <p>Klapki Fajne!</p>
@@ -138,7 +138,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
           
       
           <div class="product-card">
-            <a href="JordanKlapkiC.html" style="text-decoration: none; color: inherit; display: block;">
+            <a href="JordanKlapkiC.php" style="text-decoration: none; color: inherit; display: block;">
             <img src="img/Jordan/KlapkiCzarne/1.avif" alt="Jordan czerwone">
             <h3>Klapki Jordan Czarne</h3>
             <p>Klapki Fajne!</p>
