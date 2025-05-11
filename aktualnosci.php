@@ -127,7 +127,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
         <img src="img/aktualnosci/5.png" alt="klapki">
         <div class="news-card-content">
           <h3>  👟 Nowa kolekcja klapkow</h3>
-          <p>   Nowa kolekcja Klapkow Obczaj co nowego czekaja na ciebie Klapki z roznych marek NIKE ADIDASA I JORDANA bardzo Korzystnych cenach zobaczcie sami!!!</p>
+          <p>   Nowa kolekcja Klapków! Obczaj co nowego czeka na ciebie! Klapki z różnych marek - NIKE, ADIDAS i JORDAN w bardzo korzystnych cenach zobaczcie sami!!!</p>
           <span class="date"> 29 kwietnia 2025</span>
         </div>
       </div>
