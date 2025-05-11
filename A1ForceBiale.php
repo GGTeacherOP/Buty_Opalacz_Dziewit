@@ -40,6 +40,11 @@ if ($zalogowany && isset($_SESSION['id_uzytkownika'])) {
     <title>Sklep z Butami – Nike Air Force 1</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="icon" href="img/favi2.png" type="image/png">
+    <style>
+       
+    
+
+    </style>
 </head>
 <body>
     <div class="wrapper">
