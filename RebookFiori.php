@@ -15,20 +15,6 @@ if ($polaczenie->connect_error) {
     die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error); // Jeśli wystąpił błąd, skrypt zostaje zatrzymany i wyświetla komunikat
 }
 
-// Sprawdzenie, czy użytkownik jest zalogowany i czy istnieje ID użytkownika w sesji
-if ($zalogowany && isset($_SESSION['id_uzytkownika'])) {
-    $id_uzytkownika = $_SESSION['id_uzytkownika']; // Pobranie ID użytkownika z sesji
-} else if ($zalogowany) {
-    // Użytkownik zalogowany, ale brak id_uzytkownika w sesji - BŁĄD!
-    // Wyświetlenie komunikatu błędu i przekierowanie na stronę główną
-    echo "<script>alert('Błąd: Brak ID użytkownika w sesji. Skontaktuj się z administratorem.'); window.location.href='index.php';</script>";
-    exit; // Zakończenie skryptu
-} else {
-    // Użytkownik niezalogowany
-    // Wyświetlenie komunikatu i przekierowanie na stronę logowania
-    echo "<script>alert('Musisz być zalogowany, aby dokonać zakupu.'); window.location.href='login.php';</script>";
-    exit; // Zakończenie skryptu
-}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
