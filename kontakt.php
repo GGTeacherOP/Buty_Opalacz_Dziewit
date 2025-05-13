@@ -234,7 +234,7 @@ form button:hover {
         <?php
         $con = mysqli_connect('localhost', 'root', '', 'buty');
         $sql1="SELECT `imie`,`email`,`pytanie`,`email` FROM wiadomosci;";
-        $que1=mysqli_query($con,$sql1);
+        $que=mysqli_query($con,$sql1);
         if(isset($_POST['submit']) && $_POST['imie'] && isset($_POST['email']) && isset($_POST['wiad'])){
             $imie = $_POST['imie'];
             $email = $_POST['email'];
