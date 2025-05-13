@@ -63,32 +63,39 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
         <button onclick="plus(1)">&#10095;</button>
       </div>
     
-      <!-- Sekcja bestsellerów -->
-      <section class="bestsellery">
-        <h2>Nasze Bestsellery</h2>
-        <div class="produkty">
-          <a href="A1ForceBiale.php" class="produkt">
-            <img src="img/Nike/AF1/AF1white.jpg" alt="Nike Air Force 1" />
-            <p>Nike Air Force 1</p>
-            <span>499 zł</span>
-          </a>
-          <a href="J1Mocha.php" class="produkt">
-            <img src="img/Jordan/Mocha/Mocha1.jpeg" alt="Nike Air Jordan 1 Mocha" />
-            <p>Nike Air Jordan 1 High Mocha</p>
-            <span>1249 zł</span>
-          </a>
-          <a href="Campusy.php" class="produkt">
-            <img src="img/Adidas/Campus/1.avif" alt="Adidas Campus 00s" />
-            <p>Adidas Campus 00s</p>
-            <span>529 zł</span>
-          </a>
-          <a href="Samba.php" class="produkt">
-            <img src="img/Adidas/Samba/samba1.jpg" alt="Adidas Samba OG" />
-            <p>Adidas Samba OG</p>
-            <span>429 zł</span>
-          </a>
-        </div>
-      </section>
+     <section class="bestsellery">
+  <h2>Nasze Bestsellery</h2>
+  <div class="produkty-grid">
+    <div class="produkt-card">
+      <img src="img/Nike/AF1/AF1white.jpg" alt="Nike Air Force 1" />
+      <h3>Nike Air Force 1</h3>
+      <p class="cena">499 zł</p>
+      <a href="A1ForceBiale.php" class="btn-zobacz">Zobacz</a>
+    </div>
+
+    <div class="produkt-card">
+      <img src="img/Jordan/Mocha/Mocha1.jpeg" alt="Nike Air Jordan 1 Mocha" />
+      <h3>Jordan 1 High Mocha</h3>
+      <p class="cena">1249 zł</p>
+      <a href="J1Mocha.php" class="btn-zobacz">Zobacz</a>
+    </div>
+
+    <div class="produkt-card">
+      <img src="img/Adidas/Campus/1.avif" alt="Adidas Campus 00s" />
+      <h3>Adidas Campus 00s</h3>
+      <p class="cena">529 zł</p>
+      <a href="Campusy2.php" class="btn-zobacz">Zobacz</a>
+    </div>
+
+    <div class="produkt-card">
+      <img src="img/Adidas/ForumBlack/Forum1.jpg" alt="Adidas Forum Low" />
+      <h3>Adidas Forum Low</h3>
+      <p class="cena">499 zł</p>
+      <a href="AdidasFor.php" class="btn-zobacz">Zobacz</a>
+    </div>
+  </div>
+</section>
+
 
       <!-- Dlaczego warto nas wybrać -->
       <section class="why-us">
