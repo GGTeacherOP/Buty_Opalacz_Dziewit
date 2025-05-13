@@ -55,9 +55,9 @@ if ($polaczenie->connect_error) {
         <img src="img/Adidas/Campus/1.avif" alt="Adidas Campus 00s" class="main-img" />
         <div class="thumbnails">
           <img src="img/Adidas/Campus/1.avif" alt="Zdjęcie 1" />
-          <img src="img/Adidas/Campus/1.avif" alt="Zdjęcie 2" />
-          <img src="img/Adidas/Campus/1.avif" alt="Zdjęcie 3" />
-          <img src="img/Adidas/Campus/1.avif" alt="Zdjęcie 4" />
+          <img src="img/Adidas/Campus/2.avif" alt="Zdjęcie 2" />
+          <img src="img/Adidas/Campus/3.avif" alt="Zdjęcie 3" />
+          <img src="img/Adidas/Campus/4.avif" alt="Zdjęcie 4" />
         </div>
       </div>
       <div class="product-details">
