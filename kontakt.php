@@ -45,7 +45,49 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
         }
         .info{
             font-size: 20px;
+            width:50%;
+            float: left;
+            
         }
+        .kontakt{
+            float: right;
+        }
+        form {
+  max-width: 600px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+ 
+form input,
+form textarea {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fafafa;
+}
+form button {
+  padding: 1rem;
+  border: none;
+  background-color: #222;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+}
+ 
+form button:hover {
+  background-color: #000;
+  font-size:1.3rem;
+  padding:0.83rem;
+}
     </style>
 </head>
 <body>
@@ -82,6 +124,15 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
                 Prosimy o wskazanie numeru zamówienia oraz tematu sprawy w tytule wiadomości - pomoże nam to szybciej i skuteczniej zająć się Twoim zgłoszeniem.<br><br>
                 Dziękujemy za zrozumienie i prosimy o cierpliwość.</p>
             </div><br><br><br>
+            <section class="kontakt">
+            <h1>Czy masz inne pytania? Napisz do nas</h1>
+            <form action="" method="post">
+            <input type="text" name="name" placeholder="Twoje imię" required>
+            <input type="email" name="email" placeholder="Twój email" required>
+            <textarea name="message" placeholder="Napisz tutaj swoje pytanie" required></textarea>
+            <button type="submit" class="submit">Wyślij</button>
+            </form>
+            </section>
             <div class="info">
                 <h2>Informacje kontaktowe</h2>
                 <p>Buty.pl - Mielec<br>
