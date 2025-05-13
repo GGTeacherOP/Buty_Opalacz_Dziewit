@@ -11,6 +11,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
     <title>Document</title>
     <title>Sklep z Butami – Strona główna</title>
     <link rel="stylesheet" href="css/style.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
     <style>
         .calosc{
