@@ -196,13 +196,13 @@ form button:hover {
       <p>Nasze zwroty są szybkie i proste:<br> 
         - Jeśli zwracasz do 3 produktów włącznie, skorzystaj z InPost Paczkomat® 24/7,<br>
         - Jeśli zwracasz 4 lub więcej produktów, zwrócisz je za pośrednictwem Kuriera DPD.<br><br>
-    Każdy produkt możesz też zwrócić w najbliższym sklepie stacjonarnym.<br><br>
-    Chcesz zwrócić produkt przez internet?<br>
-    1. Zaloguj się i znajdź zakładkę zwroty na Twoim koncie. <br> 
-    2. Wybierz, które produkty chcesz zwrócić.  <br>
-    3. Idź do Paczkomatu® albo czekaj na kuriera.  <br><br>
-    Jeśli zwracasz produkty Paczkomatem®, wyślemy do Ciebie SMS z kodem do dowolnego Paczkomatu®. Nie musisz drukować etykiety.<br>
-    Jeśli zwracasz Kurierem DPD podaj dokładny adres, z którego chcesz nadać paczkę. Później zmiana adresu nie będzie możliwa.</p>
+      Każdy produkt możesz też zwrócić w najbliższym sklepie stacjonarnym.<br><br>
+      Chcesz zwrócić produkt przez internet?<br>
+      1. Zaloguj się i znajdź zakładkę zwroty na Twoim koncie. <br> 
+      2. Wybierz, które produkty chcesz zwrócić.  <br>
+      3. Idź do Paczkomatu® albo czekaj na kuriera.  <br><br>
+      Jeśli zwracasz produkty Paczkomatem®, wyślemy do Ciebie SMS z kodem do dowolnego Paczkomatu®. Nie musisz drukować etykiety.<br>
+      Jeśli zwracasz Kurierem DPD podaj dokładny adres, z którego chcesz nadać paczkę. Później zmiana adresu nie będzie możliwa.</p>
     </div>
   </div>
 
