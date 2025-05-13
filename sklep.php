@@ -8,8 +8,9 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sklep z butami</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="css/style.css" />
-  
+  <link rel="icon" href="img/favi2.png" type="image/png">
 </head>
 <body>
   <div class="wrapper">
@@ -20,18 +21,15 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
       <a href="kontakt.php">Kontakt</a>
       <a href="opinie.php">Opinie</a>
       <a href="aktualnosci.php">Aktualności</a>
-            <?php if ($zalogowany): ?>
-            <!-- Powitanie zalogowanego użytkownika -->
-            <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
-                Witaj, <?= htmlspecialchars($_SESSION['username']) ?>!
-            </span>
-            <!-- Przycisk wylogowania -->
-            <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
-        <?php else: ?>
-            <!-- Linki logowania i rejestracji -->
-            <a href="login.php" class="zg">Zaloguj</a>
-            <a href="register.php" class="zg">Zarejestruj</a>  
-        <?php endif; ?>
+      <?php if ($zalogowany): ?>
+        <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
+          Witaj, <?= htmlspecialchars($_SESSION['username']) ?>!
+        </span>
+        <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
+      <?php else: ?>
+        <a href="login.php" class="zg">Zaloguj</a>
+        <a href="register.php" class="zg">Zarejestruj</a>  
+      <?php endif; ?>
     </header>
 
     <nav>
@@ -83,161 +81,213 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
       </select>
     </div>
 
-    <main class="bestsellery produkty-filtr">
-      <div class="produkty" id="productList">
-        <!-- Produkty -->
-        <a href="A1ForceBiale.php" class="produkt" data-brand="Nike" data-price="499" data-type="Sneakersy">
-          <img src="img/Nike/AF1/AF1white.jpg" alt="Air Force 1 Białe" />
-          <p>Nike Air Force 1 Białe</p>
-          <span>499 zł</span>
-        </a>
+   <section class="bestsellery">
+    <h2>Nasze Produkty</h2>
+    <div class="produkty-grid" id="productList">
+      
+        <div class="produkt-card" data-brand="Nike" data-price="499" data-type="Sneakersy">
+            <img src="img/Nike/AF1/AF1white.jpg" alt="Air Force 1 Białe" />
+            <h3>Nike Air Force 1 Białe</h3>
+            <p class="cena">499 zł</p>
+            <a href="A1ForceBiale.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        <a href="J1Mocha.php" class="produkt" data-brand="Jordan" data-price="1249" data-type="Sneakersy">
-          <img src="img/Jordan/Mocha/Mocha1.jpeg" alt="Jordan 1 Mocha" />
-          <p>Jordan 1 Mocha</p>
-          <span>1249 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Jordan" data-price="1249" data-type="Sneakersy">
+            <img src="img/Jordan/Mocha/Mocha1.jpeg" alt="Jordan 1 Mocha" />
+            <h3>Jordan 1 Mocha</h3>
+            <p class="cena">1249 zł</p>
+            <a href="J1Mocha.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        
-        <a href="Campusy.php" class="produkt" data-brand="Adidas" data-price="529" data-type="Sneakersy">
-          <img src="img/Adidas/Campus/1.avif" alt="Adidas Campus 00s" />
-          <p>Adidas Campus 00s Beżowe</p>
-          <span>529 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Adidas" data-price="529" data-type="Sneakersy">
+            <img src="img/Adidas/Campus/1.avif" alt="Adidas Campus 00s" />
+            <h3>Adidas Campus 00s Beżowe</h3>
+            <p class="cena">529 zł</p>
+            <a href="Campusy.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
+        <div class="produkt-card" data-brand="Adidas" data-price="529" data-type="Sneakersy">
+            <img src="img/Adidas/Campus/campus1.jpg" alt="Adidas Campus 00s Czarne" />
+            <h3>Adidas Campus 00s Czarne</h3>
+            <p class="cena">529 zł</p>
+            <a href="Campusy2.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-         <a href="Campusy2.php" class="produkt" data-brand="Adidas" data-price="529" data-type="Sneakersy">
-          <img src="img/Adidas/Campus/campus1.jpg" alt="Adidas Campus 00s" />
-          <p>Adidas Campus 00s Czarne</p>
-          <span>529 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Adidas" data-price="429" data-type="Sneakersy">
+            <img src="img/Adidas/Samba/samba1.jpg" alt="Adidas Samba OG White" />
+            <h3>Adidas Samba OG</h3>
+            <p class="cena">429 zł</p>
+            <a href="Samba.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        <a href="Samba.php" class="produkt" data-brand="Adidas" data-price="429" data-type="Sneakersy">
-          <img src="img/Adidas/Samba/samba1.jpg" alt="Adidas Samba OG White" />
-          <p>Adidas Samba OG </p>
-          <span>429 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Jordan" data-price="1399" data-type="Sneakersy">
+            <img src="img/Jordan/Military/Military1.jpg" alt="Jordan 4 Military Black" />
+            <h3>Jordan 4 Military Black</h3>
+            <p class="cena">1399 zł</p>
+            <a href="JordanMilitary.php" class="btn-zobacz">Zobacz</a>
+        </div>
+        <div class="produkt-card" data-brand="Nike" data-price="899" data-type="Biegania">
+            <img src="img/Nike/Nike Pegasus Premium/pegasusprem1.png" alt="Nike Pegasus Premium" />
+            <h3>Nike Pegasus Premium</h3>
+            <p class="cena">899 zł</p>
+            <a href="NikePegasusPrem.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        <a href="JordanMilitary.php" class="produkt" data-brand="Jordan" data-price="1399" data-type="Sneakersy">
-          <img src="img/Jordan/Military/Military1.jpg" alt="Jordan 4 Military Black" />
-          <p>Jordan 4 Military Black</p>
-          <span>1399 zł</span>
-        </a>
-        <a href="NikePegasusPrem.php" class="produkt" data-brand="Nike" data-price="899" data-type="Biegania">
-          <img src="img/Nike/Nike Pegasus Premium/pegasusprem1.png" alt="Nike Pegasus Premium" />
-          <p>Nike Pegasus Premium</p>
-          <span>899 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Nike" data-price="649" data-type="Sneakersy">
+            <img src="img/Nike/AIR MAX/MAX1.png" alt="Nike Air Max 90" />
+            <h3>Nike Air Max 90</h3>
+            <p class="cena">649 zł</p>
+            <a href="AirMax.php" class="btn-zobacz">Zobacz</a>
+        </div>
+        <div class="produkt-card" data-brand="Reebok" data-price="250" data-type="Biegania">
+            <img src="img/Reebook/Reebok FIORI/Rebook FIORI1.jpg" alt="Reebook FIORI "/>
+            <h3>Reebook FIORI</h3>
+            <p class="cena">250 zł</p>
+            <a href="RebookFiori.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        <a href="AirMax.php" class="produkt" data-brand="Nike" data-price="649" data-type="Sneakersy">
-          <img src="img/Nike/AIR MAX/MAX1.png" alt="Nike Air Max 90" />
-          <p>Nike Air Max 90</p>
-          <span>649 zł</span>
-        </a>
-        <a href="RebookFiori.php" class="produkt" data-brand="Reebok" data-price="250" data-type="Biegania">
-          <img src="img/Reebook/Reebok FIORI/Rebook FIORI1.jpg" alt="Reebook FIORI "/>
-          <p>Reebook FIORI</p>
-          <span>250 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Converse" data-price="349" data-type="Trampki">
+            <img src="img/Converse/ConverseAllStar/ConverseALLStar1.jpg" alt="Converse All Star">
+            <h3>Converse Chuck Taylor All Star</h3>
+            <p class="cena">349 zł</p>
+            <a href="ConvAllStar.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        <a href="ConvAllStar.php" class="produkt" data-brand="Converse" data-price="349" data-type="Trampki">
-          <img src="img/Converse/ConverseAllStar/ConverseALLStar1.jpg "alt="Converse All Star">
-          <p>Converse Chuck Taylor All Star</p>
-          <span>349 zł</span>
-        </a>
-        
-        <a href="ConvPlatform.php" class="produkt" data-brand="Converse" data-price="399" data-type="Trampki">
-          <img src="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg" alt="Converse All Star Platform">
-          <p>Converse All Star Platform Czarny</p>
-          <span>399 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Converse" data-price="399" data-type="Trampki">
+            <img src="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg" alt="Converse All Star Platform">
+            <h3>Converse All Star Platform Czarny</h3>
+            <p class="cena">399 zł</p>
+            <a href="ConvPlatform.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        <a href="AdidasFor.php" class="produkt" data-brand="Adidas" data-price="499" data-type="Sneakersy">
-          <img src="img/Adidas/ForumBlack/Forum1.jpg" alt="Adidas Forum Low" />
-          <p>Adidas Forum Low</p>
-          <span>499 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Adidas" data-price="499" data-type="Sneakersy">
+            <img src="img/Adidas/ForumBlack/Forum1.jpg" alt="Adidas Forum Low" />
+            <h3>Adidas Forum Low</h3>
+            <p class="cena">499 zł</p>
+            <a href="AdidasFor.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        <a href="Jordan1Chi.php" class="produkt" data-brand="Jordan" data-price="1599" data-type="Sneakersy">
-          <img src="img/Jordan/J1Chicago/J1Chicago1.jpg" alt="Jordan 1 Chicago" />
-          <p>Jordan 1 Chicago</p>
-          <span>1599 zł</span>
-        </a>
-        <a href="CopaPure.php" class="produkt" data-brand="Adidas" data-price="350" data-type="Treningowe">
-          <img src="img/Adidas/COPA PURE 2 CLUB IN/add1.jpg" alt="COPA PURE" />
-          <p>Adidas COPA PURE 2</p>
-          <span>350 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Jordan" data-price="1599" data-type="Sneakersy">
+            <img src="img/Jordan/J1Chicago/J1Chicago1.jpg" alt="Jordan 1 Chicago" />
+            <h3>Jordan 1 Chicago</h3>
+            <p class="cena">1599 zł</p>
+            <a href="Jordan1Chi.php" class="btn-zobacz">Zobacz</a>
+        </div>
+        <div class="produkt-card" data-brand="Adidas" data-price="350" data-type="Treningowe">
+            <img src="img/Adidas/COPA PURE 2 CLUB IN/add1.jpg" alt="COPA PURE" />
+            <h3>Adidas COPA PURE 2</h3>
+            <p class="cena">350 zł</p>
+            <a href="CopaPure.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-        <a href="VansOld.php" class="produkt" data-brand="Vans" data-price="379" data-type="Trampki">
-          <img src="img/VANS/VansOld/VansOld1.avif" alt="Vans Old Skool">
-          <p>Vans Old Skool Czarny</p>
-          <span>379 zł</span>
-        </a>
-        
-        <a href="VansOld.php" class="produkt" data-brand="Vans" data-price="429" data-type="Trampki">
-          <img src="img/VANS/VansSk8/VansSk81.avif" alt="Vans Sk8-Hi">
-          <p>Vans Sk8-Hi Biało-Czarne</p>
-          <span>429 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Vans" data-price="379" data-type="Trampki">
+            <img src="img/VANS/VansOld/VansOld1.avif" alt="Vans Old Skool">
+            <h3>Vans Old Skool Czarny</h3>
+            <p class="cena">379 zł</p>
+            <a href="VansOld.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
-
-        <a href="klapkiNikeB.php" class="produkt" data-brand="Nike" data-price="199" data-type="Klapki">
-          <img src="img/Nike/KlapkiBiale/1.avif" alt="Nike Klapki Białe" />
-          <p>Nike Klapki Białe</p>
-          <span>199 zł</span>
-        </a>
-        <a href="klapkiNikeC.php" class="produkt" data-brand="Nike" data-price="199" data-type="Klapki">
-          <img src="img/Nike/KlpakiCzarne/1.avif" alt="Nike Klapki Czarne" />
-          <p>Nike Klapki Czarne</p>
-          <span>199 zł</span>
-        </a>
-        
-
-        <a href="UnderArmourInf.php" class="produkt" data-brand="Under" data-price="699" data-type="biegania">
-          <img src="img/UnderArmour/Infinite/UA_W_Infinite_Elite_2_1.png" alt="Under Armour Infinite" />
-          <p>Under Armour Infinite</p>
-          <span>699</span>
-        </a>
-        
-        <a href="AdidasKlapkiB.php" class="produkt" data-brand="Adidas" data-price="179" data-type="Klapki">
-          <img src="img/Adidas/KlapkiBiale/1.avif" alt="Adidas Klapki Białe" />
-          <p>Adidas Klapki Białe</p>
-          <span>179 zł</span>
-        </a>
-        <a href="AdidasKlapkiC.php" class="produkt" data-brand="Adidas" data-price="179" data-type="Klapki">
-          <img src="img/Adidas/KlapkiCzarne/1.avif" alt="Adidas Klapki Czarne" />
-          <p>Adidas Klapki Czarne</p>
-          <span>179 zł</span>
-        </a>
-
-        <a href="JordanKlapkiC.php" class="produkt" data-brand="Jordan" data-price="250" data-type="Klapki">
-          <img src="img/Jordan/KlapkiCzarne/1.avif" alt="Jordan Klapki Czarne" />
-          <p>Jordan Klapki Czarne</p>
-          <span>250 zł</span>
-        </a>
-
-        <a href="UAMagnetico.php" class="produkt" data-brand="Under" data-price="299" data-type="Treningowe">
-          <img src="img/UnderArmour/Magnetico/UA_Magnetico_Elite_4Fg_1.png" alt="Under Armour Magnetico" />
-          <p>Under Armour Magnetico</p>
-          <span>299</span>
-        </a>
-        <a href="JordanKlapkiB.php" class="produkt" data-brand="Jordan" data-price="250" data-type="Klapki">
-          <img src="img/Jordan/KlapkiBiale/1.avif" alt="Jordan Klapki Białe" />
-          <p>Jordan Klapki Białe</p>
-          <span>250 zł</span>
-        </a>
+        <div class="produkt-card" data-brand="Vans" data-price="429" data-type="Trampki">
+            <img src="img/VANS/VansSk8/VansSk81.avif" alt="Vans Sk8-Hi">
+            <h3>Vans Sk8-Hi Biało-Czarne</h3>
+            <p class="cena">429 zł</p>
+            <a href="VansOld.php" class="btn-zobacz">Zobacz</a>
+        </div>
 
 
-        
-       
+        <div class="produkt-card" data-brand="Nike" data-price="199" data-type="Klapki">
+            <img src="img/Nike/KlapkiBiale/1.avif" alt="Nike Klapki Białe" />
+            <h3>Nike Klapki Białe</h3>
+            <p class="cena">199 zł</p>
+            <a href="klapkiNikeB.php" class="btn-zobacz">Zobacz</a>
+        </div>
+        <div class="produkt-card" data-brand="Nike" data-price="199" data-type="Klapki">
+            <img src="img/Nike/KlpakiCzarne/1.avif" alt="Nike Klapki Czarne" />
+            <h3>Nike Klapki Czarne</h3>
+            <p class="cena">199 zł</p>
+            <a href="klapkiNikeC.php" class="btn-zobacz">Zobacz</a>
+        </div>
+
+
+        <div class="produkt-card" data-brand="Under" data-price="699" data-type="biegania">
+            <img src="img/UnderArmour/Infinite/UA_W_Infinite_Elite_2_1.png" alt="Under Armour Infinite" />
+            <h3>Under Armour Infinite</h3>
+            <p class="cena">699 zł</p>
+            <a href="UnderArmourInf.php" class="btn-zobacz">Zobacz</a>
+        </div>
+
+        <div class="produkt-card" data-brand="Adidas" data-price="179" data-type="Klapki">
+            <img src="img/Adidas/KlapkiBiale/1.avif" alt="Adidas Klapki Białe" />
+            <h3>Adidas Klapki Białe</h3>
+            <p class="cena">179 zł</p>
+            <a href="AdidasKlapkiB.php" class="btn-zobacz">Zobacz</a>
+        </div>
+        <div class="produkt-card" data-brand="Adidas" data-price="179" data-type="Klapki">
+            <img src="img/Adidas/KlapkiCzarne/1.avif" alt="Adidas Klapki Czarne" />
+            <h3>Adidas Klapki Czarne</h3>
+            <p class="cena">179 zł</p>
+            <a href="AdidasKlapkiC.php" class="btn-zobacz">Zobacz</a>
+        </div>
+
+        <div class="produkt-card" data-brand="Jordan" data-price="250" data-type="Klapki">
+            <img src="img/Jordan/KlapkiCzarne/1.avif" alt="Jordan Klapki Czarne" />
+            <h3>Jordan Klapki Czarne</h3>
+            <p class="cena">250 zł</p>
+            <a href="JordanKlapkiC.php" class="btn-zobacz">Zobacz</a>
+        </div>
+
+        <div class="produkt-card" data-brand="Under" data-price="299" data-type="Treningowe">
+            <img src="img/UnderArmour/Magnetico/UA_Magnetico_Elite_4Fg_1.png" alt="Under Armour Magnetico" />
+            <h3>Under Armour Magnetico</h3>
+            <p class="cena">299 zł</p>
+            <a href="UAMagnetico.php" class="btn-zobacz">Zobacz</a>
+        </div>
+        <div class="produkt-card" data-brand="Jordan" data-price="250" data-type="Klapki">
+            <img src="img/Jordan/KlapkiBiale/1.avif" alt="Jordan Klapki Białe" />
+            <h3>Jordan Klapki Białe</h3>
+            <p class="cena">250 zł</p>
+            <a href="JordanKlapkiB.php" class="btn-zobacz">Zobacz</a>
+        </div>
+
+    </div>
+</section>
       </div>
-    </main>
-
     <footer class="footer">
-      <p>&copy; 2025 Sklep z Butami. Wszystkie prawa zastrzeżone.</p>
+      <div class="footer-container">
+        <div class="footer-column">
+          <h3>Kontakt</h3>
+          <p>Buty Opalacz Dziewit</p>
+          <p>ul. Kwiatowa 30, Mielec</p>
+          <p>Tel: <a href="tel:+48123456789">+48 123 456 789</a></p>
+          <p>Email: <a href="mailto:kontakt@butyopalacz.pl">kontakt@butyopalacz.pl</a></p>
+        </div>
+        <div class="footer-column">
+          <h3>Godziny otwarcia</h3>
+          <p>Poniedziałek – Piątek: 9:00 – 18:00</p>
+          <p>Sobota: 10:00 – 14:00</p>
+          <p>Niedziela: nieczynne</p>
+        </div>
+        <div class="footer-column">
+          <h3>Śledź nas</h3>
+          <div class="social-icons">
+            <a href="https://facebook.com/butyopalacz" target="_blank" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://instagram.com/butyopalacz" target="_blank" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://twitter.com/butyopalacz" target="_blank" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Buty Opalacz Dziewit. Wszelkie prawa zastrzeżone.</p>
+      </div>
     </footer>
   </div>
+
   <script>
     // Pobieranie elementów filtrów
     const poleWyszukiwania = document.getElementById("searchInput");
@@ -248,7 +298,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
     const sortowanieCeny = document.getElementById("sortOrder");
   
     const listaProduktow = document.getElementById("productList");
-    const wszystkieProdukty = Array.from(listaProduktow.querySelectorAll(".produkt"));
+    const wszystkieProdukty = Array.from(listaProduktow.querySelectorAll(".produkt-card"));
   
     // Aktualizacja tekstu przy suwaku
     suwakCeny.addEventListener("input", () => {
@@ -271,7 +321,7 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
   
       // Filtrowanie produktów
       let pasujaceProdukty = wszystkieProdukty.filter(produkt => {
-        const nazwa = produkt.querySelector("p").textContent.toLowerCase();
+        const nazwa = produkt.querySelector("h3").textContent.toLowerCase();
         const marka = produkt.dataset.brand;
         const rodzaj = produkt.dataset.type;
         const cena = parseInt(produkt.dataset.price);
@@ -299,11 +349,5 @@ $zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest
     // Pierwsze wywołanie na starcie
     filtrujProdukty();
   </script>
-  
 </body>
 </html>
-
-
-
-
-
