@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 11, 2025 at 09:31 PM
+-- Generation Time: Maj 13, 2025 at 08:57 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.0.30
 
@@ -50,7 +50,18 @@ INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `i
 (8, 9, 2, 1, 1249.00),
 (9, 10, 1, 1, 499.00),
 (10, 11, 2, 1, 1249.00),
-(11, 12, 1, 1, 499.00);
+(11, 12, 1, 1, 499.00),
+(12, 14, 1, 1, 499.00),
+(13, 14, 1, 1, 499.00),
+(14, 15, 1, 1, 499.00),
+(15, 15, 1, 1, 499.00),
+(16, 16, 1, 1, 499.00),
+(17, 17, 1, 1, 499.00),
+(18, 18, 1, 1, 499.00),
+(19, 19, 1, 1, 499.00),
+(20, 20, 1, 2, 499.00),
+(21, 21, 1, 4, 499.00),
+(22, 22, 1, 1, 499.00);
 
 -- --------------------------------------------------------
 
@@ -167,6 +178,26 @@ INSERT INTO `uzytkownicy` (`id_uzytkownika`, `nazwa_uzytkownika`, `haslo`, `emai
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `wiadomosci`
+--
+
+CREATE TABLE `wiadomosci` (
+  `id` int(11) NOT NULL,
+  `imie` varchar(20) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `pytanie` varchar(5000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `wiadomosci`
+--
+
+INSERT INTO `wiadomosci` (`id`, `imie`, `email`, `pytanie`) VALUES
+(1, 'Andrzej', 'Andrzej@gmail.com', 'Andrzej siemka');
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `zamowienia`
 --
 
@@ -192,7 +223,16 @@ INSERT INTO `zamowienia` (`id_zamowienia`, `id_uzytkownika`, `data_zamowienia`, 
 (9, 17, '2025-05-11 17:37:00', 1249.00),
 (10, 30, '2025-05-11 17:56:26', 499.00),
 (11, 30, '2025-05-11 17:58:18', 1249.00),
-(12, 31, '2025-05-11 19:29:39', 499.00);
+(12, 31, '2025-05-11 19:29:39', 499.00),
+(14, 29, '2025-05-13 17:57:10', 998.00),
+(15, 29, '2025-05-13 18:09:33', 998.00),
+(16, 29, '2025-05-13 18:17:46', 499.00),
+(17, 29, '2025-05-13 18:18:23', 499.00),
+(18, 29, '2025-05-13 18:19:24', 499.00),
+(19, 29, '2025-05-13 18:21:56', 499.00),
+(20, 29, '2025-05-13 18:29:30', 998.00),
+(21, 29, '2025-05-13 18:49:53', 1996.00),
+(22, 29, '2025-05-13 18:55:16', 499.00);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -229,6 +269,12 @@ ALTER TABLE `uzytkownicy`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indeksy dla tabeli `wiadomosci`
+--
+ALTER TABLE `wiadomosci`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeksy dla tabeli `zamowienia`
 --
 ALTER TABLE `zamowienia`
@@ -243,7 +289,7 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `elementy_zamowienia`
 --
 ALTER TABLE `elementy_zamowienia`
-  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `opinie`
@@ -264,10 +310,16 @@ ALTER TABLE `uzytkownicy`
   MODIFY `id_uzytkownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
+-- AUTO_INCREMENT for table `wiadomosci`
+--
+ALTER TABLE `wiadomosci`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Constraints for dumped tables
