@@ -39,6 +39,7 @@ if (!empty($_SESSION['koszyk'])) {
 <head>
     <meta charset="UTF-8">
     <title>Twój Koszyk</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
         .koszyk-container {
@@ -189,8 +190,40 @@ if (!empty($_SESSION['koszyk'])) {
         </div>
     </main>
             </div>
+    
     <footer class="footer">
-        <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
+      <div class="footer-container">
+        <div class="footer-column">
+          <h3>Kontakt</h3>
+          <p>Buty Opalacz Dziewit</p>
+          <p>ul. Kwiatowa 30, Mielec</p>
+          <p>Tel: <a href="tel:+48123456789">+48 123 456 789</a></p>
+          <p>Email: <a href="mailto:kontakt@butyopalacz.pl">kontakt@butyopalacz.pl</a></p>
+        </div>
+        <div class="footer-column">
+          <h3>Godziny otwarcia</h3>
+          <p>Poniedziałek – Piątek: 9:00 – 18:00</p>
+          <p>Sobota: 10:00 – 14:00</p>
+          <p>Niedziela: nieczynne</p>
+        </div>
+        <div class="footer-column">
+          <h3>Śledź nas</h3>
+          <div class="social-icons">
+            <a href="https://facebook.com/butyopalacz" target="_blank" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://instagram.com/butyopalacz" target="_blank" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://twitter.com/butyopalacz" target="_blank" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Buty Opalacz Dziewit. Wszelkie prawa zastrzeżone.</p>
+      </div>
     </footer>
 </div>
 
