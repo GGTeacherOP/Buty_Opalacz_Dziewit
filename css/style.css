@@ -184,6 +184,7 @@ nav .zbior a:hover {
 }
 
 /*---bestseller--*/
+/* --- NASZE PRODUKTY --- */
 .bestsellery {
   padding: 40px 20px;
   background-color: #f5f5f5;
@@ -199,40 +200,44 @@ nav .zbior a:hover {
 .produkty-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 12px;
- max-width: 1000px;
- margin: 0 auto;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .produkt-card {
   background-color: #fff;
   border-radius: 16px;
-  padding: 10px;
-  max-width: 260px;
+  padding: 15px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
-  margin: 0 auto;
-  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .produkt-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-5px);
 }
 
 .produkt-card img {
-  max-width: 100%;
-  border-radius: 12px;
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  border-radius: 8px;
   margin-bottom: 15px;
 }
 
 .produkt-card h3 {
-  font-size: 18px;
+  font-size: 16px;
   margin: 10px 0;
   color: #222;
+  flex-grow: 1;
 }
 
 .produkt-card .cena {
-  font-size: 16px;
+  font-size: 18px;
   color: #007bff;
   margin-bottom: 15px;
   font-weight: bold;
@@ -240,12 +245,15 @@ nav .zbior a:hover {
 
 .btn-zobacz {
   display: inline-block;
-  padding: 8px 16px;
+  padding: 10px 15px;
   background-color: #007bff;
   color: white;
   text-decoration: none;
   border-radius: 8px;
   transition: background-color 0.3s ease;
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
 }
 
 .btn-zobacz:hover {
