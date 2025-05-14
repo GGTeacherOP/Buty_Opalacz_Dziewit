@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 13, 2025 at 08:57 PM
+-- Generation Time: Maj 14, 2025 at 08:32 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.0.30
 
@@ -50,18 +50,51 @@ INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `i
 (8, 9, 2, 1, 1249.00),
 (9, 10, 1, 1, 499.00),
 (10, 11, 2, 1, 1249.00),
-(11, 12, 1, 1, 499.00),
-(12, 14, 1, 1, 499.00),
-(13, 14, 1, 1, 499.00),
-(14, 15, 1, 1, 499.00),
-(15, 15, 1, 1, 499.00),
-(16, 16, 1, 1, 499.00),
-(17, 17, 1, 1, 499.00),
-(18, 18, 1, 1, 499.00),
-(19, 19, 1, 1, 499.00),
-(20, 20, 1, 2, 499.00),
-(21, 21, 1, 4, 499.00),
-(22, 22, 1, 1, 499.00);
+(11, 12, 1, 1, 499.00);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `klienci`
+--
+
+CREATE TABLE `klienci` (
+  `id_klienta` int(11) NOT NULL,
+  `nazwa_uzytkownika` varchar(50) NOT NULL,
+  `haslo` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `data_rejestracji` timestamp NOT NULL DEFAULT current_timestamp(),
+  `rola` varchar(20) NOT NULL DEFAULT 'klient'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `klienci`
+--
+
+INSERT INTO `klienci` (`id_klienta`, `nazwa_uzytkownika`, `haslo`, `email`, `data_rejestracji`, `rola`) VALUES
+(1, 'jan_kowalski', 'haslo123', 'jan.kowalski@example.com', '2025-05-11 19:31:00', 'klient'),
+(2, 'maria_nowak', 'tajnehaslo', 'maria.nowak@example.com', '2025-05-11 19:31:00', 'klient'),
+(4, 'anna_smith', 'password456', 'anna.smith@example.com', '2025-05-11 19:31:00', 'klient'),
+(5, 'piotr_wisniewski', 'sekretne123', 'piotr.wisniewski@example.com', '2025-05-11 19:31:00', 'klient'),
+(6, 'ewa_lewandowska', 'hasloewa', 'ewa.lewandowska@example.com', '2025-05-11 19:31:00', 'klient'),
+(7, 'tomasz_muller', 'tomasz123', 'tomasz.muller@example.com', '2025-05-11 19:31:00', 'klient'),
+(8, 'magdalena_bak', 'magdabak', 'magdalena.bak@example.com', '2025-05-11 19:31:00', 'klient'),
+(9, 'lukasz_nowakowski', 'lukaszpass', 'lukasz.nowakowski@example.com', '2025-05-11 19:31:00', 'klient'),
+(10, 'katarzyna_zielinska', 'katarzynaz', 'katarzyna.zielinska@example.com', '2025-05-11 19:31:00', 'klient'),
+(11, 'michal_wozniak', 'michal123', 'michal.wozniak@example.com', '2025-05-11 19:31:00', 'klient'),
+(12, 'aleksandra_duda', 'aleksandrad', 'aleksandra.duda@example.com', '2025-05-11 19:31:00', 'klient'),
+(13, 'marcin_kaminski', 'marcinkam', 'marcin.kaminski@example.com', '2025-05-11 19:31:00', 'klient'),
+(14, 'natalia_sokolowska', 'natalias', 'natalia.sokolowska@example.com', '2025-05-11 19:31:00', 'klient'),
+(15, 'dawid_gorski', 'dawidgorski', 'dawid.gorski@example.com', '2025-05-11 19:31:00', 'klient'),
+(16, 'karolina_mazur', 'karolinam', 'karolina.mazur@example.com', '2025-05-11 19:31:00', 'klient'),
+(17, 'sebastian_kowalczyk', 'sebastiank', 'sebastian.kowalczyk@example.com', '2025-05-11 19:31:00', 'klient'),
+(18, 'wiktoria_rutkowska', 'wiktoriar', 'wiktoria.rutkowska@example.com', '2025-05-11 19:31:00', 'klient'),
+(19, 'filip_zawadzki', 'filipz', 'filip.zawadzki@example.com', '2025-05-11 19:31:00', 'klient'),
+(20, 'julia_kaczmarek', 'juliak', 'julia.kaczmarek@example.com', '2025-05-11 19:31:00', 'klient'),
+(28, 'MarekJ', 'haslo123', 'MarekJ@gmail.com', '2025-05-11 19:31:00', 'klient'),
+(29, 'Andrzej', 'haslo123', 'Andrzej@gmail.com', '2025-05-11 19:31:00', 'klient'),
+(30, 'Bombel', 'haslo123', 'Bombel@gmail.com', '2025-05-11 19:31:00', 'klient'),
+(31, 'Dominik', 'Domino123', 'Dominik@wp.pl', '2025-05-11 19:31:00', 'klient');
 
 -- --------------------------------------------------------
 
@@ -72,11 +105,41 @@ INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `i
 CREATE TABLE `opinie` (
   `id_opinii` int(11) NOT NULL,
   `id_produktu` int(11) DEFAULT NULL,
-  `id_uzytkownika` int(11) DEFAULT NULL,
+  `id_klienta` int(11) DEFAULT NULL,
   `ocena` int(11) DEFAULT NULL,
   `komentarz` text DEFAULT NULL,
   `data_opinii` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `pracownicy`
+--
+
+CREATE TABLE `pracownicy` (
+  `id_pracownika` int(11) NOT NULL,
+  `nazwa_uzytkownika` varchar(50) NOT NULL,
+  `haslo` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `data_zatrudnienia` date DEFAULT NULL,
+  `stanowisko` varchar(50) DEFAULT NULL,
+  `pensja` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pracownicy`
+--
+
+INSERT INTO `pracownicy` (`id_pracownika`, `nazwa_uzytkownika`, `haslo`, `email`, `data_zatrudnienia`, `stanowisko`, `pensja`) VALUES
+(3, 'admin123', 'adminpass', 'admin123@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
+(21, 'patryk_jakubowski', 'patrykj', 'patryk.jakubowski@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
+(22, 'amanda_jablonska', 'amandaj', 'amanda.jablonska@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
+(23, 'adam_piekarski', 'adamp', 'adam.piekarski@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
+(24, 'beata_mazurek', 'beatam', 'beata.mazurek@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
+(25, 'cezary_baranski', 'cezaryb', 'cezary.baranski@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
+(26, 'diana_sikora', 'dianas', 'diana.sikora@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
+(27, 'eryk_urban', 'eryku', 'eryk.urban@example.com', '2025-05-11', 'Pracownik sklepu', NULL);
 
 -- --------------------------------------------------------
 
@@ -127,57 +190,6 @@ INSERT INTO `produkty` (`id_produktu`, `nazwa`, `opis`, `cena`, `marka`, `katego
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `uzytkownicy`
---
-
-CREATE TABLE `uzytkownicy` (
-  `id_uzytkownika` int(11) NOT NULL,
-  `nazwa_uzytkownika` varchar(50) NOT NULL,
-  `haslo` varchar(255) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `rola` enum('klient','pracownik') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `uzytkownicy`
---
-
-INSERT INTO `uzytkownicy` (`id_uzytkownika`, `nazwa_uzytkownika`, `haslo`, `email`, `rola`) VALUES
-(1, 'jan_kowalski', 'haslo123', 'jan.kowalski@example.com', 'klient'),
-(2, 'maria_nowak', 'tajnehaslo', 'maria.nowak@example.com', 'klient'),
-(3, 'admin123', 'adminpass', 'admin123@example.com', 'pracownik'),
-(4, 'anna_smith', 'password456', 'anna.smith@example.com', 'klient'),
-(5, 'piotr_wisniewski', 'sekretne123', 'piotr.wisniewski@example.com', 'klient'),
-(6, 'ewa_lewandowska', 'hasloewa', 'ewa.lewandowska@example.com', 'klient'),
-(7, 'tomasz_muller', 'tomasz123', 'tomasz.muller@example.com', 'klient'),
-(8, 'magdalena_bak', 'magdabak', 'magdalena.bak@example.com', 'klient'),
-(9, 'lukasz_nowakowski', 'lukaszpass', 'lukasz.nowakowski@example.com', 'klient'),
-(10, 'katarzyna_zielinska', 'katarzynaz', 'katarzyna.zielinska@example.com', 'klient'),
-(11, 'michal_wozniak', 'michal123', 'michal.wozniak@example.com', 'klient'),
-(12, 'aleksandra_duda', 'aleksandrad', 'aleksandra.duda@example.com', 'klient'),
-(13, 'marcin_kaminski', 'marcinkam', 'marcin.kaminski@example.com', 'klient'),
-(14, 'natalia_sokolowska', 'natalias', 'natalia.sokolowska@example.com', 'klient'),
-(15, 'dawid_gorski', 'dawidgorski', 'dawid.gorski@example.com', 'klient'),
-(16, 'karolina_mazur', 'karolinam', 'karolina.mazur@example.com', 'klient'),
-(17, 'sebastian_kowalczyk', 'sebastiank', 'sebastian.kowalczyk@example.com', 'klient'),
-(18, 'wiktoria_rutkowska', 'wiktoriar', 'wiktoria.rutkowska@example.com', 'klient'),
-(19, 'filip_zawadzki', 'filipz', 'filip.zawadzki@example.com', 'klient'),
-(20, 'julia_kaczmarek', 'juliak', 'julia.kaczmarek@example.com', 'klient'),
-(21, 'patryk_jakubowski', 'patrykj', 'patryk.jakubowski@example.com', 'pracownik'),
-(22, 'amanda_jablonska', 'amandaj', 'amanda.jablonska@example.com', 'pracownik'),
-(23, 'adam_piekarski', 'adamp', 'adam.piekarski@example.com', 'pracownik'),
-(24, 'beata_mazurek', 'beatam', 'beata.mazurek@example.com', 'pracownik'),
-(25, 'cezary_baranski', 'cezaryb', 'cezary.baranski@example.com', 'pracownik'),
-(26, 'diana_sikora', 'dianas', 'diana.sikora@example.com', 'pracownik'),
-(27, 'eryk_urban', 'eryku', 'eryk.urban@example.com', 'pracownik'),
-(28, 'MarekJ', 'haslo123', 'MarekJ@gmail.com', 'klient'),
-(29, 'Andrzej', 'haslo123', 'Andrzej@gmail.com', 'klient'),
-(30, 'Bombel', 'haslo123', 'Bombel@gmail.com', 'klient'),
-(31, 'Dominik', 'Domino123', 'Dominik@wp.pl', 'klient');
-
--- --------------------------------------------------------
-
---
 -- Struktura tabeli dla tabeli `wiadomosci`
 --
 
@@ -185,7 +197,7 @@ CREATE TABLE `wiadomosci` (
   `id` int(11) NOT NULL,
   `imie` varchar(20) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `pytanie` varchar(5000) NOT NULL
+  `pytanie` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -193,7 +205,130 @@ CREATE TABLE `wiadomosci` (
 --
 
 INSERT INTO `wiadomosci` (`id`, `imie`, `email`, `pytanie`) VALUES
-(1, 'Andrzej', 'Andrzej@gmail.com', 'Andrzej siemka');
+(1, 'Andrzej', 'Andrrzej@gmail.com', 'Siemka mam pytanie');
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `widok_najaktywniejsi_klienci`
+-- (See below for the actual view)
+--
+CREATE TABLE `widok_najaktywniejsi_klienci` (
+`id_klienta` int(11)
+,`nazwa_uzytkownika` varchar(50)
+,`email` varchar(100)
+,`liczba_zamowien` bigint(21)
+,`laczna_wartosc` decimal(32,2)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `widok_najlepsze_produkty`
+-- (See below for the actual view)
+--
+CREATE TABLE `widok_najlepsze_produkty` (
+`id_produktu` int(11)
+,`nazwa` varchar(255)
+,`marka` varchar(100)
+,`liczba_zamowien` bigint(21)
+,`laczna_ilosc` decimal(32,0)
+,`laczna_wartosc` decimal(42,2)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `widok_opinie_z_danymi`
+-- (See below for the actual view)
+--
+CREATE TABLE `widok_opinie_z_danymi` (
+`id_opinii` int(11)
+,`ocena` int(11)
+,`komentarz` text
+,`data_opinii` timestamp
+,`klient` varchar(50)
+,`produkt` varchar(255)
+,`marka` varchar(100)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `widok_pele_zamowienia`
+-- (See below for the actual view)
+--
+CREATE TABLE `widok_pele_zamowienia` (
+`id_zamowienia` int(11)
+,`data_zamowienia` timestamp
+,`klient` varchar(50)
+,`produkt` varchar(255)
+,`ilosc` int(11)
+,`cena_jednostkowa` decimal(10,2)
+,`wartosc_czesciowa` decimal(20,2)
+,`kwota_calkowita` decimal(10,2)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `widok_produkty_wedlug_kategorii`
+-- (See below for the actual view)
+--
+CREATE TABLE `widok_produkty_wedlug_kategorii` (
+`kategoria` varchar(100)
+,`liczba_produktow` bigint(21)
+,`najnizsza_cena` decimal(10,2)
+,`najwyzsza_cena` decimal(10,2)
+,`srednia_cena` decimal(14,6)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `widok_statystyki_produktow`
+-- (See below for the actual view)
+--
+CREATE TABLE `widok_statystyki_produktow` (
+`id_produktu` int(11)
+,`nazwa` varchar(255)
+,`marka` varchar(100)
+,`cena` decimal(10,2)
+,`liczba_zamowien` bigint(21)
+,`laczna_ilosc` decimal(32,0)
+,`laczna_wartosc` decimal(42,2)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `widok_szczegoly_zamowien`
+-- (See below for the actual view)
+--
+CREATE TABLE `widok_szczegoly_zamowien` (
+`id_elementu_zamowienia` int(11)
+,`id_zamowienia` int(11)
+,`produkt` varchar(255)
+,`marka` varchar(100)
+,`ilosc` int(11)
+,`cena_jednostkowa` decimal(10,2)
+,`wartosc_czesciowa` decimal(20,2)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `widok_zamowienia_z_klientami`
+-- (See below for the actual view)
+--
+CREATE TABLE `widok_zamowienia_z_klientami` (
+`id_zamowienia` int(11)
+,`data_zamowienia` timestamp
+,`kwota_calkowita` decimal(10,2)
+,`id_klienta` int(11)
+,`klient` varchar(50)
+,`email` varchar(100)
+);
 
 -- --------------------------------------------------------
 
@@ -203,7 +338,7 @@ INSERT INTO `wiadomosci` (`id`, `imie`, `email`, `pytanie`) VALUES
 
 CREATE TABLE `zamowienia` (
   `id_zamowienia` int(11) NOT NULL,
-  `id_uzytkownika` int(11) DEFAULT NULL,
+  `id_klienta` int(11) DEFAULT NULL,
   `data_zamowienia` timestamp NOT NULL DEFAULT current_timestamp(),
   `kwota_calkowita` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -212,7 +347,7 @@ CREATE TABLE `zamowienia` (
 -- Dumping data for table `zamowienia`
 --
 
-INSERT INTO `zamowienia` (`id_zamowienia`, `id_uzytkownika`, `data_zamowienia`, `kwota_calkowita`) VALUES
+INSERT INTO `zamowienia` (`id_zamowienia`, `id_klienta`, `data_zamowienia`, `kwota_calkowita`) VALUES
 (2, 5, '2025-05-11 16:49:46', 499.00),
 (3, 5, '2025-05-11 16:52:12', 499.00),
 (4, 7, '2025-05-11 17:00:02', 529.00),
@@ -223,16 +358,79 @@ INSERT INTO `zamowienia` (`id_zamowienia`, `id_uzytkownika`, `data_zamowienia`, 
 (9, 17, '2025-05-11 17:37:00', 1249.00),
 (10, 30, '2025-05-11 17:56:26', 499.00),
 (11, 30, '2025-05-11 17:58:18', 1249.00),
-(12, 31, '2025-05-11 19:29:39', 499.00),
-(14, 29, '2025-05-13 17:57:10', 998.00),
-(15, 29, '2025-05-13 18:09:33', 998.00),
-(16, 29, '2025-05-13 18:17:46', 499.00),
-(17, 29, '2025-05-13 18:18:23', 499.00),
-(18, 29, '2025-05-13 18:19:24', 499.00),
-(19, 29, '2025-05-13 18:21:56', 499.00),
-(20, 29, '2025-05-13 18:29:30', 998.00),
-(21, 29, '2025-05-13 18:49:53', 1996.00),
-(22, 29, '2025-05-13 18:55:16', 499.00);
+(12, 31, '2025-05-11 19:29:39', 499.00);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `widok_najaktywniejsi_klienci`
+--
+DROP TABLE IF EXISTS `widok_najaktywniejsi_klienci`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_najaktywniejsi_klienci`  AS SELECT `k`.`id_klienta` AS `id_klienta`, `k`.`nazwa_uzytkownika` AS `nazwa_uzytkownika`, `k`.`email` AS `email`, count(`z`.`id_zamowienia`) AS `liczba_zamowien`, sum(`z`.`kwota_calkowita`) AS `laczna_wartosc` FROM (`klienci` `k` join `zamowienia` `z` on(`k`.`id_klienta` = `z`.`id_klienta`)) GROUP BY `k`.`id_klienta`, `k`.`nazwa_uzytkownika`, `k`.`email` ORDER BY sum(`z`.`kwota_calkowita`) DESC ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `widok_najlepsze_produkty`
+--
+DROP TABLE IF EXISTS `widok_najlepsze_produkty`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_najlepsze_produkty`  AS SELECT `p`.`id_produktu` AS `id_produktu`, `p`.`nazwa` AS `nazwa`, `p`.`marka` AS `marka`, count(`ez`.`id_elementu_zamowienia`) AS `liczba_zamowien`, sum(`ez`.`ilosc`) AS `laczna_ilosc`, sum(`ez`.`ilosc` * `ez`.`cena_jednostkowa`) AS `laczna_wartosc` FROM (`produkty` `p` join `elementy_zamowienia` `ez` on(`p`.`id_produktu` = `ez`.`id_produktu`)) GROUP BY `p`.`id_produktu`, `p`.`nazwa`, `p`.`marka` ORDER BY sum(`ez`.`ilosc` * `ez`.`cena_jednostkowa`) DESC ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `widok_opinie_z_danymi`
+--
+DROP TABLE IF EXISTS `widok_opinie_z_danymi`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_opinie_z_danymi`  AS SELECT `o`.`id_opinii` AS `id_opinii`, `o`.`ocena` AS `ocena`, `o`.`komentarz` AS `komentarz`, `o`.`data_opinii` AS `data_opinii`, `k`.`nazwa_uzytkownika` AS `klient`, `p`.`nazwa` AS `produkt`, `p`.`marka` AS `marka` FROM ((`opinie` `o` join `klienci` `k` on(`o`.`id_klienta` = `k`.`id_klienta`)) join `produkty` `p` on(`o`.`id_produktu` = `p`.`id_produktu`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `widok_pele_zamowienia`
+--
+DROP TABLE IF EXISTS `widok_pele_zamowienia`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_pele_zamowienia`  AS SELECT `z`.`id_zamowienia` AS `id_zamowienia`, `z`.`data_zamowienia` AS `data_zamowienia`, `k`.`nazwa_uzytkownika` AS `klient`, `p`.`nazwa` AS `produkt`, `ez`.`ilosc` AS `ilosc`, `ez`.`cena_jednostkowa` AS `cena_jednostkowa`, `ez`.`ilosc`* `ez`.`cena_jednostkowa` AS `wartosc_czesciowa`, `z`.`kwota_calkowita` AS `kwota_calkowita` FROM (((`zamowienia` `z` join `klienci` `k` on(`z`.`id_klienta` = `k`.`id_klienta`)) join `elementy_zamowienia` `ez` on(`z`.`id_zamowienia` = `ez`.`id_zamowienia`)) join `produkty` `p` on(`ez`.`id_produktu` = `p`.`id_produktu`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `widok_produkty_wedlug_kategorii`
+--
+DROP TABLE IF EXISTS `widok_produkty_wedlug_kategorii`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_produkty_wedlug_kategorii`  AS SELECT `produkty`.`kategoria` AS `kategoria`, count(`produkty`.`id_produktu`) AS `liczba_produktow`, min(`produkty`.`cena`) AS `najnizsza_cena`, max(`produkty`.`cena`) AS `najwyzsza_cena`, avg(`produkty`.`cena`) AS `srednia_cena` FROM `produkty` GROUP BY `produkty`.`kategoria` ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `widok_statystyki_produktow`
+--
+DROP TABLE IF EXISTS `widok_statystyki_produktow`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_statystyki_produktow`  AS SELECT `p`.`id_produktu` AS `id_produktu`, `p`.`nazwa` AS `nazwa`, `p`.`marka` AS `marka`, `p`.`cena` AS `cena`, count(`ez`.`id_elementu_zamowienia`) AS `liczba_zamowien`, sum(`ez`.`ilosc`) AS `laczna_ilosc`, sum(`ez`.`ilosc` * `ez`.`cena_jednostkowa`) AS `laczna_wartosc` FROM (`produkty` `p` left join `elementy_zamowienia` `ez` on(`p`.`id_produktu` = `ez`.`id_produktu`)) GROUP BY `p`.`id_produktu`, `p`.`nazwa`, `p`.`marka`, `p`.`cena` ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `widok_szczegoly_zamowien`
+--
+DROP TABLE IF EXISTS `widok_szczegoly_zamowien`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_szczegoly_zamowien`  AS SELECT `ez`.`id_elementu_zamowienia` AS `id_elementu_zamowienia`, `ez`.`id_zamowienia` AS `id_zamowienia`, `p`.`nazwa` AS `produkt`, `p`.`marka` AS `marka`, `ez`.`ilosc` AS `ilosc`, `ez`.`cena_jednostkowa` AS `cena_jednostkowa`, `ez`.`ilosc`* `ez`.`cena_jednostkowa` AS `wartosc_czesciowa` FROM (`elementy_zamowienia` `ez` join `produkty` `p` on(`ez`.`id_produktu` = `p`.`id_produktu`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `widok_zamowienia_z_klientami`
+--
+DROP TABLE IF EXISTS `widok_zamowienia_z_klientami`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_zamowienia_z_klientami`  AS SELECT `z`.`id_zamowienia` AS `id_zamowienia`, `z`.`data_zamowienia` AS `data_zamowienia`, `z`.`kwota_calkowita` AS `kwota_calkowita`, `k`.`id_klienta` AS `id_klienta`, `k`.`nazwa_uzytkownika` AS `klient`, `k`.`email` AS `email` FROM (`zamowienia` `z` join `klienci` `k` on(`z`.`id_klienta` = `k`.`id_klienta`)) ;
 
 --
 -- Indeksy dla zrzutów tabel
@@ -247,26 +445,34 @@ ALTER TABLE `elementy_zamowienia`
   ADD KEY `id_produktu` (`id_produktu`);
 
 --
+-- Indeksy dla tabeli `klienci`
+--
+ALTER TABLE `klienci`
+  ADD PRIMARY KEY (`id_klienta`),
+  ADD UNIQUE KEY `nazwa_uzytkownika` (`nazwa_uzytkownika`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
 -- Indeksy dla tabeli `opinie`
 --
 ALTER TABLE `opinie`
   ADD PRIMARY KEY (`id_opinii`),
   ADD KEY `id_produktu` (`id_produktu`),
-  ADD KEY `id_uzytkownika` (`id_uzytkownika`);
+  ADD KEY `id_klienta` (`id_klienta`);
+
+--
+-- Indeksy dla tabeli `pracownicy`
+--
+ALTER TABLE `pracownicy`
+  ADD PRIMARY KEY (`id_pracownika`),
+  ADD UNIQUE KEY `nazwa_uzytkownika` (`nazwa_uzytkownika`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indeksy dla tabeli `produkty`
 --
 ALTER TABLE `produkty`
   ADD PRIMARY KEY (`id_produktu`);
-
---
--- Indeksy dla tabeli `uzytkownicy`
---
-ALTER TABLE `uzytkownicy`
-  ADD PRIMARY KEY (`id_uzytkownika`),
-  ADD UNIQUE KEY `nazwa_uzytkownika` (`nazwa_uzytkownika`),
-  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indeksy dla tabeli `wiadomosci`
@@ -279,7 +485,7 @@ ALTER TABLE `wiadomosci`
 --
 ALTER TABLE `zamowienia`
   ADD PRIMARY KEY (`id_zamowienia`),
-  ADD KEY `id_uzytkownika` (`id_uzytkownika`);
+  ADD KEY `id_klienta` (`id_klienta`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -289,7 +495,13 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `elementy_zamowienia`
 --
 ALTER TABLE `elementy_zamowienia`
-  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `klienci`
+--
+ALTER TABLE `klienci`
+  MODIFY `id_klienta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `opinie`
@@ -298,16 +510,16 @@ ALTER TABLE `opinie`
   MODIFY `id_opinii` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `pracownicy`
+--
+ALTER TABLE `pracownicy`
+  MODIFY `id_pracownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
 -- AUTO_INCREMENT for table `produkty`
 --
 ALTER TABLE `produkty`
   MODIFY `id_produktu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT for table `uzytkownicy`
---
-ALTER TABLE `uzytkownicy`
-  MODIFY `id_uzytkownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `wiadomosci`
@@ -319,7 +531,7 @@ ALTER TABLE `wiadomosci`
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
@@ -337,13 +549,13 @@ ALTER TABLE `elementy_zamowienia`
 --
 ALTER TABLE `opinie`
   ADD CONSTRAINT `opinie_ibfk_1` FOREIGN KEY (`id_produktu`) REFERENCES `produkty` (`id_produktu`),
-  ADD CONSTRAINT `opinie_ibfk_2` FOREIGN KEY (`id_uzytkownika`) REFERENCES `uzytkownicy` (`id_uzytkownika`);
+  ADD CONSTRAINT `opinie_ibfk_2` FOREIGN KEY (`id_klienta`) REFERENCES `klienci` (`id_klienta`);
 
 --
 -- Constraints for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  ADD CONSTRAINT `zamowienia_ibfk_1` FOREIGN KEY (`id_uzytkownika`) REFERENCES `uzytkownicy` (`id_uzytkownika`);
+  ADD CONSTRAINT `zamowienia_ibfk_1` FOREIGN KEY (`id_klienta`) REFERENCES `klienci` (`id_klienta`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
