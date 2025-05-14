@@ -244,15 +244,12 @@ form button:hover {
         }
         if ($que) {
         echo "<script>alert('Wiadomość została wysłana do bazy danych!');</script>";
-        } else {
-        echo "<script>alert('Wystąpił błąd podczas zapisu do bazy danych!');</script>";
         }
-
         mysqli_close($con);
         ?>
       </main>
     </div>
-    <footer>
+    <footer style="background-color:#222; color: white; text-align: center; padding:10px;">
         <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
     </footer>
 </body>
