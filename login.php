@@ -1,6 +1,5 @@
 <?php
 session_start();
-$zalogowany = isset($_SESSION['username']);
 
 $host = 'localhost';
 $uzytkownik = 'root';
@@ -12,67 +11,65 @@ if ($polaczenie->connect_error) {
     die("Błąd połączenia: " . $polaczenie->connect_error);
 }
 
-$wiadomosc_bledu = ""; // Inicjalizacja zmiennej na komunikaty błędów
+$wiadomosc_bledu = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    $sql = "SELECT * FROM uzytkownicy WHERE nazwa_uzytkownika = ? AND haslo = ?";
-    $stmt = $polaczenie->prepare($sql);
+    // Sprawdzenie w tabeli 'klienci'
+    $sql_klienci = "SELECT id_klienta, nazwa_uzytkownika, haslo FROM klienci WHERE nazwa_uzytkownika = ?";
+    $stmt_klienci = $polaczenie->prepare($sql_klienci);
 
-    if (!$stmt) {
-        die("Błąd zapytania: " . $polaczenie->error);
+    if ($stmt_klienci) {
+        $stmt_klienci->bind_param("s", $username);
+        $stmt_klienci->execute();
+        $wynik_klienci = $stmt_klienci->get_result();
+
+        if ($wynik_klienci->num_rows === 1) {
+            $uzytkownik = $wynik_klienci->fetch_assoc();
+            // Zmieniono na zwykłe porównanie haseł (NIEBEZPIECZNE!)
+            if ($password == $uzytkownik['haslo']) {
+                $_SESSION['username'] = htmlspecialchars($uzytkownik['nazwa_uzytkownika']);
+                $_SESSION['rola'] = 'klient';
+                $_SESSION['id_uzytkownika'] = $uzytkownik['id_klienta'];
+                header("Location: index.php");
+                exit;
+            } else {
+                $wiadomosc_bledu = "Nieprawidłowe hasło.";
+            }
+        }
+        $stmt_klienci->close();
     }
 
-    $stmt->bind_param("ss", $username, $password);
-    $stmt->execute();
-    $wynik = $stmt->get_result();
+    // Jeśli nie znaleziono w 'klienci', to sprawdzamy w 'pracownicy'
+    if (empty($_SESSION['username'])) {
+        $sql_pracownicy = "SELECT id_pracownika, nazwa_uzytkownika, haslo, stanowisko FROM pracownicy WHERE nazwa_uzytkownika = ?";
+        $stmt_pracownicy = $polaczenie->prepare($sql_pracownicy);
 
-    if ($wynik->num_rows === 1) {
-        $uzytkownik = $wynik->fetch_assoc();
-        $_SESSION['username'] = $uzytkownik['nazwa_uzytkownika'];
-        $_SESSION['rola'] = $uzytkownik['rola'];
-        $_SESSION['id_uzytkownika'] = $uzytkownik['id_uzytkownika'];  // ***KLUCZOWA POPRAWKA***
+        if ($stmt_pracownicy) {
+            $stmt_pracownicy->bind_param("s", $username);
+            $stmt_pracownicy->execute();
+            $wynik_pracownicy = $stmt_pracownicy->get_result();
 
-        // Ładne powitanie + przekierowanie
-        echo "<!DOCTYPE html>
-        <html lang='pl'>
-        <head>
-            <meta charset='UTF-8'>
-            <meta http-equiv='refresh' content='2;url=index.php'>
-            <title>Logowanie</title>
-            <style>
-                body {
-                    font-family: Arial;
-                    background-color: #f8f9fa;
-                    text-align: center;
-                    padding-top: 50px;
+            if ($wynik_pracownicy->num_rows === 1) {
+                $uzytkownik = $wynik_pracownicy->fetch_assoc();
+                // Zmieniono na zwykłe porównanie haseł (NIEBEZPIECZNE!)
+                if ($password == $uzytkownik['haslo']) {
+                    $_SESSION['username'] = htmlspecialchars($uzytkownik['nazwa_uzytkownika']);
+                    $_SESSION['rola'] = $uzytkownik['stanowisko'];
+                    $_SESSION['id_uzytkownika'] = $uzytkownik['id_pracownika'];
+                    header("Location: index.php");
+                    exit;
+                } else {
+                    $wiadomosc_bledu = "Nieprawidłowe hasło.";
                 }
-                .box {
-                    background: white;
-                    padding: 30px;
-                    margin: auto;
-                    width: 300px;
-                    border-radius: 10px;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                }
-            </style>
-        </head>
-        <body>
-            <div class='box'>
-                <h2>Zalogowano jako <span style='color:#007bff;'>".htmlspecialchars($uzytkownik['nazwa_uzytkownika'])."</span>!</h2>
-                <p>Za chwilę nastąpi przekierowanie...</p>
-            </div>
-        </body>
-        </html>";
-        exit;
-
-    } else {
-        $wiadomosc_bledu = "Nieprawidłowa nazwa użytkownika lub hasło.";
+            } else {
+                $wiadomosc_bledu = "Nieprawidłowa nazwa użytkownika.";
+            }
+            $stmt_pracownicy->close();
+        }
     }
-
-    $stmt->close();
 }
 
 $polaczenie->close();
@@ -140,7 +137,7 @@ $polaczenie->close();
         <a href="kontakt.php">Kontakt</a>
         <a href="opinie.php">Opinie</a>
         <a href="aktualnosci.php">Aktualności</a>
-        <?php if ($zalogowany): ?>
+        <?php if (isset($_SESSION['username'])): ?>
             <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
                 Witaj, <?= htmlspecialchars($_SESSION['username']) ?>!
             </span>
@@ -170,8 +167,8 @@ $polaczenie->close();
           <h3>Kontakt</h3>
           <p>Buty Opalacz Dziewit</p>
           <p>ul. Kwiatowa 30, Mielec</p>
-          <p>Tel: <a href="tel:+48123456789">+48 123 456 789</a></p>
-          <p>Email: <a href="mailto:kontakt@butyopalacz.pl">kontakt@butyopalacz.pl</a></p>
+          <p>Tel: <a href="tel:+48123456789\">+48 123 456 789</a></p>
+          <p>Email: <a href="mailto:kontakt@butyopalacz.pl\">kontakt@butyopalacz.pl</a></p>
         </div>
         <div class="footer-column">
           <h3>Godziny otwarcia</h3>
