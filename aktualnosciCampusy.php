@@ -1,6 +1,8 @@
 <?php
 session_start(); // Uruchomienie sesji
-$zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest zalogowany
+include 'auth_utils.php';
+$zalogowany = isset($_SESSION['username']);
+$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
 ?>
 <!DOCTYPE html>
 <html lang="pl">

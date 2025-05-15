@@ -1,6 +1,8 @@
 <?php
 session_start();
+include 'auth_utils.php';
 $zalogowany = isset($_SESSION['username']);
+$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
 
 $host = "localhost";
 $uzytkownik_db = "root";

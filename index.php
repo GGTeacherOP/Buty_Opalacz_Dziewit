@@ -38,11 +38,11 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
                 <a href="register.php" class="zg">Zarejestruj</a>
             <?php endif; ?>
 
-            <?php if (czy_ma_role(['Pracownik sklepu', 'admin123'])): ?>
+            <?php if (czy_ma_role(['Pracownik sklepu', 'admin'])): ?>
                 <a href="panel_pracownikow.php">Panel Pracowników</a>
             <?php endif; ?>
 
-            <?php if (czy_ma_role('admin123')): ?>
+            <?php if (czy_ma_role('admin')): ?>
                 <a href="panel_admina.php">Panel Admina</a>
             <?php endif; ?>
 

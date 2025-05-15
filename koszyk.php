@@ -1,6 +1,8 @@
 <?php
 session_start();
+include 'auth_utils.php';
 $zalogowany = isset($_SESSION['username']);
+$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
 
 // Dodawanie produktu do koszyka
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dodaj_do_koszyka'])) {

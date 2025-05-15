@@ -1,7 +1,9 @@
 
 <?php
 session_start(); // Uruchomienie sesji
-$zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy użytkownik jest zalogowany
+include 'auth_utils.php';
+$zalogowany = isset($_SESSION['username']);
+$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
 // Dane do połączenia z bazą danych
 $host = "localhost";       // Adres serwera bazy danych
 $uzytkownik_db = "root";        // Nazwa użytkownika bazy danych
