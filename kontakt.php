@@ -174,7 +174,7 @@ form button:hover {
       Pieniądze otrzymasz na nową Kartę Podarunkową, którą wyślemy do Ciebie mailem.</p><br>
 
       <p><strong>Zwrot w sklepie stacjonarnym</strong><br>
-      Zwrot środków nastąpi w formie doładowania Karty Podarunkowej CCCxHalfPrice według zasad z Regulaminu Kart Podarunkowych. W razie awarii terminy mogą się wydłużyć o kolejne 5 dni roboczych.</p>
+      Zwrot środków nastąpi w formie doładowania Karty Podarunkowej BUTYxHalfPrice według zasad z Regulaminu Kart Podarunkowych. W razie awarii terminy mogą się wydłużyć o kolejne 5 dni roboczych.</p>
     </div>
   </div>
 
@@ -246,15 +246,12 @@ form button:hover {
         }
         if ($que) {
         echo "<script>alert('Wiadomość została wysłana do bazy danych!');</script>";
-        } else {
-        echo "<script>alert('Wystąpił błąd podczas zapisu do bazy danych!');</script>";
         }
-
         mysqli_close($con);
         ?>
       </main>
     </div>
-    <footer>
-        <p>&copy; 2025 Sklep z Butami | kontakt@buty.pl</p>
+    <footer style="background-color:#222; color: white; text-align: center; padding:10px;">
+        <p>&copy; 2025 Sklep z Butami | info@buty.pl</p>
     </footer>
 </body>
