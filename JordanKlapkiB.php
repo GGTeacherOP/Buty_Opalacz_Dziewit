@@ -38,19 +38,31 @@ if ($polaczenie->connect_error) {
             <a href="kontakt.php">Kontakt</a>
             <a href="opinie.php">Opinie</a>
             <a href="aktualnosci.php">Aktualności</a>
-                <?php if ($zalogowany): ?>
-            <!-- Powitanie zalogowanego użytkownika -->
-            <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
-                Witaj, <?= htmlspecialchars($_SESSION['username']) ?>!
-            </span>
-            <!-- Przycisk wylogowania -->
-            <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
-        <?php else: ?>
-            <!-- Linki logowania i rejestracji -->
-            <a href="login.php" class="zg">Zaloguj</a>
-            <a href="register.php" class="zg">Zarejestruj</a>  
-        <?php endif; ?>
+                  <?php if ($zalogowany): ?>
+                <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
+                    Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
+                </span>
+                <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
+            <?php else: ?>
+                <a href="login.php" class="zg">Zaloguj</a>
+                <a href="register.php" class="zg">Zarejestruj</a>
+            <?php endif; ?>
 
+            <?php if (czy_ma_role(['kierownik', 'admin', 'szef', 'Pracownik sklepu'])): ?>
+                <a href="produkty.php">Panel Produktów i Zamówien</a>
+            <?php endif; ?>
+
+            <?php if (czy_ma_role(['kierownik', 'admin', 'szef'])): ?>
+                <a href="panel_pracownikow.php">Panel Pracowników</a>
+            <?php endif; ?>
+
+            <?php if (czy_ma_role('admin', 'szef')): ?>
+                <a href="panel_admina.php">Panel Admina</a>
+            <?php endif; ?>
+
+             <?php if (czy_ma_role('szef')): ?>
+                <a href="panel_szef.php">Panel Szefa</a>
+            <?php endif; ?>
     </header>
 
   <main class="product-page">
