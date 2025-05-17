@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 17, 2025 at 05:57 PM
+-- Generation Time: Maj 17, 2025 at 10:21 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -42,10 +42,6 @@ CREATE TABLE `elementy_zamowienia` (
 --
 
 INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `id_produktu`, `ilosc`, `cena_jednostkowa`, `id_klienta`, `rozmiar`) VALUES
-(12, 13, 1, 2, 499.00, NULL, NULL),
-(13, 14, 1, 3, 499.00, NULL, NULL),
-(14, 15, 1, 2, 499.00, NULL, NULL),
-(15, 16, 1, 4, 499.00, NULL, NULL),
 (16, 17, 1, 2, 499.00, 29, '41'),
 (17, 18, 1, 3, 499.00, 29, '41'),
 (18, 19, 1, 2, 499.00, 29, '40'),
@@ -53,7 +49,19 @@ INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `i
 (20, 20, 1, 2, 499.00, 29, '41'),
 (21, 21, 1, 2, 499.00, 29, '40'),
 (22, 21, 1, 3, 499.00, 29, '41'),
-(23, 22, 1, 3, 499.00, 29, '41');
+(23, 22, 1, 3, 499.00, 29, '41'),
+(24, 23, 1, 2, 499.00, 29, '41'),
+(25, 23, 12, 1, 499.00, 29, '40'),
+(26, 23, 20, 3, 179.00, 29, '39'),
+(27, 24, 3, 1, 529.00, 5, '41'),
+(28, 24, 10, 3, 349.00, 5, '39'),
+(29, 24, 11, 1, 399.00, 5, '41'),
+(30, 24, 7, 1, 899.00, 5, '39'),
+(31, 25, 1, 1, 499.00, 5, '40'),
+(32, 25, 2, 3, 1249.00, 5, '42'),
+(33, 25, 15, 2, 379.00, 5, '39'),
+(34, 25, 19, 3, 699.00, 5, '40'),
+(35, 25, 23, 3, 299.00, 5, '40');
 
 -- --------------------------------------------------------
 
@@ -113,13 +121,6 @@ CREATE TABLE `koszyki` (
   `ilosc` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `koszyki`
---
-
-INSERT INTO `koszyki` (`id_koszyka`, `id_klienta`, `id_produktu`, `rozmiar`, `ilosc`) VALUES
-(4, 29, 1, '41', 3);
-
 -- --------------------------------------------------------
 
 --
@@ -163,7 +164,8 @@ INSERT INTO `pracownicy` (`id_pracownika`, `nazwa_uzytkownika`, `haslo`, `email`
 (5, 'beata_mazurek', 'beatam', 'beata.mazurek@example.com', '2025-05-11', 'Pracownik sklepu', 4900.00),
 (6, 'cezary_baranski', 'cezaryb', 'cezary.baranski@example.com', '2025-05-11', 'kierownik', 6500.00),
 (7, 'diana_sikora', 'dianas', 'diana.sikora@example.com', '2025-05-11', 'admin', 7100.00),
-(8, 'eryk_urban', 'eryku', 'eryk.urban@example.com', '2025-05-11', 'Pracownik sklepu', 5400.00);
+(8, 'eryk_urban', 'eryku', 'eryk.urban@example.com', '2025-05-11', 'Pracownik sklepu', 5400.00),
+(9, 'Michał', 'Michał55', 'Michał55@gmail.com', '2024-01-03', 'szef', NULL);
 
 -- --------------------------------------------------------
 
@@ -383,16 +385,15 @@ INSERT INTO `zamowienia` (`id_zamowienia`, `id_klienta`, `data_zamowienia`, `kwo
 (10, 30, '2025-05-11 17:56:26', 499.00),
 (11, 30, '2025-05-11 17:58:18', 1249.00),
 (12, 31, '2025-05-11 19:29:39', 499.00),
-(13, 29, '0000-00-00 00:00:00', 998.00),
-(14, 29, '0000-00-00 00:00:00', 1497.00),
-(15, 29, '0000-00-00 00:00:00', 998.00),
-(16, 29, '0000-00-00 00:00:00', 1996.00),
 (17, 29, '2025-05-17 15:23:29', 998.00),
 (18, 29, '2025-05-17 15:25:28', 1497.00),
 (19, 29, '2025-05-17 15:26:15', 1996.00),
 (20, 29, '2025-05-17 15:30:48', 998.00),
 (21, 29, '2025-05-17 15:37:09', 2495.00),
-(22, 29, '2025-05-17 15:56:03', 1497.00);
+(22, 29, '2025-05-17 15:56:03', 1497.00),
+(23, 29, '2025-05-17 16:18:18', 2034.00),
+(24, 5, '2025-05-17 16:50:10', 2874.00),
+(25, 5, '2025-05-17 17:00:31', 7998.00);
 
 -- --------------------------------------------------------
 
@@ -538,7 +539,7 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `elementy_zamowienia`
 --
 ALTER TABLE `elementy_zamowienia`
-  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `klienci`
@@ -550,7 +551,7 @@ ALTER TABLE `klienci`
 -- AUTO_INCREMENT for table `koszyki`
 --
 ALTER TABLE `koszyki`
-  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `opinie`
@@ -562,7 +563,7 @@ ALTER TABLE `opinie`
 -- AUTO_INCREMENT for table `pracownicy`
 --
 ALTER TABLE `pracownicy`
-  MODIFY `id_pracownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_pracownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `produkty`
@@ -580,7 +581,7 @@ ALTER TABLE `wiadomosci`
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables

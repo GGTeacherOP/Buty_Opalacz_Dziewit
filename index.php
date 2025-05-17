@@ -28,44 +28,46 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
             <a href="opinie.php">Opinie</a>
             <a href="aktualnosci.php">Aktualności</a>
 
-            <?php if ($zalogowany): ?>
-                <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
-                    Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
-                </span>
-                <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
-            <?php else: ?>
-                <a href="login.php" class="zg">Zaloguj</a>
-                <a href="register.php" class="zg">Zarejestruj</a>
-            <?php endif; ?>
+     
 
-            <?php if (czy_ma_role(['kierownik', 'admin', 'szef', 'Pracownik sklepu'])): ?>
-                <a href="produkty.php">Panel Produktów i Zamówien</a>
-            <?php endif; ?>
+    <?php if ($zalogowany): ?>
+        <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
+            Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
+        </span>
+        <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
+    <?php else: ?>
+        <a href="login.php" class="zg">Zaloguj</a>
+        <a href="register.php" class="zg">Zarejestruj</a>
+    <?php endif; ?>
 
-            <?php if (czy_ma_role(['kierownik', 'admin', 'szef'])): ?>
-                <a href="panel_pracownikow.php">Panel Pracowników</a>
-            <?php endif; ?>
+    <?php if (czy_ma_role(['szef'])): ?>
+        <a href="panel_szefa.php">Panel Szefa</a>
+    <?php endif; ?>
 
-            <?php if (czy_ma_role('admin', 'szef')): ?>
-                <a href="panel_admina.php">Panel Admina</a>
-            <?php endif; ?>
+    <?php if (czy_ma_role(['admin', 'szef'])): ?>
+        <a href="panel_admina.php">Panel Admina</a> 
+    <?php endif; ?>
 
-             <?php if (czy_ma_role('szef')): ?>
-                <a href="panel_szef.php">Panel Szefa</a>
-            <?php endif; ?>
+    <?php if (czy_ma_role(['kierownik', 'admin', 'szef'])): ?>
+        <a href="panel_kierownika.php">Panel Kierownika</a>
+    <?php endif; ?>
 
-        </header>
+    <?php if (czy_ma_role(['Pracownik sklepu', 'kierownik', 'admin', 'szef'])): ?>
+        <a href="panel_pracownikow.php">Panel Pracownika</a>
+    <?php endif; ?>
 
-        <nav>
-            <p class="prz">Buty</p>
-            <div class="zbior">
-                <a href="snekarsy.html">Sneakersy</a>
-                <a href="trampki.html">Trampki</a>
-                <a href="butdb.html">Buty do biegania</a>
-                <a href="butdtr.html">Buty treningowe</a>
-                <a href="klp.html">Klapki</a>
-            </div>
-        </nav>
+</header>
+
+       <nav>
+    <p class="prz">Buty</p>
+    <div class="zbior">
+        <a href="sklep.php?type=Sneakersy">Sneakersy</a>
+        <a href="sklep.php?type=Trampki">Trampki</a>
+        <a href="sklep.php?type=Biegania">Buty do biegania</a>
+        <a href="sklep.php?type=Treningowe">Buty treningowe</a>
+        <a href="sklep.php?type=Klapki">Klapki</a>
+    </div>
+</nav>
 
         <main>
             <div class="pokaz">

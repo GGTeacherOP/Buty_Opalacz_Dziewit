@@ -17,6 +17,10 @@ if ($polaczenie->connect_error) {
     die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error); // Jeśli wystąpił błąd, skrypt zostaje zatrzymany i wyświetla komunikat
 }
 
+$product_id = 11; 
+$product_name = "Converse All Star Platform Czarny";
+$product_price = 349.00;
+$product_image = "img/Converse/ConversePlatform/ConversePlatform1 (1).jpg"
 
 ?>
 <!DOCTYPE html>
@@ -24,7 +28,7 @@ if ($polaczenie->connect_error) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sklep z Butami – Converse All Star Platform Czarny</title>
+  <title>Sklep z Butami – Adidas Campus 00s</title>
   <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="icon" href="img/favi2.png" type="image/png">
@@ -38,7 +42,7 @@ if ($polaczenie->connect_error) {
             <a href="kontakt.php">Kontakt</a>
             <a href="opinie.php">Opinie</a>
             <a href="aktualnosci.php">Aktualności</a>
-                   <<?php if ($zalogowany): ?>
+                   <?php if ($zalogowany): ?>
                 <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
                     Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
                 </span>
@@ -63,75 +67,61 @@ if ($polaczenie->connect_error) {
              <?php if (czy_ma_role('szef')): ?>
                 <a href="panel_szef.php">Panel Szefa</a>
             <?php endif; ?>
+    </header>
 
   <main class="product-page">
-    <div class="product-container">
-      <div class="gallery">
-        <img src="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg" alt="Converse All Star Platform Czarny" class="main-img" />
-        <div class="thumbnails">
+            <div class="product-container">
+                <div class="gallery">
+                    <img src="<?= htmlspecialchars($product_image) ?>" alt="<?= htmlspecialchars($product_name) ?>"
+                        class="main-img" />
+                    <div class="thumbnails">
           <img src="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg" alt="Zdjęcie 1" />
           <img src="img/Converse/ConversePlatform/ConversePlatform1 (1).webp" alt="Zdjęcie 2" />
           <img src="img/Converse/ConversePlatform/ConversePlatform1 (2).jpg" alt="Zdjęcie 3" />
           <img src="img/Converse/ConversePlatform/ConversePlatform1 (3).jpg" alt="Zdjęcie 4" />
         </div>
       </div>
-      <div class="product-details">
-        <h1>Converse All Star Platform </h1>
-        <p class="price">399 zł</p>
-        <p>Stylowe tenisówki</p>
+           <div class="product-details">
+                    <h1><?= htmlspecialchars($product_name) ?></h1>
+                    <p class="price"><?= number_format($product_price, 2) ?> zł</p>
+                    <p>Stylowe sneakersy</p>
 
-        <label>Rozmiar:
-          <select id="product-size">
-            <option value="">Wybierz rozmiar</option>
-            <option>38</option>
-            <option>39</option>
-            <option>40</option>
-            <option>41</option>
-            <option>42</option>
-            <option>43</option>
-            <option>44</option>
-          </select>
-        </label>
+                    <form action="koszyk.php" method="POST">
+                        <label>Rozmiar:
+                            <select id="product-size" name="rozmiar" required>
+                                <option value="">Wybierz rozmiar</option>
+                                <option value="38">38</option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+                                <option value="44">44</option>
+                            </select>
+                        </label>
 
-      
+                        <div class="buttons">
+                            <?php if ($zalogowany): ?>
+                                <input type="hidden" name="id_produktu" value="<?= $product_id ?>">
+                                <input type="hidden" name="nazwa" value="<?= htmlspecialchars($product_name) ?>">
+                                <input type="hidden" name="cena" value="<?= $product_price ?>">
+                                <input type="hidden" name="zdjecie" value="<?= htmlspecialchars($product_image) ?>">
+                                <input type="hidden" name="dodaj_do_koszyka" value="1">
+                                <button type="submit" class="buy-now add-to-cart-btn">Dodaj do koszyka</button>
+                            <?php else: ?>
+                                <p>Musisz być <a href="login.php">zalogowany</a>, aby dodać produkt do koszyka.</p>
+                            <?php endif; ?>
 
-             <div class="buttons">
-  <form action="koszyk.php" method="POST">
-    <input type="hidden" name="nazwa" value="Converse All Star Platform ">
-    <input type="hidden" name="cena" value="399">
-    <input type="hidden" name="zdjecie" value="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg">
-    <button type="submit" class="buy-now">Dodaj do koszyka</button>
-  </form>
-    <form action="zapis_zamowienia.php" method="POST">
-    <input type="hidden" name="nazwa" value="Converse All Star Platform Czarny">
-    <input type="hidden" name="cena" value="399">
-    <input type="hidden" name="zdjecie" value="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg">
-    <input type="hidden" name="rozmiar" id="product-size" value=""> <?php if ($zalogowany && isset($_SESSION['id_uzytkownika'])): ?>
-        <input type="hidden" name="id_uzytkownika" value="<?= $_SESSION['id_uzytkownika'] ?>">
-    <?php endif; ?>
-    <button type="submit" class="buy-now">Kup teraz</button>
-  </form>
-
-<script>
-    // Skrypt JavaScript do obsługi wyboru rozmiaru przed zakupem
-    document.querySelector('form[action="zapis_zamowienia.php"] .buy-now').addEventListener('click', function(event) {
-        var rozmiar = document.getElementById('product-size').value; // Pobranie wybranego rozmiaru
-        if (rozmiar === '') {
-            alert('Wybierz rozmiar!');  // Wyświetlenie alertu, jeśli nie wybrano rozmiaru
-            event.preventDefault(); // Zatrzymaj wysyłanie formularza
-        } else {
-            document.querySelector('form[action="zapis_zamowienia.php"] input[name="rozmiar"]').value = rozmiar; // Wypełnienie ukrytego pola rozmiar
-        }
-    });
-</script>
-</div>
-      </div>
-    </div>
+                      
+                    </div>
+                </form>
+            </div>
+        </div>
 
     <section class="opinie-produktu">
       <h2>Opinie</h2>
-      <blockquote>⭐️⭐️⭐️⭐️ "Ładne buty!" – Monika</blockquote>
-      <blockquote>⭐️⭐️⭐️ "Lekko opóźniona dostawa, buty dotarły w dobrym stanie." – Ewelina</blockquote>
+      <blockquote>⭐️⭐️⭐️⭐️⭐️ "Piękne! Zachęcam do zakupu!" – Ewelina</blockquote>
+      <blockquote>⭐️⭐️⭐️⭐️ "Szybka dostawa, buty przyszły w idealnym stanie." – Wojciech</blockquote>
     </section>
   </main>
 </div>
@@ -169,6 +159,7 @@ if ($polaczenie->connect_error) {
         <p>&copy; 2025 Buty Opalacz Dziewit. Wszelkie prawa zastrzeżone.</p>
       </div>
     </footer>
+
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {

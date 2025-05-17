@@ -1,37 +1,71 @@
-<?php
-session_start();
-include 'auth_utils.php';
-sprawdz_i_przekieruj(['pracownik', 'admin'], 'index.php', 'Brak uprawnień!');
-
-$polaczenie = new mysqli('localhost', 'root', '', 'buty');
-if ($polaczenie->connect_error) {
-    die("Błąd połączenia: " . $polaczenie->connect_error);
-}
-
-// Pobierz dane pracowników
-$sql = "SELECT * FROM pracownicy";
-$wynik = $polaczenie->query($sql);
-
-if ($wynik->num_rows > 0) {
-    echo "<h2>Panel Pracowników</h2>";
-    echo "<table>";
-    echo "<thead><tr><th>ID</th><th>Użytkownik</th><th>Email</th><th>Stanowisko</th><th>Data Zatrudnienia</th><th>Akcje</th></tr></thead>";
-    echo "<tbody>";
-    while ($row = $wynik->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $row["id_pracownika"] . "</td>";
-        echo "<td>" . htmlspecialchars($row["nazwa_uzytkownika"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-        echo "<td>" . htmlspecialchars($row["stanowisko"]) . "</td>";
-        echo "<td>" . $row["data_zatrudnienia"] . "</td>";
-        echo "<td><a href='edytuj_pracownika.php?id=" . $row["id_pracownika"] . "'>Edytuj</a> | <a href='usun_pracownika.php?id=" . $row["id_pracownika"] . "'>Usuń</a></td>";
-        echo "</tr>";
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Pracownika Sklepu</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
     }
-    echo "</tbody></table>";
-} else {
-    echo "Brak danych pracowników.";
-}
+    .card {
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      background-color: #007bff;
+      color: white;
+      padding: 1.5rem;
+      border-radius: 1rem 1rem 0 0;
+    }
+    .nav-link {
+      font-size: 1.1rem;
+    }
+     h1 {
+      color: #333;
+    }
 
-$polaczenie->close();
+    .back-button {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
 
-?>
+    .back-button:hover {
+      background-color: darkblue;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="card">
+      <div class="header text-center">
+        <h2>Panel Pracownika Sklepu</h2>
+        <p>Witaj! Wybierz jedną z dostępnych opcji poniżej:</p>
+      </div>
+      <div class="card-body">
+        <div class="row text-center">
+          <div class="col-md-6 mb-4">
+            <a href="lista_zamowien.php" class="btn btn-outline-primary w-100 py-3">Zamówienia klientów</a>
+          </div>
+          <div class="col-md-6 mb-4">
+            <a href="produkty.php" class="btn btn-outline-success w-100 py-3">Lista produktów</a>
+          </div>
+         
+          <button class="back-button" onclick="window.location.href='index.php'">
+    Powrót do strony głównej
+  </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+</html>

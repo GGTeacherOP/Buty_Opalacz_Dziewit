@@ -640,3 +640,48 @@ main {
 .usun-btn:hover {
     background-color: #c82333;
 }
+/* Style dla kategorii i podkategorii */
+.category-group {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.main-category {
+    display: block;
+    padding: 8px 12px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.main-category:hover {
+    color: #007bff;
+}
+
+.subcategories {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+}
+
+.subcategories a {
+    color: #555;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #eee;
+}
+
+.subcategories a:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.category-group:hover .subcategories {
+    display: block;
+}

@@ -34,6 +34,7 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
+<<<<<<< HEAD
     <style>
         .stars {
       cursor: pointer;
@@ -87,6 +88,9 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
   padding:0.83rem;
 }
     </style>
+=======
+   
+>>>>>>> e756a286749d7896aa1641b86dd6ccaed58dfb21
 </head>
 
 <body>
@@ -167,6 +171,12 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
                             <?php else: ?>
                                 <p>Musisz być <a href="login.php">zalogowany</a>, aby dodać produkt do koszyka.</p>
                             <?php endif; ?>
+<<<<<<< HEAD
+=======
+
+                        
+                
+>>>>>>> e756a286749d7896aa1641b86dd6ccaed58dfb21
                     </div>
                 </form>
             </div>
