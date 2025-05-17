@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 17, 2025 at 10:21 PM
+-- Generation Time: Maj 17, 2025 at 11:13 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -61,7 +61,8 @@ INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `i
 (32, 25, 2, 3, 1249.00, 5, '42'),
 (33, 25, 15, 2, 379.00, 5, '39'),
 (34, 25, 19, 3, 699.00, 5, '40'),
-(35, 25, 23, 3, 299.00, 5, '40');
+(35, 25, 23, 3, 299.00, 5, '40'),
+(36, 26, 1, 3, 499.00, 29, '40');
 
 -- --------------------------------------------------------
 
@@ -121,6 +122,13 @@ CREATE TABLE `koszyki` (
   `ilosc` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `koszyki`
+--
+
+INSERT INTO `koszyki` (`id_koszyka`, `id_klienta`, `id_produktu`, `rozmiar`, `ilosc`) VALUES
+(22, 29, 1, '40', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -130,11 +138,22 @@ CREATE TABLE `koszyki` (
 CREATE TABLE `opinie` (
   `id_opinii` int(11) NOT NULL,
   `id_produktu` int(11) DEFAULT NULL,
-  `id_klienta` int(11) DEFAULT NULL,
+  `imie` varchar(50) NOT NULL,
   `ocena` int(11) DEFAULT NULL,
   `komentarz` text DEFAULT NULL,
   `data_opinii` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `opinie`
+--
+
+INSERT INTO `opinie` (`id_opinii`, `id_produktu`, `imie`, `ocena`, `komentarz`, `data_opinii`) VALUES
+(1, 1, 'Mistrz', 4, 'Fajny but', '2025-05-17 21:00:24'),
+(2, 1, 'Fajny but', 3, 'kaska', '2025-05-17 21:03:19'),
+(3, 1, 'kaska', 2, 'faaffsff', '2025-05-17 21:04:39'),
+(4, 12, 'andrzej', 4, 'haslo123', '2025-05-17 21:12:33'),
+(5, 1, 'aura', 5, 'bomba', '2025-05-17 21:12:51');
 
 -- --------------------------------------------------------
 
@@ -269,13 +288,6 @@ CREATE TABLE `widok_najlepsze_produkty` (
 -- (See below for the actual view)
 --
 CREATE TABLE `widok_opinie_z_danymi` (
-`id_opinii` int(11)
-,`ocena` int(11)
-,`komentarz` text
-,`data_opinii` timestamp
-,`klient` varchar(50)
-,`produkt` varchar(255)
-,`marka` varchar(100)
 );
 
 -- --------------------------------------------------------
@@ -393,7 +405,8 @@ INSERT INTO `zamowienia` (`id_zamowienia`, `id_klienta`, `data_zamowienia`, `kwo
 (22, 29, '2025-05-17 15:56:03', 1497.00),
 (23, 29, '2025-05-17 16:18:18', 2034.00),
 (24, 5, '2025-05-17 16:50:10', 2874.00),
-(25, 5, '2025-05-17 17:00:31', 7998.00);
+(25, 5, '2025-05-17 17:00:31', 7998.00),
+(26, 29, '2025-05-17 20:45:14', 1497.00);
 
 -- --------------------------------------------------------
 
@@ -501,8 +514,7 @@ ALTER TABLE `koszyki`
 --
 ALTER TABLE `opinie`
   ADD PRIMARY KEY (`id_opinii`),
-  ADD KEY `id_produktu` (`id_produktu`),
-  ADD KEY `id_klienta` (`id_klienta`);
+  ADD KEY `id_produktu` (`id_produktu`);
 
 --
 -- Indeksy dla tabeli `pracownicy`
@@ -539,7 +551,7 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `elementy_zamowienia`
 --
 ALTER TABLE `elementy_zamowienia`
-  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `klienci`
@@ -551,13 +563,13 @@ ALTER TABLE `klienci`
 -- AUTO_INCREMENT for table `koszyki`
 --
 ALTER TABLE `koszyki`
-  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `opinie`
 --
 ALTER TABLE `opinie`
-  MODIFY `id_opinii` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_opinii` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pracownicy`
@@ -581,7 +593,7 @@ ALTER TABLE `wiadomosci`
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables
@@ -606,8 +618,7 @@ ALTER TABLE `koszyki`
 -- Constraints for table `opinie`
 --
 ALTER TABLE `opinie`
-  ADD CONSTRAINT `opinie_ibfk_1` FOREIGN KEY (`id_produktu`) REFERENCES `produkty` (`id_produktu`),
-  ADD CONSTRAINT `opinie_ibfk_2` FOREIGN KEY (`id_klienta`) REFERENCES `klienci` (`id_klienta`);
+  ADD CONSTRAINT `opinie_ibfk_1` FOREIGN KEY (`id_produktu`) REFERENCES `produkty` (`id_produktu`);
 
 --
 -- Constraints for table `zamowienia`
