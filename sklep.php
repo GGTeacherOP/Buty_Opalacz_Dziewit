@@ -59,6 +59,7 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     <nav>
        <div class="prz">Kategorie</div>
   <div class="zbior">
+    <a href="#" data-brand="">Wszystkie</a> 
     <a href="#" data-brand="Nike">Nike</a>
     <a href="#" data-brand="Adidas">Adidas</a>
     <a href="#" data-brand="Jordan">Jordan</a>
@@ -323,7 +324,8 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
   
     const listaProduktow = document.getElementById("productList");
     const wszystkieProdukty = Array.from(listaProduktow.querySelectorAll(".produkt-card"));
-  
+    const kategorieLinks = document.querySelectorAll('.zbior a');
+
     // Aktualizacja tekstu przy suwaku
     suwakCeny.addEventListener("input", () => {
       wartoscCeny.textContent = suwakCeny.value + " zł";
@@ -332,7 +334,63 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
   
     // Nasłuchiwanie zmian na filtrach
     [poleWyszukiwania, filtrMarka, filtrRodzaj, sortowanieCeny].forEach(element => {
-      element.addEventListener("input", filtrujProdukty);
+      element.addEventListener("change", filtrujProdukty);
+    });
+
+    // Obsługa zmian w filtrze marki - synchronizacja z kategoriami
+    filtrMarka.addEventListener("change", () => {
+      aktualizujAktywnaKategorie();
+    });
+
+    // Funkcja aktualizująca aktywną kategorię na podstawie wybranej marki
+    function aktualizujAktywnaKategorie() {
+      const wybranaMarka = filtrMarka.value;
+      
+      // Usuń klasę active-category ze wszystkich linków
+      kategorieLinks.forEach(link => {
+        link.classList.remove('active-category');
+      });
+
+      // Znajdź i podświetl odpowiednią kategorię
+      if (wybranaMarka) {
+        const aktywnaKategoria = document.querySelector(`.zbior a[data-brand="${wybranaMarka}"]`);
+        if (aktywnaKategoria) {
+          aktywnaKategoria.classList.add('active-category');
+        }
+      } else {
+        // Podświetl "Wszystkie" jeśli żadna marka nie jest wybrana
+        const wszystkieLink = document.querySelector('.zbior a[data-brand=""]');
+        if (wszystkieLink) {
+          wszystkieLink.classList.add('active-category');
+        }
+      }
+    }
+
+    // Dodaj obsługę kliknięcia dla każdej kategorii
+    kategorieLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const marka = link.dataset.brand;
+        
+        // Ustaw wybraną markę w filtrze
+        filtrMarka.value = marka;
+        
+        // Zresetuj inne filtry (opcjonalnie)
+        poleWyszukiwania.value = '';
+        filtrRodzaj.value = '';
+        suwakCeny.value = '2000';
+        wartoscCeny.textContent = '2000 zł';
+        sortowanieCeny.value = '';
+        
+        // Zastosuj filtry
+        filtrujProdukty();
+        aktualizujAktywnaKategorie();
+        
+        // Przewiń do sekcji produktów (opcjonalnie)
+        document.querySelector('.bestsellery').scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
     });
   
     // Główna funkcja filtrująca
@@ -370,42 +428,17 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
       pasujaceProdukty.forEach(produkt => listaProduktow.appendChild(produkt));
     }
   
-    // Pierwsze wywołanie na starcie
-    filtrujProdukty();
-
-
-
-
-    // Pobierz wszystkie linki kategorii
-const kategorieLinks = document.querySelectorAll('.zbior a');
-
-// Dodaj obsługę kliknięcia dla każdej kategorii
-kategorieLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const marka = link.dataset.brand;
-    
-    // Ustaw wybraną markę w filtrze
-    filtrMarka.value = marka;
-    
-    // Zresetuj inne filtry (opcjonalnie)
-    poleWyszukiwania.value = '';
-    filtrRodzaj.value = '';
-    suwakCeny.value = '2000';
-    wartoscCeny.textContent = '2000 zł';
-    sortowanieCeny.value = '';
-    
-    // Zastosuj filtry
-    filtrujProdukty();
-    
-    // Przewiń do sekcji produktów (opcjonalnie)
-    document.querySelector('.bestsellery').scrollIntoView({
-      behavior: 'smooth'
+    // Inicjalizacja - pierwsze wywołanie na starcie
+    document.addEventListener('DOMContentLoaded', function() {
+      // Aktywuj kategorię "Wszystkie" na starcie
+      const wszystkieLink = document.querySelector('.zbior a[data-brand=""]');
+      if (wszystkieLink) {
+        wszystkieLink.classList.add('active-category');
+      }
+      
+      // Pierwsze filtrowanie
+      filtrujProdukty();
     });
-  });
-});
   </script>
-
-  
 </body>
 </html>
