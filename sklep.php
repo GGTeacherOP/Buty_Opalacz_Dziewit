@@ -1,8 +1,11 @@
 <?php
-session_start(); // Uruchomienie sesji
+session_start();
 include 'auth_utils.php';
 $zalogowany = isset($_SESSION['username']);
-$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
+$rola = $_SESSION['rola'] ?? 'gość';
+
+// Pobierz parametr type z URL
+$selectedType = isset($_GET['type']) ? $_GET['type'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -15,9 +18,20 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
   <link rel="icon" href="img/favi2.png" type="image/png">
   <style>
     .zbior a.active-category {
-  color: #007bff;
-  font-weight: bold;
-}
+      color: #007bff;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    .prz {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .type-filter {
+      margin-top: 15px;
+    }
+    .filtry-container {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -56,18 +70,28 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
             <?php endif; ?>
     </header>
 
-    <nav>
-       <div class="prz">Kategorie</div>
-  <div class="zbior">
-    <a href="#" data-brand="">Wszystkie</a> 
-    <a href="#" data-brand="Nike">Nike</a>
-    <a href="#" data-brand="Adidas">Adidas</a>
-    <a href="#" data-brand="Jordan">Jordan</a>
-    <a href="#" data-brand="Vans">Vans</a>
-    <a href="#" data-brand="Under">Under Armour</a>
-    <a href="#" data-brand="Converse">Converse</a>
-  </div>
-    </nav>
+   <nav>
+    <div class="prz">Marki</div>
+    <div class="zbior brand-filter"> <!-- Dodaj klasę brand-filter -->
+        <a href="#" data-brand="">Wszystkie</a> 
+        <a href="#" data-brand="Nike">Nike</a>
+        <a href="#" data-brand="Adidas">Adidas</a>
+        <a href="#" data-brand="Jordan">Jordan</a>
+        <a href="#" data-brand="Vans">Vans</a>
+        <a href="#" data-brand="Under">Under Armour</a>
+        <a href="#" data-brand="Converse">Converse</a>
+    </div>
+    
+    <div class="prz" style="margin-top: 20px;"></div>
+    <div class="zbior type-filter">
+        
+        <a href="#" data-type="Sneakersy">Sneakersy</a>
+        <a href="#" data-type="Trampki">Trampki</a>
+        <a href="#" data-type="Klapki">Klapki</a>
+        <a href="#" data-type="Treningowe">Treningowe</a>
+        <a href="#" data-type="Biegania">Do biegania</a>
+    </div>
+</nav>
 
     <!-- Filtry -->
     <div class="filtry-container">
@@ -84,14 +108,14 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
         <option value="Under">Under Armour</option>
       </select>
 
-      <select id="filterType">
-        <option value="">Wszystkie rodzaje</option>
-        <option value="Sneakersy">Sneakersy</option>
-        <option value="Trampki">Trampki</option>
-        <option value="Klapki">Klapki</option>
-        <option value="Treningowe">Buty Treningowe</option>
-        <option value="Biegania">Buty do Biegania</option>
-      </select>
+     <select id="filterType">
+    <option value="">Wszystkie rodzaje</option>
+    <option value="Sneakersy" <?= $selectedType === 'Sneakersy' ? 'selected' : '' ?>>Sneakersy</option>
+    <option value="Trampki" <?= $selectedType === 'Trampki' ? 'selected' : '' ?>>Trampki</option>
+    <option value="Klapki" <?= $selectedType === 'Klapki' ? 'selected' : '' ?>>Klapki</option>
+    <option value="Treningowe" <?= $selectedType === 'Treningowe' ? 'selected' : '' ?>>Buty Treningowe</option>
+    <option value="Biegania" <?= $selectedType === 'Biegania' ? 'selected' : '' ?>>Buty do Biegania</option>
+</select>
 
       <label>
         Cena do:
@@ -313,86 +337,89 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     </footer>
   </div>
 
-  <script>
-    // Pobieranie elementów filtrów
+   <script>
+    // Pobieranie elementów
     const poleWyszukiwania = document.getElementById("searchInput");
     const filtrMarka = document.getElementById("filterBrand");
     const filtrRodzaj = document.getElementById("filterType");
     const suwakCeny = document.getElementById("priceRange");
     const wartoscCeny = document.getElementById("priceValue");
     const sortowanieCeny = document.getElementById("sortOrder");
-  
     const listaProduktow = document.getElementById("productList");
     const wszystkieProdukty = Array.from(listaProduktow.querySelectorAll(".produkt-card"));
-    const kategorieLinks = document.querySelectorAll('.zbior a');
+    const brandLinks = document.querySelectorAll('.brand-filter a');
+    const typeLinks = document.querySelectorAll('.type-filter a');
 
     // Aktualizacja tekstu przy suwaku
     suwakCeny.addEventListener("input", () => {
       wartoscCeny.textContent = suwakCeny.value + " zł";
       filtrujProdukty();
     });
-  
+
     // Nasłuchiwanie zmian na filtrach
     [poleWyszukiwania, filtrMarka, filtrRodzaj, sortowanieCeny].forEach(element => {
       element.addEventListener("change", filtrujProdukty);
     });
 
-    // Obsługa zmian w filtrze marki - synchronizacja z kategoriami
-    filtrMarka.addEventListener("change", () => {
-      aktualizujAktywnaKategorie();
+    // Obsługa kliknięcia w markę
+    brandLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const brand = link.dataset.brand;
+        filtrMarka.value = brand;
+        filtrRodzaj.value = '';
+        resetujPozostaleFiltry();
+        filtrujProdukty();
+        aktualizujAktywneLinki();
+      });
     });
 
-    // Funkcja aktualizująca aktywną kategorię na podstawie wybranej marki
-    function aktualizujAktywnaKategorie() {
-      const wybranaMarka = filtrMarka.value;
-      
-      // Usuń klasę active-category ze wszystkich linków
-      kategorieLinks.forEach(link => {
-        link.classList.remove('active-category');
+    // Obsługa kliknięcia w rodzaj buta
+    typeLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const type = link.dataset.type;
+        filtrRodzaj.value = type;
+        filtrMarka.value = '';
+        resetujPozostaleFiltry();
+        filtrujProdukty();
+        aktualizujAktywneLinki();
       });
+    });
 
-      // Znajdź i podświetl odpowiednią kategorię
+    // Funkcja resetująca pozostałe filtry
+    function resetujPozostaleFiltry() {
+      poleWyszukiwania.value = '';
+      suwakCeny.value = '2000';
+      wartoscCeny.textContent = '2000 zł';
+      sortowanieCeny.value = '';
+    }
+
+    // Funkcja aktualizująca aktywne linki
+    function aktualizujAktywneLinki() {
+      // Resetuj wszystkie linki
+      brandLinks.forEach(link => link.classList.remove('active-category'));
+      typeLinks.forEach(link => link.classList.remove('active-category'));
+
+      // Ustaw aktywne linki na podstawie filtrów
+      const wybranaMarka = filtrMarka.value;
+      const wybranyRodzaj = filtrRodzaj.value;
+
+      // Aktywuj link marki
       if (wybranaMarka) {
-        const aktywnaKategoria = document.querySelector(`.zbior a[data-brand="${wybranaMarka}"]`);
-        if (aktywnaKategoria) {
-          aktywnaKategoria.classList.add('active-category');
-        }
+        document.querySelector(`.brand-filter a[data-brand="${wybranaMarka}"]`).classList.add('active-category');
       } else {
-        // Podświetl "Wszystkie" jeśli żadna marka nie jest wybrana
-        const wszystkieLink = document.querySelector('.zbior a[data-brand=""]');
-        if (wszystkieLink) {
-          wszystkieLink.classList.add('active-category');
-        }
+        document.querySelector('.brand-filter a[data-brand=""]').classList.add('active-category');
+      }
+
+      // Aktywuj link rodzaju
+      if (wybranyRodzaj) {
+        document.querySelector(`.type-filter a[data-type="${wybranyRodzaj}"]`).classList.add('active-category');
+      } else {
+        document.querySelector('.type-filter a[data-type=""]').classList.add('active-category');
       }
     }
 
-    // Dodaj obsługę kliknięcia dla każdej kategorii
-    kategorieLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const marka = link.dataset.brand;
-        
-        // Ustaw wybraną markę w filtrze
-        filtrMarka.value = marka;
-        
-        // Zresetuj inne filtry (opcjonalnie)
-        poleWyszukiwania.value = '';
-        filtrRodzaj.value = '';
-        suwakCeny.value = '2000';
-        wartoscCeny.textContent = '2000 zł';
-        sortowanieCeny.value = '';
-        
-        // Zastosuj filtry
-        filtrujProdukty();
-        aktualizujAktywnaKategorie();
-        
-        // Przewiń do sekcji produktów (opcjonalnie)
-        document.querySelector('.bestsellery').scrollIntoView({
-          behavior: 'smooth'
-        });
-      });
-    });
-  
     // Główna funkcja filtrująca
     function filtrujProdukty() {
       const tekstWyszukiwania = poleWyszukiwania.value.toLowerCase();
@@ -400,14 +427,14 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
       const wybranyRodzaj = filtrRodzaj.value;
       const maksCena = parseInt(suwakCeny.value);
       const kolejnoscSortowania = sortowanieCeny.value;
-  
+
       // Filtrowanie produktów
       let pasujaceProdukty = wszystkieProdukty.filter(produkt => {
         const nazwa = produkt.querySelector("h3").textContent.toLowerCase();
         const marka = produkt.dataset.brand;
         const rodzaj = produkt.dataset.type;
         const cena = parseInt(produkt.dataset.price);
-  
+
         return (
           nazwa.includes(tekstWyszukiwania) &&
           (!wybranaMarka || marka === wybranaMarka) &&
@@ -415,29 +442,42 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
           cena <= maksCena
         );
       });
-  
+
       // Sortowanie cen
       if (kolejnoscSortowania === "asc") {
         pasujaceProdukty.sort((a, b) => a.dataset.price - b.dataset.price);
       } else if (kolejnoscSortowania === "desc") {
         pasujaceProdukty.sort((a, b) => b.dataset.price - a.dataset.price);
       }
-  
+
       // Aktualizacja widoku
       listaProduktow.innerHTML = "";
       pasujaceProdukty.forEach(produkt => listaProduktow.appendChild(produkt));
+      
+      // Aktualizacja aktywnych linków
+      aktualizujAktywneLinki();
     }
-  
+
     // Inicjalizacja - pierwsze wywołanie na starcie
     document.addEventListener('DOMContentLoaded', function() {
-      // Aktywuj kategorię "Wszystkie" na starcie
-      const wszystkieLink = document.querySelector('.zbior a[data-brand=""]');
-      if (wszystkieLink) {
-        wszystkieLink.classList.add('active-category');
-      }
+      // Sprawdź parametry URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const selectedType = urlParams.get('type');
+      const selectedBrand = urlParams.get('brand');
+      
+      // Ustaw filtry na podstawie URL
+      if (selectedType) filtrRodzaj.value = selectedType;
+      if (selectedBrand) filtrMarka.value = selectedBrand;
       
       // Pierwsze filtrowanie
       filtrujProdukty();
+      
+      // Przewiń do sekcji produktów jeśli są parametry
+      if (selectedType || selectedBrand) {
+        document.querySelector('.bestsellery').scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
     });
   </script>
 </body>
