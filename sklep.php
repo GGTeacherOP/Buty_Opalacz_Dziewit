@@ -13,6 +13,12 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="img/favi2.png" type="image/png">
+  <style>
+    .zbior a.active-category {
+  color: #007bff;
+  font-weight: bold;
+}
+  </style>
 </head>
 <body>
   <div class="wrapper">
@@ -51,15 +57,15 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     </header>
 
     <nav>
-      <div class="prz">Kategorie</div>
-      <div class="zbior">
-        <a href="#">Nike</a>
-        <a href="#">Adidas</a>
-        <a href="#">Jordan</a>
-        <a href="#">Yeezy</a>
-        <a href="#">Nowości</a>
-        <a href="#">Wyprzedaż</a>
-      </div>
+       <div class="prz">Kategorie</div>
+  <div class="zbior">
+    <a href="#" data-brand="Nike">Nike</a>
+    <a href="#" data-brand="Adidas">Adidas</a>
+    <a href="#" data-brand="Jordan">Jordan</a>
+    <a href="#" data-brand="Vans">Vans</a>
+    <a href="#" data-brand="Under">Under Armour</a>
+    <a href="#" data-brand="Converse">Converse</a>
+  </div>
     </nav>
 
     <!-- Filtry -->
@@ -366,6 +372,40 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
   
     // Pierwsze wywołanie na starcie
     filtrujProdukty();
+
+
+
+
+    // Pobierz wszystkie linki kategorii
+const kategorieLinks = document.querySelectorAll('.zbior a');
+
+// Dodaj obsługę kliknięcia dla każdej kategorii
+kategorieLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const marka = link.dataset.brand;
+    
+    // Ustaw wybraną markę w filtrze
+    filtrMarka.value = marka;
+    
+    // Zresetuj inne filtry (opcjonalnie)
+    poleWyszukiwania.value = '';
+    filtrRodzaj.value = '';
+    suwakCeny.value = '2000';
+    wartoscCeny.textContent = '2000 zł';
+    sortowanieCeny.value = '';
+    
+    // Zastosuj filtry
+    filtrujProdukty();
+    
+    // Przewiń do sekcji produktów (opcjonalnie)
+    document.querySelector('.bestsellery').scrollIntoView({
+      behavior: 'smooth'
+    });
+  });
+});
   </script>
+
+  
 </body>
 </html>
