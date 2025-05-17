@@ -1,8 +1,11 @@
+
+
 <?php
 session_start();
 include 'auth_utils.php';
+
 $zalogowany = isset($_SESSION['username']);
-$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
+$rola = $_SESSION['rola'] ?? 'gość';
 
 $host = "localhost";
 $uzytkownik_db = "root";
@@ -14,6 +17,11 @@ $polaczenie = new mysqli($host, $uzytkownik_db, $haslo_db, $nazwa_bazy);
 if ($polaczenie->connect_error) {
     die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error);
 }
+
+$product_id = 1; // Stałe ID produktu dla tej strony
+$product_name = "Nike Air Force 1 Białe";
+$product_price = 499.00;
+$product_image = "img/Nike/AF1/AF1white.jpg";
 ?>
 
 <!DOCTYPE html>
@@ -67,91 +75,56 @@ if ($polaczenie->connect_error) {
             <?php endif; ?>
         </header>
 
-        <main class="product-page">
+         <main class="product-page">
             <div class="product-container">
                 <div class="gallery">
-                    <img src="img/Nike/AF1/AF1white.jpg" alt="Nike Air Force 1" class="main-img" />
-                <div class="thumbnails">
-                    <img src="img/Nike/AF1/AF1white.jpg" alt="Zdjęcie 1" />
-                    <img src="img/Nike/AF1/AF1white2.jpg" alt="Zdjęcie 2" />
-                    <img src="img/Nike/AF1/AF1white3.jpg" alt="Zdjęcie 3" />
-                    <img src="img/Nike/AF1/AF1white4.jpg" alt="Zdjęcie 4" />
+                    <img src="<?= htmlspecialchars($product_image) ?>" alt="<?= htmlspecialchars($product_name) ?>"
+                        class="main-img" />
+                    <div class="thumbnails">
+                        <img src="img/Nike/AF1/AF1white.jpg" alt="Zdjęcie 1" />
+                        <img src="img/Nike/AF1/AF1white2.jpg" alt="Zdjęcie 2" />
+                        <img src="img/Nike/AF1/AF1white3.jpg" alt="Zdjęcie 3" />
+                        <img src="img/Nike/AF1/AF1white4.jpg" alt="Zdjęcie 4" />
+                    </div>
                 </div>
-            </div>
-            <div class="product-details">
-                <h1>Nike Air Force 1</h1>
-                <p class="price">499 zł</p>
-                <p>Stylowe sneakersy</p>
+                <div class="product-details">
+                    <h1><?= htmlspecialchars($product_name) ?></h1>
+                    <p class="price"><?= number_format($product_price, 2) ?> zł</p>
+                    <p>Stylowe sneakersy</p>
 
-                <label>Rozmiar:
-                    <select id="product-size" name="rozmiar">
-                        <option value="">Wybierz rozmiar</option>
-                        <option value="38">38</option>
-                        <option value="39">39</option>
-                        <option value="40">40</option>
-                        <option value="41">41</option>
-                        <option value="42">42</option>
-                        <option value="43">43</option>
-                        <option value="44">44</option>
-                    </select>
-                </label>
+                    <form action="koszyk.php" method="POST">
+                        <label>Rozmiar:
+                            <select id="product-size" name="rozmiar" required>
+                                <option value="">Wybierz rozmiar</option>
+                                <option value="38">38</option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+                                <option value="44">44</option>
+                            </select>
+                        </label>
 
-                <div class="buttons">
-                  <form action="koszyk.php" method="POST">
-                    <input type="hidden" name="id_produktu" value="1">
-                    <input type="hidden" name="nazwa" value="Nike Air Force 1 Białe">
-                    <input type="hidden" name="cena" value="499">
-                    <?php
-                    $sciezka_do_obrazka = "img/Nike/AF1/AF1white.jpg";  
-                    ?>
-                    <input type="hidden" name="zdjecie" value="<?= htmlspecialchars($sciezka_do_obrazka) ?>">
-                    <input type="hidden" name="rozmiar" id="product-size-add-to-cart" value="">
-                    <input type="hidden" name="dodaj_do_koszyka" value="1">  <button type="submit" class="buy-now add-to-cart-btn">Dodaj do koszyka</button>
+                        <div class="buttons">
+                            <?php if ($zalogowany): ?>
+                                <input type="hidden" name="id_produktu" value="<?= $product_id ?>">
+                                <input type="hidden" name="nazwa" value="<?= htmlspecialchars($product_name) ?>">
+                                <input type="hidden" name="cena" value="<?= $product_price ?>">
+                                <input type="hidden" name="zdjecie" value="<?= htmlspecialchars($product_image) ?>">
+                                <input type="hidden" name="dodaj_do_koszyka" value="1">
+                                <button type="submit" class="buy-now add-to-cart-btn">Dodaj do koszyka</button>
+                            <?php else: ?>
+                                <p>Musisz być <a href="login.php">zalogowany</a>, aby dodać produkt do koszyka.</p>
+                            <?php endif; ?>
+
+                        <script>
+                            // Skrypt JavaScript został usunięty, ponieważ atrybut 'required' w HTML5
+                            // wymusza wybór rozmiaru. Jeśli chcesz bardziej zaawansowaną walidację,
+                            // możesz dodać skrypt, ale ten podstawowy powinien wystarczyć.
+                        </script>
+                    </div>
                 </form>
-               <form action="zapis_zamowienia.php" method="POST">
-    <input type="hidden" name="potwierdz_zamowienie" value="1">
-    <input type="hidden" name="nazwa[]" value="Nike Air Force 1 Białe">
-    <input type="hidden" name="cena[]" value="499">
-    <input type="hidden" name="ilosc[]" value="1">
-    <input type="hidden" name="rozmiar" id="product-size-buy-now" value="">
-    <?php if ($zalogowany && isset($_SESSION['id_uzytkownika'])): ?>
-        <input type="hidden" name="id_uzytkownika" value="<?= $_SESSION['id_uzytkownika'] ?>">
-    <?php endif; ?>
-    <button type="submit" class="buy-now buy-now-btn">Kup teraz</button>
-</form>
-
-                    <script>
-                        // Skrypt JavaScript do obsługi wyboru rozmiaru
-                        const productSize = document.getElementById('product-size');
-                        const productSizeAddToCart = document.getElementById('product-size-add-to-cart');
-                        const productSizeBuyNow = document.getElementById('product-size-buy-now');
-                        const addToCartButton = document.querySelector('.add-to-cart-btn');
-                        const buyNowButton = document.querySelector('.buy-now-btn');
-
-                        function validateSize(event) {
-                            if (productSize.value === '') {
-                                alert('Wybierz rozmiar!');
-                                event.preventDefault(); // Zatrzymaj wysyłanie formularza
-                                return false;
-                            }
-                            return true;
-                        }
-
-                        addToCartButton.addEventListener('click', function (event) {
-                            if (validateSize(event)) {
-                                productSizeAddToCart.value = productSize.value;
-                            }
-                        });
-
-                        buyNowButton.addEventListener('click', function (event) {
-                            if (validateSize(event)) {
-                                productSizeBuyNow.value = productSize.value;
-                            }
-                        });
-                    </script>
-
-                </div>
-
             </div>
         </div>
 
@@ -161,41 +134,41 @@ if ($polaczenie->connect_error) {
             <blockquote>⭐️⭐️⭐️⭐️ "But dotarł w idealnym stanie, dostawa natychmiastowa." – Elżbieta</blockquote>
         </section>
     </main>
-    </div>
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-column">
-                <h3>Kontakt</h3>
-                <p>Buty Opalacz Dziewit</p>
-                <p>ul. Kwiatowa 30, Mielec</p>
-                <p>Tel: <a href="tel:+48123456789">+48 123 456 789</a></p>
-                <p>Email: <a href="mailto:kontakt@butyopalacz.pl">kontakt@butyopalacz.pl</a></p>
-            </div>
-            <div class="footer-column">
-                <h3>Godziny otwarcia</h3>
-                <p>Poniedziałek – Piątek: 9:00 – 18:00</p>
-                <p>Sobota: 10:00 – 14:00</p>
-                <p>Niedziela: nieczynne</p>
-            </div>
-            <div class="footer-column">
-                <h3>Śledź nas</h3>
-                <div class="social-icons">
-                    <a href="https://facebook.com/butyopalacz" target="_blank" aria-label="Facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://instagram.com/butyopalacz" target="_blank" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://twitter.com/butyopalacz" target="_blank" aria-label="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
+
+      <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>Kontakt</h3>
+                    <p>Buty Opalacz Dziewit</p>
+                    <p>ul. Kwiatowa 30, Mielec</p>
+                    <p>Tel: <a href="tel:+48123456789">+48 123 456 789</a></p>
+                    <p>Email: <a href="mailto:kontakt@butyopalacz.pl">kontakt@butyopalacz.pl</a></p>
+                </div>
+                <div class="footer-column">
+                    <h3>Godziny otwarcia</h3>
+                    <p>Poniedziałek – Piątek: 9:00 – 18:00</p>
+                    <p>Sobota: 10:00 – 14:00</p>
+                    <p>Niedziela: nieczynne</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Śledź nas</h3>
+                    <div class="social-icons">
+                        <a href="https://facebook.com/butyopalacz" target="_blank" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com/butyopalacz" target="_blank" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://twitter.com/butyopalacz" target="_blank" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Buty Opalacz Dziewit. Wszelkie prawa zastrzeżone.</p>
-        </div>
-    </footer>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Buty Opalacz Dziewit. Wszelkie prawa zastrzeżone.</p>
+            </div>
+        </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {

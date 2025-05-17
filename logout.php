@@ -1,5 +1,10 @@
 <?php
 session_start();
-session_destroy(); // Niszczy sesję użytkownika (wylogowanie)
-header("Location: index.php"); // Przekierowanie na stronę główną
+
+// Nie usuwaj koszyka z sesji, bo jest przechowywany w bazie danych
+// Po prostu zniszcz sesję
+session_destroy();
+
+header("Location: index.php");
 exit;
+?>

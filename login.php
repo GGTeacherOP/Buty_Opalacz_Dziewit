@@ -1,23 +1,26 @@
+
 <?php
 session_start();
+
 
 $host = 'localhost';
 $uzytkownik = 'root';
 $haslo_db = '';
 $nazwa_bazy = 'buty';
 
+// Nawiązanie połączenia z bazą danych
 $polaczenie = new mysqli($host, $uzytkownik, $haslo_db, $nazwa_bazy);
 if ($polaczenie->connect_error) {
-    die("Błąd połączenia: " . $polaczenie->connect_error);
+    die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error);
 }
 
-$wiadomosc_bledu = "";
+$wiadomosc_bledu = ""; // Inicjalizacja zmiennej na komunikaty błędów
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    // Sprawdzenie w tabeli 'klienci'
+    // 1. Sprawdzenie w tabeli 'klienci'
     $sql_klienci = "SELECT id_klienta, nazwa_uzytkownika, haslo FROM klienci WHERE nazwa_uzytkownika = ?";
     $stmt_klienci = $polaczenie->prepare($sql_klienci);
 
@@ -28,21 +31,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($wynik_klienci->num_rows === 1) {
             $uzytkownik = $wynik_klienci->fetch_assoc();
-            // Zmieniono na zwykłe porównanie haseł (NIEBEZPIECZNE!)
             if ($password == $uzytkownik['haslo']) {
+                // Uwierzytelnienie udane
                 $_SESSION['username'] = htmlspecialchars($uzytkownik['nazwa_uzytkownika']);
-                $_SESSION['rola'] = 'klient';
+                $_SESSION['rola'] = 'klient'; // Domyślna rola
                 $_SESSION['id_uzytkownika'] = $uzytkownik['id_klienta'];
+
+                // Opcjonalne: Pobranie koszyka z bazy danych
+                //  Pamiętaj, żeby dokładnie sprawdzić zapytanie SQL!
+                $id_klienta = $_SESSION['id_uzytkownika'];
+                $sql_koszyk = "SELECT ez.*, p.cena, p.nazwa, p.url_zdjecia
+                              FROM elementy_zamowienia ez
+                              JOIN produkty p ON ez.id_produktu = p.id_produktu
+                              WHERE ez.id_klienta = ?";
+                $stmt_koszyk = $polaczenie->prepare($sql_koszyk);
+
+                if ($stmt_koszyk) {
+                    $stmt_koszyk->bind_param("i", $id_klienta);
+                    $stmt_koszyk->execute();
+                    $wynik_koszyk = $stmt_koszyk->get_result();
+                    $_SESSION['koszyk'] = $wynik_koszyk->fetch_all(MYSQLI_ASSOC);
+                } else {
+                    // Błąd w zapytaniu o koszyk (ważne!)
+                    $wiadomosc_bledu = "Błąd przy pobieraniu koszyka.";
+                }
+
                 header("Location: index.php");
                 exit;
+
             } else {
                 $wiadomosc_bledu = "Nieprawidłowe hasło.";
             }
+        } else {
+            $wiadomosc_bledu = "Użytkownik nie istnieje.";
         }
         $stmt_klienci->close();
+    } else {
+        // Błąd w zapytaniu SQL (bardzo ważne!)
+        $wiadomosc_bledu = "Błąd w zapytaniu SQL (klienci).";
     }
 
-    // Jeśli nie znaleziono w 'klienci', to sprawdzamy w 'pracownicy'
+    // 2. Sprawdzenie w tabeli 'pracownicy' (opcjonalne, zależnie od wymagań)
     if (empty($_SESSION['username'])) {
         $sql_pracownicy = "SELECT id_pracownika, nazwa_uzytkownika, haslo, stanowisko FROM pracownicy WHERE nazwa_uzytkownika = ?";
         $stmt_pracownicy = $polaczenie->prepare($sql_pracownicy);
@@ -54,26 +83,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($wynik_pracownicy->num_rows === 1) {
                 $uzytkownik = $wynik_pracownicy->fetch_assoc();
-                // Zmieniono na zwykłe porównanie haseł (NIEBEZPIECZNE!)
                 if ($password == $uzytkownik['haslo']) {
                     $_SESSION['username'] = htmlspecialchars($uzytkownik['nazwa_uzytkownika']);
                     $_SESSION['rola'] = $uzytkownik['stanowisko'];
-                    $_SESSION['id_uzytkownika'] = $uzytkownik['id_pracownika'];
                     header("Location: index.php");
                     exit;
                 } else {
                     $wiadomosc_bledu = "Nieprawidłowe hasło.";
                 }
             } else {
-                $wiadomosc_bledu = "Nieprawidłowa nazwa użytkownika.";
+                $wiadomosc_bledu = "Nieprawidłowy użytkownik.";
             }
             $stmt_pracownicy->close();
+        } else {
+            $wiadomosc_bledu = "Błąd w zapytaniu SQL (pracownicy).";
         }
     }
 }
 
 $polaczenie->close();
 ?>
+
+
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="img/favi2.png" type="image/png">
 
 <!DOCTYPE html>
 <html lang="pl">

@@ -1,57 +1,121 @@
 <?php
 session_start();
 include 'auth_utils.php';
+
+$host = 'localhost';
+$uzytkownik_db = 'root';
+$haslo_db = '';
+$nazwa_bazy = 'buty';
+
+$polaczenie = new mysqli($host, $uzytkownik_db, $haslo_db, $nazwa_bazy);
+if ($polaczenie->connect_error) {
+    die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error);
+}
+
 $zalogowany = isset($_SESSION['username']);
-$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
+$rola = $_SESSION['rola'] ?? 'gość';
+$id_klienta = $_SESSION['id_uzytkownika'] ?? null;
 
-// Dodawanie produktu do koszyka
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['dodaj_do_koszyka'])) {
-    $id_produktu = intval($_POST['id_produktu']);  // Zmiana: Zawsze integer
-    $nazwa = $_POST['nazwa'];
-    $cena = floatval($_POST['cena']);   // Zmiana: Zawsze float
-    $zdjecie = $_POST['zdjecie'];
-    $rozmiar = trim($_POST['rozmiar']);  // Zmiana: Usuń spacje
-
-    $produkt = array(
-        'id' => $id_produktu,
-        'nazwa' => $nazwa,
-        'cena' => $cena,
-        'zdjecie' => $zdjecie,
-        'rozmiar' => $rozmiar,
-        'ilosc' => 1
-    );
-
-    if (!isset($_SESSION['koszyk'])) {
-        $_SESSION['koszyk'] = array();
+// Pobierz koszyk z bazy danych
+function pobierz_koszyk_z_bazy($polaczenie, $id_klienta) {
+    $koszyk = [];
+    if ($id_klienta) {
+        $sql = "SELECT k.*, p.nazwa, p.cena, p.url_zdjecia AS zdjecie
+                FROM koszyki k
+                JOIN produkty p ON k.id_produktu = p.id_produktu
+                WHERE k.id_klienta = ?";
+        $stmt = $polaczenie->prepare($sql);
+        $stmt->bind_param("i", $id_klienta);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $koszyk[] = [
+                'id_produktu' => $row['id_produktu'],
+                'nazwa' => $row['nazwa'],
+                'cena' => $row['cena'],
+                'zdjecie' => $row['zdjecie'],
+                'rozmiar' => $row['rozmiar'],
+                'ilosc' => $row['ilosc'],
+                'id_koszyka' => $row['id_koszyka']
+            ];
+        }
     }
+    return $koszyk;
+}
+
+function dodaj_do_koszyka_w_bazie($polaczenie, $id_klienta, $id_produktu, $rozmiar, $ilosc = 1) {
+    $sql = "INSERT INTO koszyki (id_klienta, id_produktu, rozmiar, ilosc) VALUES (?, ?, ?, ?)";
+    $stmt = $polaczenie->prepare($sql);
+    $stmt->bind_param("iisi", $id_klienta, $id_produktu, $rozmiar, $ilosc); // ✅ MOD: poprawiony typ 's' dla rozmiaru
+    $stmt->execute();
+    return $polaczenie->insert_id;
+}
+
+function aktualizuj_ilosc_w_bazie($polaczenie, $id_koszyka, $ilosc) {
+    $sql = "UPDATE koszyki SET ilosc = ? WHERE id_koszyka = ?";
+    $stmt = $polaczenie->prepare($sql);
+    $stmt->bind_param("ii", $ilosc, $id_koszyka);
+    $stmt->execute();
+}
+
+function usun_z_koszyka_w_bazie($polaczenie, $id_koszyka) {
+    $sql = "DELETE FROM koszyki WHERE id_koszyka = ?";
+    $stmt = $polaczenie->prepare($sql);
+    $stmt->bind_param("i", $id_koszyka);
+    $stmt->execute();
+}
+
+if ($zalogowany) {
+    $_SESSION['koszyk'] = pobierz_koszyk_z_bazy($polaczenie, $id_klienta);
+}
+// Dodawanie do koszyka
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['dodaj_do_koszyka'])) {
+    if (!$zalogowany) {
+        header('Location: login.php');
+        exit;
+    }
+
+    $id_produktu = intval($_POST['id_produktu']);
+    $nazwa = $_POST['nazwa'];
+    $cena = floatval($_POST['cena']);
+    $zdjecie = $_POST['zdjecie'];
+    $rozmiar = trim($_POST['rozmiar']);
 
     $produkt_istnieje = false;
     foreach ($_SESSION['koszyk'] as $key => $item) {
-        if (intval($item['id']) === $id_produktu && trim($item['rozmiar']) === $rozmiar) {  // Zmiana: Porównuj jako int i usuń spacje
+        if ($item['id_produktu'] == $id_produktu && $item['rozmiar'] == $rozmiar) {
             $_SESSION['koszyk'][$key]['ilosc']++;
             $produkt_istnieje = true;
+            aktualizuj_ilosc_w_bazie($polaczenie, $item['id_koszyka'], $_SESSION['koszyk'][$key]['ilosc']);
             break;
         }
     }
 
     if (!$produkt_istnieje) {
-        $_SESSION['koszyk'][] = $produkt;
+        $id_koszyka = dodaj_do_koszyka_w_bazie($polaczenie, $id_klienta, $id_produktu, $rozmiar);
+        $nowy_produkt = [
+            'id_produktu' => $id_produktu,
+            'nazwa' => $nazwa,
+            'cena' => $cena,
+            'zdjecie' => $zdjecie,
+            'rozmiar' => $rozmiar,
+            'ilosc' => 1,
+            'id_koszyka' => $id_koszyka
+        ];
+        $_SESSION['koszyk'][] = $nowy_produkt;
     }
 
     header('Location: koszyk.php');
     exit;
 }
 
-
-
-// Aktualizacja ilości produktów
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['aktualizuj_koszyk'])) {
-    if (isset($_POST['ilosc'])) {
-        foreach ($_POST['ilosc'] as $index => $nowa_ilosc) {
-            $nowa_ilosc = intval($nowa_ilosc);
-            if ($nowa_ilosc > 0 && isset($_SESSION['koszyk'][$index])) {
-                $_SESSION['koszyk'][$index]['ilosc'] = $nowa_ilosc;
-            }
+// Aktualizacja ilości
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aktualizuj_koszyk']) && $zalogowany) {
+    if (isset($_POST['ilosc']) && is_array($_POST['ilosc'])) {
+        foreach ($_POST['ilosc'] as $i => $ilosc) {
+            $ilosc = max(1, intval($ilosc));
+            $_SESSION['koszyk'][$i]['ilosc'] = $ilosc;
+            aktualizuj_ilosc_w_bazie($polaczenie, $_SESSION['koszyk'][$i]['id_koszyka'], $ilosc);
         }
     }
     header('Location: koszyk.php');
@@ -59,30 +123,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['aktualizuj_koszyk'])) 
 }
 
 // Usuwanie produktu
-if (isset($_GET['usun'])) {
-    $id = intval($_GET['usun']);
-    if (isset($_SESSION['koszyk'][$id])) {
-        unset($_SESSION['koszyk'][$id]);
+if (isset($_GET['usun']) && $zalogowany) {
+    $indeks = intval($_GET['usun']);
+    if (isset($_SESSION['koszyk'][$indeks])) {
+        usun_z_koszyka_w_bazie($polaczenie, $_SESSION['koszyk'][$indeks]['id_koszyka']);
+        unset($_SESSION['koszyk'][$indeks]);
         $_SESSION['koszyk'] = array_values($_SESSION['koszyk']);
     }
-    header('Location: koszyk.php'); // WAŻNE: Przekieruj, aby zaktualizować sumę
+    header('Location: koszyk.php');
     exit;
 }
 
-// Funkcja obliczająca sumę koszyka (zostawiamy tylko jedną deklarację)
 function oblicz_sume_koszyka() {
     $suma = 0;
-    if (!empty($_SESSION['koszyk'])) {
+    if (isset($_SESSION['koszyk'])) {
         foreach ($_SESSION['koszyk'] as $produkt) {
-            $suma += (float)$produkt['cena'] * (int)$produkt['ilosc'];
+            $suma += $produkt['cena'] * $produkt['ilosc'];
         }
     }
     return $suma;
 }
 
-$suma = oblicz_sume_koszyka(); // Oblicz sumę przy załadowaniu strony
+$koszyk = $_SESSION['koszyk'] ?? [];
 
+// ✅ MOD: Poprawiony zapis zamówienia
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalogowany) {
+    $id_uzytkownika = $_SESSION['id_uzytkownika'];
+    $data_zamowienia = date('Y-m-d H:i:s');
+    $suma_zamowienia = oblicz_sume_koszyka();
 
+    $stmt_zamowienie = $polaczenie->prepare("INSERT INTO zamowienia (id_klienta, data_zamowienia, kwota_calkowita) VALUES (?, ?, ?)");
+    $stmt_zamowienie->bind_param("isd", $id_uzytkownika, $data_zamowienia, $suma_zamowienia);
+    $stmt_zamowienie->execute();
+    $id_zamowienia = $polaczenie->insert_id;
+    $stmt_zamowienie->close();
+
+    foreach ($_SESSION['koszyk'] as $produkt) {
+        $id_produktu = $produkt['id_produktu'];
+        $ilosc = $produkt['ilosc'];
+        $cena_jednostkowa = $produkt['cena'];
+        $rozmiar = $produkt['rozmiar'];
+        $id_klienta = $id_uzytkownika;
+
+        $stmt_element = $polaczenie->prepare("
+            INSERT INTO elementy_zamowienia (id_zamowienia, id_produktu, ilosc, cena_jednostkowa, id_klienta, rozmiar)
+            VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt_element->bind_param("iiidis", $id_zamowienia, $id_produktu, $ilosc, $cena_jednostkowa, $id_klienta, $rozmiar);
+        $stmt_element->execute();
+        $stmt_element->close();
+    }
+
+    // ✅ MOD: Usunięcie koszyka użytkownika z bazy
+    $stmt_clear = $polaczenie->prepare("DELETE FROM koszyki WHERE id_klienta = ?");
+    $stmt_clear->bind_param("i", $id_uzytkownika);
+    $stmt_clear->execute();
+    $stmt_clear->close();
+
+    $_SESSION['koszyk'] = [];
+
+    echo "<script>alert('Dziękujemy za złożenie zamówienia!'); window.location.href='index.php';</script>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -205,7 +306,7 @@ $suma = oblicz_sume_koszyka(); // Oblicz sumę przy załadowaniu strony
             <a href="kontakt.php">Kontakt</a>
             <a href="opinie.php">Opinie</a>
             <a href="aktualnosci.php">Aktualności</a>
-              <?php if ($zalogowany): ?>
+            <?php if ($zalogowany): ?>
                 <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
                     Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
                 </span>
@@ -227,7 +328,7 @@ $suma = oblicz_sume_koszyka(); // Oblicz sumę przy załadowaniu strony
                 <a href="panel_admina.php">Panel Admina</a>
             <?php endif; ?>
 
-             <?php if (czy_ma_role('szef')): ?>
+            <?php if (czy_ma_role('szef')): ?>
                 <a href="panel_szef.php">Panel Szefa</a>
             <?php endif; ?>
         </header>
@@ -236,46 +337,40 @@ $suma = oblicz_sume_koszyka(); // Oblicz sumę przy załadowaniu strony
             <div class="koszyk-container">
                 <h1>Twój koszyk</h1>
 
-      <?php if (!empty($_SESSION['koszyk'])): ?>
-    <form method="post" action="koszyk.php" id="aktualizacja-koszyka-form">
-        <?php foreach ($_SESSION['koszyk'] as $i => $produkt): ?>
-            <div class="produkt-w-koszyku">
-                <div class="produkt-info">
-                    <img src="<?= htmlspecialchars($produkt['zdjecie']) ?>" alt="<?= htmlspecialchars($produkt['nazwa']) ?>">
-                    <div class="produkt-dane">
-                        <span><?= htmlspecialchars($produkt['nazwa']) ?></span>
-                        <span>Rozmiar: <?= htmlspecialchars($produkt['rozmiar']) ?></span>
-                        <span>Cena: <?= number_format($produkt['cena'], 2) ?> zł</span>
-                        <label>
-                            Ilość:
-                            <input type="number" name="ilosc[<?= $i ?>]" value="<?= $produkt['ilosc'] ?>" min="1" class="ilosc-input">
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <button type="button" onclick="usunProdukt(<?= $i ?>)" class="usun-btn">Usuń</button>
-                </div>
-            </div>
-        <?php endforeach; ?>
-        <div class="suma-container">
-            Suma: <?= number_format(oblicz_sume_koszyka(), 2) ?> zł
-            <br>
-            <button type="submit" name="aktualizuj_koszyk" value="1" class="kup-btn">Aktualizuj koszyk</button>
-            <button type="button" onclick="document.getElementById('zapis-zamowienia-form').submit()" class="kup-btn">Przejdź do płatności</button>
-        </div>
-    </form>
-    
-    <form method="post" action="zapis_zamowienia.php" id="zapis-zamowienia-form">
-        <input type="hidden" name="potwierdz_zamowienie" value="1">
-        <?php foreach ($_SESSION['koszyk'] as $i => $produkt): ?>
-            <input type="hidden" name="nazwa[]" value="<?= htmlspecialchars($produkt['nazwa']) ?>">
-            <input type="hidden" name="cena[]" value="<?= htmlspecialchars($produkt['cena']) ?>">
-            <input type="hidden" name="ilosc[]" value="<?= htmlspecialchars($produkt['ilosc']) ?>">
-        <?php endforeach; ?>
-    </form>
-<?php else: ?>
-    <p class="pusty">Koszyk jest pusty.</p>
-<?php endif; ?>
+                <?php if (!empty($koszyk)): ?>
+                    <form method="post" action="koszyk.php" id="aktualizacja-koszyka-form">
+                        <?php foreach ($koszyk as $i => $produkt): ?>
+                            <div class="produkt-w-koszyku">
+                                <div class="produkt-info">
+                                    <img src="<?= htmlspecialchars($produkt['zdjecie']) ?>"
+                                         alt="<?= htmlspecialchars($produkt['nazwa']) ?>">
+                                    <div class="produkt-dane">
+                                        <span><?= htmlspecialchars($produkt['nazwa']) ?></span>
+                                        <span>Rozmiar: <?= htmlspecialchars($produkt['rozmiar']) ?></span>
+                                        <span>Cena: <?= number_format($produkt['cena'], 2) ?> zł</span>
+                                        <label>
+                                            Ilość:
+                                            <input type="number" name="ilosc[<?= $i ?>]" value="<?= $produkt['ilosc'] ?>"
+                                                   min="1" class="ilosc-input">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                   <button type="button" onclick="usunProdukt(<?= $i ?>)" class="usun-btn">Usuń</button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <div class="suma-container">
+                            Suma: <?= number_format(oblicz_sume_koszyka(), 2) ?> zł
+                            <br>
+                            <button type="submit" name="aktualizuj_koszyk" value="1" class="kup-btn">Aktualizuj koszyk</button>
+                            <button type="submit" name="kup_teraz" class="kup-btn">Kup Teraz</button>
+                        </div>
+                    </form>
+
+                <?php else: ?>
+                    <p class="pusty">Koszyk jest pusty.</p>
+                <?php endif; ?>
 
             </div>
         </main>
