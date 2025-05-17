@@ -171,7 +171,7 @@ $product_image = "img/UnderArmour/Magnetico/UA_Magnetico_Elite_4Fg_1.png"
             </div>
         </div>
 
-    section class="opinie-produktu">
+    <section class="opinie-produktu">
             <form id="formularz-opinii">
   <h3>Dodaj swoją opinię: </h3>
   <label>Ocena:</label>

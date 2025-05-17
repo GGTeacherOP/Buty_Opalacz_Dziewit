@@ -171,7 +171,7 @@ $product_image = "img/Reebook/Reebok FIORI/Rebook FIORI1.jpg"
             </div>
         </div>
 
-    section class="opinie-produktu">
+    <section class="opinie-produktu">
             <form id="formularz-opinii">
   <h3>Dodaj swoją opinię: </h3>
   <label>Ocena:</label>

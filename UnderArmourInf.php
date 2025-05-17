@@ -171,7 +171,7 @@ $product_image = "img/UnderArmour/Infinite/UA_W_Infinite_Elite_2_1.png"
             </div>
         </div>
 
-    section class="opinie-produktu">
+    <section class="opinie-produktu">
             <form id="formularz-opinii">
   <h3>Dodaj swoją opinię: </h3>
   <label>Ocena:</label>
