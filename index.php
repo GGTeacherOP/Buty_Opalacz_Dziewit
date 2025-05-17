@@ -56,16 +56,16 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
 
         </header>
 
-        <nav>
-            <p class="prz">Buty</p>
-            <div class="zbior">
-                <a href="snekarsy.html">Sneakersy</a>
-                <a href="trampki.html">Trampki</a>
-                <a href="butdb.html">Buty do biegania</a>
-                <a href="butdtr.html">Buty treningowe</a>
-                <a href="klp.html">Klapki</a>
-            </div>
-        </nav>
+       <nav>
+    <p class="prz">Buty</p>
+    <div class="zbior">
+        <a href="sklep.php?type=Sneakersy">Sneakersy</a>
+        <a href="sklep.php?type=Trampki">Trampki</a>
+        <a href="sklep.php?type=Biegania">Buty do biegania</a>
+        <a href="sklep.php?type=Treningowe">Buty treningowe</a>
+        <a href="sklep.php?type=Klapki">Klapki</a>
+    </div>
+</nav>
 
         <main>
             <div class="pokaz">
