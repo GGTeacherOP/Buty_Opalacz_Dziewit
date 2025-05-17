@@ -138,8 +138,9 @@ function oblicz_sume_koszyka() {
     $suma = 0;
     if (isset($_SESSION['koszyk'])) {
         foreach ($_SESSION['koszyk'] as $produkt) {
-            $suma += $produkt['cena'] * $produkt['ilosc'];
-        }
+    $suma += (float)$produkt['cena'] * (int)$produkt['ilosc'];
+}
+
     }
     return $suma;
 }
@@ -421,3 +422,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalo
 </body>
 
 </html>
+
+
+
+
+
+
+
+ 
+         
