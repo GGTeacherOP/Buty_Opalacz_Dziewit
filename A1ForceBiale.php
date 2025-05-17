@@ -34,9 +34,7 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
-    <style>
-        /* Style CSS pozostają bez zmian */
-    </style>
+   
 </head>
 
 <body>
@@ -118,11 +116,8 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
                                 <p>Musisz być <a href="login.php">zalogowany</a>, aby dodać produkt do koszyka.</p>
                             <?php endif; ?>
 
-                        <script>
-                            // Skrypt JavaScript został usunięty, ponieważ atrybut 'required' w HTML5
-                            // wymusza wybór rozmiaru. Jeśli chcesz bardziej zaawansowaną walidację,
-                            // możesz dodać skrypt, ale ten podstawowy powinien wystarczyć.
-                        </script>
+                        
+                
                     </div>
                 </form>
             </div>
