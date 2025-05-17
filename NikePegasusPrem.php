@@ -171,7 +171,7 @@ $product_image = "img/Nike/Nike Pegasus Premium/pegasusprem1.png"
             </div>
         </div>
 
-    section class="opinie-produktu">
+    <section class="opinie-produktu">
             <form id="formularz-opinii">
   <h3>Dodaj swoją opinię: </h3>
   <label>Ocena:</label>
