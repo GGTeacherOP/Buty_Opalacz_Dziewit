@@ -171,12 +171,6 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
                             <?php else: ?>
                                 <p>Musisz być <a href="login.php">zalogowany</a>, aby dodać produkt do koszyka.</p>
                             <?php endif; ?>
-<<<<<<< HEAD
-=======
-
-                        
-                
->>>>>>> e756a286749d7896aa1641b86dd6ccaed58dfb21
                     </div>
                 </form>
             </div>
