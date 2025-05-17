@@ -35,7 +35,57 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
     <style>
-        /* Style CSS pozostają bez zmian */
+        .stars {
+      cursor: pointer;
+      font-size: 24px;
+      color: lightgray;
+    }
+    .stars.selected {
+      color: gold;
+    }
+    .review {
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+    }
+
+
+    #formularz-opinii {
+  max-width: 600px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#formularz-opinii input,
+#formularz-opinii textarea {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fafafa;
+}
+#formularz-opinii button {
+  padding: 1rem;
+  border: none;
+  background-color: #222;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+#formularz-opinii button:hover {
+  background-color: #000;
+  font-size:1.3rem;
+  padding:0.83rem;
+}
     </style>
 </head>
 
@@ -117,22 +167,86 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
                             <?php else: ?>
                                 <p>Musisz być <a href="login.php">zalogowany</a>, aby dodać produkt do koszyka.</p>
                             <?php endif; ?>
-
-                        <script>
-                            // Skrypt JavaScript został usunięty, ponieważ atrybut 'required' w HTML5
-                            // wymusza wybór rozmiaru. Jeśli chcesz bardziej zaawansowaną walidację,
-                            // możesz dodać skrypt, ale ten podstawowy powinien wystarczyć.
-                        </script>
                     </div>
                 </form>
             </div>
         </div>
+  </form>
 
         <section class="opinie-produktu">
-            <h2>Opinie</h2>
-            <blockquote>⭐️⭐️⭐️⭐️⭐️ "Cudnie wyglądają, bardzo polecam!" – Agnieszka</blockquote>
-            <blockquote>⭐️⭐️⭐️⭐️ "But dotarł w idealnym stanie, dostawa natychmiastowa." – Elżbieta</blockquote>
+            <form id="formularz-opinii">
+  <h3>Dodaj swoją opinię: </h3>
+  <label>Ocena:</label>
+  <div id="gwiazdki">
+    <span data-value="1">★</span>
+    <span data-value="2">★</span>
+    <span data-value="3">★</span>
+    <span data-value="4">★</span>
+    <span data-value="5">★</span>
+  </div>
+  
+  <label for="imie">Imię:</label>
+  <input type="text" id="imie" required>
+  <label for="opinia">Opinia:</label>
+  <textarea id="opinia" rows="4" required></textarea><br>
+  <button type="submit">Dodaj opinię</button>
+</form>
+    <h2>Opinie: </h2>
+        <blockquote>⭐️⭐️⭐️⭐️⭐️ "Cudnie wyglądają, bardzo polecam!" – Agnieszka</blockquote><br>
+        <blockquote>⭐️⭐️⭐️⭐️ "But dotarł w idealnym stanie, dostawa natychmiastowa." – Elżbieta</blockquote><br>
+        <?php
+        ?>
+<script>
+  const gwiazdki = document.querySelectorAll('#gwiazdki span');
+  let wybranaOcena = 0;
+
+  gwiazdki.forEach(star => {
+    star.style.cursor = 'pointer';
+    star.style.fontSize = '24px';
+    
+    star.addEventListener('click', () => {
+      wybranaOcena = parseInt(star.dataset.value);
+      aktualizujGwiazdki();
+    });
+  });
+
+  function aktualizujGwiazdki() {
+    gwiazdki.forEach(star => {
+      if (parseInt(star.dataset.value) <= wybranaOcena) {
+        star.style.color = 'gold';
+      } else {
+        star.style.color = 'gray';
+      }
+    });
+  }
+
+  document.getElementById('formularz-opinii').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const imie = document.getElementById('imie').value.trim();
+    const opinia = document.getElementById('opinia').value.trim();
+
+    if (wybranaOcena === 0 || !opinia || !imie) {
+      alert('Uzupełnij wszystkie pola i wybierz ocenę.');
+      return;
+    }
+
+    const section = document.querySelector('.opinie-produktu');
+    const blockquote = document.createElement('blockquote');
+    blockquote.innerHTML = `${'⭐️'.repeat(wybranaOcena)}"${opinia}" – ${imie}`;
+    
+    section.appendChild(blockquote);
+
+    // Reset
+    document.getElementById('imie').value = '';
+    document.getElementById('opinia').value = '';
+    wybranaOcena = 0;
+    aktualizujGwiazdki();
+  });
+</script>
+            
         </section>
+
     </main>
 
       <footer class="footer">
@@ -184,7 +298,6 @@ $product_image = "img/Nike/AF1/AF1white.jpg";
             });
         });
     </script>
-
 </body>
 
 </html>

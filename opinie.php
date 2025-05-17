@@ -152,19 +152,19 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
         <article class="opinia">
           <h3>Anna K.</h3>
           <p>Super obsługa i szybka dostawa. Buty są oryginalne i dobrze zapakowane. Polecam!</p>
-          <button class="usun-opinie">Usuń</button>
+          <button class="usun-opinie" hidden>Usuń</button>
         </article>
 
         <article class="opinia">
           <h3>Mateusz W.</h3>
           <p>Kupiłem Jordany – przyszły w 2 dni. Wszystko zgodne z opisem.</p>
-          <button class="usun-opinie">Usuń</button>
+          <button class="usun-opinie" hidden>Usuń</button>
         </article>
 
         <article class="opinia">
           <h3>Karolina M.</h3>
           <p>Duży wybór modeli i dobre ceny. Na pewno wrócę po więcej!</p>
-          <button class="usun-opinie">Usuń</button>
+          <button class="usun-opinie" hidden>Usuń</button>
         </article>
       </section>
 
@@ -261,7 +261,7 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
       el.innerHTML = `
         <h3>${imie}</h3>
         <p>${tresc}</p>
-        <button class="usun-opinie">Usuń</button>
+        <button class="usun-opinie" hidden>Usuń</button>
       `;
 
       // Obsługa kliknięcia przycisku usuń
