@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 14, 2025 at 08:32 PM
+-- Generation Time: Maj 17, 2025 at 05:57 PM
 -- Wersja serwera: 10.4.32-MariaDB
--- Wersja PHP: 8.0.30
+-- Wersja PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -32,25 +32,28 @@ CREATE TABLE `elementy_zamowienia` (
   `id_zamowienia` int(11) DEFAULT NULL,
   `id_produktu` int(11) DEFAULT NULL,
   `ilosc` int(11) NOT NULL,
-  `cena_jednostkowa` decimal(10,2) NOT NULL
+  `cena_jednostkowa` decimal(10,2) NOT NULL,
+  `id_klienta` int(11) DEFAULT NULL,
+  `rozmiar` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `elementy_zamowienia`
 --
 
-INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `id_produktu`, `ilosc`, `cena_jednostkowa`) VALUES
-(1, 2, 1, 1, 499.00),
-(2, 3, 1, 1, 499.00),
-(3, 4, 12, 1, 529.00),
-(4, 5, 1, 1, 499.00),
-(5, 6, 20, 1, 179.00),
-(6, 7, 1, 1, 499.00),
-(7, 8, 15, 1, 379.00),
-(8, 9, 2, 1, 1249.00),
-(9, 10, 1, 1, 499.00),
-(10, 11, 2, 1, 1249.00),
-(11, 12, 1, 1, 499.00);
+INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `id_produktu`, `ilosc`, `cena_jednostkowa`, `id_klienta`, `rozmiar`) VALUES
+(12, 13, 1, 2, 499.00, NULL, NULL),
+(13, 14, 1, 3, 499.00, NULL, NULL),
+(14, 15, 1, 2, 499.00, NULL, NULL),
+(15, 16, 1, 4, 499.00, NULL, NULL),
+(16, 17, 1, 2, 499.00, 29, '41'),
+(17, 18, 1, 3, 499.00, 29, '41'),
+(18, 19, 1, 2, 499.00, 29, '40'),
+(19, 19, 1, 2, 499.00, 29, '43'),
+(20, 20, 1, 2, 499.00, 29, '41'),
+(21, 21, 1, 2, 499.00, 29, '40'),
+(22, 21, 1, 3, 499.00, 29, '41'),
+(23, 22, 1, 3, 499.00, 29, '41');
 
 -- --------------------------------------------------------
 
@@ -99,6 +102,27 @@ INSERT INTO `klienci` (`id_klienta`, `nazwa_uzytkownika`, `haslo`, `email`, `dat
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `koszyki`
+--
+
+CREATE TABLE `koszyki` (
+  `id_koszyka` int(11) NOT NULL,
+  `id_klienta` int(11) DEFAULT NULL,
+  `id_produktu` int(11) DEFAULT NULL,
+  `rozmiar` varchar(50) DEFAULT NULL,
+  `ilosc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `koszyki`
+--
+
+INSERT INTO `koszyki` (`id_koszyka`, `id_klienta`, `id_produktu`, `rozmiar`, `ilosc`) VALUES
+(4, 29, 1, '41', 3);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `opinie`
 --
 
@@ -132,14 +156,14 @@ CREATE TABLE `pracownicy` (
 --
 
 INSERT INTO `pracownicy` (`id_pracownika`, `nazwa_uzytkownika`, `haslo`, `email`, `data_zatrudnienia`, `stanowisko`, `pensja`) VALUES
-(3, 'admin123', 'adminpass', 'admin123@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
-(21, 'patryk_jakubowski', 'patrykj', 'patryk.jakubowski@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
-(22, 'amanda_jablonska', 'amandaj', 'amanda.jablonska@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
-(23, 'adam_piekarski', 'adamp', 'adam.piekarski@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
-(24, 'beata_mazurek', 'beatam', 'beata.mazurek@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
-(25, 'cezary_baranski', 'cezaryb', 'cezary.baranski@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
-(26, 'diana_sikora', 'dianas', 'diana.sikora@example.com', '2025-05-11', 'Pracownik sklepu', NULL),
-(27, 'eryk_urban', 'eryku', 'eryk.urban@example.com', '2025-05-11', 'Pracownik sklepu', NULL);
+(1, 'admin123', 'adminpass', 'admin123@example.com', '2025-05-11', 'Pracownik sklepu', 4900.00),
+(2, 'patryk_jakubowski', 'patrykj', 'patryk.jakubowski@example.com', '2025-05-11', 'kierownik', 7000.00),
+(3, 'amanda_jablonska', 'amandaj', 'amanda.jablonska@example.com', '2025-05-11', 'Pracownik sklepu', 4900.00),
+(4, 'adam_piekarski', 'adamp', 'adam.piekarski@example.com', '2025-05-11', 'admin', 6900.00),
+(5, 'beata_mazurek', 'beatam', 'beata.mazurek@example.com', '2025-05-11', 'Pracownik sklepu', 4900.00),
+(6, 'cezary_baranski', 'cezaryb', 'cezary.baranski@example.com', '2025-05-11', 'kierownik', 6500.00),
+(7, 'diana_sikora', 'dianas', 'diana.sikora@example.com', '2025-05-11', 'admin', 7100.00),
+(8, 'eryk_urban', 'eryku', 'eryk.urban@example.com', '2025-05-11', 'Pracownik sklepu', 5400.00);
 
 -- --------------------------------------------------------
 
@@ -358,7 +382,17 @@ INSERT INTO `zamowienia` (`id_zamowienia`, `id_klienta`, `data_zamowienia`, `kwo
 (9, 17, '2025-05-11 17:37:00', 1249.00),
 (10, 30, '2025-05-11 17:56:26', 499.00),
 (11, 30, '2025-05-11 17:58:18', 1249.00),
-(12, 31, '2025-05-11 19:29:39', 499.00);
+(12, 31, '2025-05-11 19:29:39', 499.00),
+(13, 29, '0000-00-00 00:00:00', 998.00),
+(14, 29, '0000-00-00 00:00:00', 1497.00),
+(15, 29, '0000-00-00 00:00:00', 998.00),
+(16, 29, '0000-00-00 00:00:00', 1996.00),
+(17, 29, '2025-05-17 15:23:29', 998.00),
+(18, 29, '2025-05-17 15:25:28', 1497.00),
+(19, 29, '2025-05-17 15:26:15', 1996.00),
+(20, 29, '2025-05-17 15:30:48', 998.00),
+(21, 29, '2025-05-17 15:37:09', 2495.00),
+(22, 29, '2025-05-17 15:56:03', 1497.00);
 
 -- --------------------------------------------------------
 
@@ -442,7 +476,8 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 ALTER TABLE `elementy_zamowienia`
   ADD PRIMARY KEY (`id_elementu_zamowienia`),
   ADD KEY `id_zamowienia` (`id_zamowienia`),
-  ADD KEY `id_produktu` (`id_produktu`);
+  ADD KEY `id_produktu` (`id_produktu`),
+  ADD KEY `fk_elementy_zamowienia_klienci` (`id_klienta`);
 
 --
 -- Indeksy dla tabeli `klienci`
@@ -451,6 +486,14 @@ ALTER TABLE `klienci`
   ADD PRIMARY KEY (`id_klienta`),
   ADD UNIQUE KEY `nazwa_uzytkownika` (`nazwa_uzytkownika`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indeksy dla tabeli `koszyki`
+--
+ALTER TABLE `koszyki`
+  ADD PRIMARY KEY (`id_koszyka`),
+  ADD KEY `id_klienta` (`id_klienta`),
+  ADD KEY `id_produktu` (`id_produktu`);
 
 --
 -- Indeksy dla tabeli `opinie`
@@ -495,13 +538,19 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `elementy_zamowienia`
 --
 ALTER TABLE `elementy_zamowienia`
-  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `klienci`
 --
 ALTER TABLE `klienci`
   MODIFY `id_klienta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+
+--
+-- AUTO_INCREMENT for table `koszyki`
+--
+ALTER TABLE `koszyki`
+  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `opinie`
@@ -531,7 +580,7 @@ ALTER TABLE `wiadomosci`
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Constraints for dumped tables
@@ -542,7 +591,15 @@ ALTER TABLE `zamowienia`
 --
 ALTER TABLE `elementy_zamowienia`
   ADD CONSTRAINT `elementy_zamowienia_ibfk_1` FOREIGN KEY (`id_zamowienia`) REFERENCES `zamowienia` (`id_zamowienia`),
-  ADD CONSTRAINT `elementy_zamowienia_ibfk_2` FOREIGN KEY (`id_produktu`) REFERENCES `produkty` (`id_produktu`);
+  ADD CONSTRAINT `elementy_zamowienia_ibfk_2` FOREIGN KEY (`id_produktu`) REFERENCES `produkty` (`id_produktu`),
+  ADD CONSTRAINT `fk_elementy_zamowienia_klienci` FOREIGN KEY (`id_klienta`) REFERENCES `klienci` (`id_klienta`);
+
+--
+-- Constraints for table `koszyki`
+--
+ALTER TABLE `koszyki`
+  ADD CONSTRAINT `koszyki_ibfk_1` FOREIGN KEY (`id_klienta`) REFERENCES `klienci` (`id_klienta`),
+  ADD CONSTRAINT `koszyki_ibfk_2` FOREIGN KEY (`id_produktu`) REFERENCES `produkty` (`id_produktu`);
 
 --
 -- Constraints for table `opinie`
