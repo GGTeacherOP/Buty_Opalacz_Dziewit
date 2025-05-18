@@ -207,6 +207,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                         <span data-value="5">★</span>
                     </div>
 
+
                     <label for="imie">Imię:</label>
                     <input type="text" id="imie" required>
                     <label for="opinia">Opinia:</label>
