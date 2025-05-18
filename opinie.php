@@ -13,15 +13,13 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
   <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    .lista-opinii {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      padding: 20px;
-      background-color: #f9f9f9;
-      border-radius: 12px;
-      margin-bottom: 40px;
-    }
+    #lista-opinii {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
 
     .opinia {
       padding: 15px 20px;
@@ -30,7 +28,7 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
       border-left: 4px solid #007bff;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      position: relative;
+      
     }
 
     .opinia h3 {
@@ -45,6 +43,8 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     }
 
     .formularz-opinii {
+      display: inline-block;
+      width: 500px;
       padding: 20px;
       background-color: #eef1f5;
       border-radius: 12px;
@@ -71,6 +71,8 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     }
 
     .formularz-opinii button {
+      display: inline-block;
+      margin: 0 auto;
       width: fit-content;
       padding: 10px 20px;
       background-color: #007bff;
@@ -106,6 +108,7 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
   padding: 1rem;
   margin-top: 3rem;
 }
+
   </style>
 </head>
 <body>
@@ -167,8 +170,9 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
           <p>Duży wybór modeli i dobre ceny. Na pewno wrócę po więcej!</p>
           <button class="usun-opinie" hidden>Usuń</button>
         </article>
+        
       </section>
-
+      
       <section class="formularz-opinii">
         <h2>Dodaj swoją opinię</h2>
         <form id="formularz-opinii">
@@ -179,7 +183,69 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
       </section>
     </main>
   </div>
+<script>
+document.getElementById('formularz-opinii').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
+    const imie = document.getElementById('imie').value;
+    const tresc = document.getElementById('tresc').value;
+
+    const res = await fetch('opinie.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `imie=${encodeURIComponent(imie)}&tresc=${encodeURIComponent(tresc)}`
+    });
+
+    if (res.ok) {
+        document.getElementById('imie').value = '';
+        document.getElementById('tresc').value = '';
+        wczytajOpinie();
+    }
+});
+
+async function wczytajOpinie() {
+    const res = await fetch('opinie.php');
+    const data = await res.json();
+
+    const container = document.getElementById('lista-opinii');
+    container.innerHTML = '';
+    data.forEach(opinia => {
+        const div = document.createElement('div');
+        div.innerHTML = `<strong>${opinia.imie}</strong>: ${opinia.komentarz} <em>(${opinia.data_opinii})</em>`;
+        container.appendChild(div);
+    });
+}
+wczytajOpinie();
+</script>
+
+<?php
+$host = "localhost";
+$db = "buty";
+$user = "root";
+$pass = "";
+$conn = new mysqli($host, $user, $pass, $db);
+$conn->set_charset("utf8");
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $imie = $_POST['imie'];
+    $tresc = $_POST['tresc'];
+
+    $stmt = $conn->prepare("INSERT INTO opinie (id_produktu, imie, ocena, komentarz, data_opinii) VALUES (?, ?, ?, ?, NOW())");
+    $stmt->bind_param("isis", $id_produktu, $imie, $ocena, $tresc);
+    $stmt->execute();
+    echo "OK";
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $result = $conn->query("SELECT imie, komentarz, data_opinii FROM opinie WHERE id_produktu=NULL");
+    $opinie = [];
+    while ($row = $result->fetch_assoc()) {
+        $opinie[] = $row;
+    }
+    echo json_encode($opinie);
+}
+?>
   <footer class="footer">
       <div class="footer-container">
         <div class="footer-column">
