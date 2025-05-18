@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['komunikat'] = "Produkt został zaktualizowany.";
-        header("Location: produkty_szef.php");
+        header("Location: zarzadzaj_produktami.php");
         exit;
     } else {
         $error = "Błąd aktualizacji produktu: " . $conn->error;
@@ -56,12 +56,12 @@ if (isset($_GET['id'])) {
         $zdjecie = $row['url_zdjecia'];
     } else {
         $_SESSION['error'] = "Nie znaleziono produktu o podanym ID.";
-        header("Location: produkty_szef.php");
+        header("Location: zarzadzaj_produktami.php");
         exit;
     }
 } else {
     $_SESSION['error'] = "Nieprawidłowe zapytanie.";
-    header("Location: produkty_szef.php");
+    header("Location: zarzadzaj_produktami.php");
     exit;
 }
 
@@ -72,7 +72,7 @@ if (isset($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administratora - Edytuj Produ</title>
+    <title>Panel Administratora - Edytuj Produkt</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -149,7 +149,7 @@ if (isset($_GET['id'])) {
                         zdjecie" value="<?= $zdjecie ?>" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Zapisz</button>
-                    <a href="produkty_szef.php" class="btn btn-secondary">Anuluj</a>
+                    <a href="zarzadzaj_produktami.php" class="btn btn-secondary">Anuluj</a>
                 </form>
             </div>
         </div>
