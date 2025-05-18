@@ -3,7 +3,36 @@ session_start(); // Uruchomienie sesji
 include 'auth_utils.php';
 $zalogowany = isset($_SESSION['username']);
 $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $con = mysqli_connect("localhost", "root", "", "buty");
+
+    if (!$con) {
+        $_SESSION['komunikat'] = "Błąd połączenia z bazą danych.";
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    $imie = mysqli_real_escape_string($con, $_POST["imie"]);
+    $email = mysqli_real_escape_string($con, $_POST["email"]);
+    $pytanie = mysqli_real_escape_string($con, $_POST["pytanie"]);
+
+    $insert_query = "INSERT INTO wiadomosci (imie, email, pytanie)
+                     VALUES ('$imie', '$email', '$pytanie')";
+
+    if (mysqli_query($con, $insert_query)) {
+        $_SESSION['komunikat'] = 'Wiadomość została wysłana! Dziękujemy za kontakt 😊';
+    } else {
+        $_SESSION['komunikat'] = 'Błąd podczas wysyłania wiadomości.';
+    }
+
+    mysqli_close($con);
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit;
+}
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -125,9 +154,34 @@ form button:hover {
     p{
         font-size: large;
     }
+    #komunikat {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #28a745;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  font-size: 1.1rem;
+  z-index: 9999;
+  display: none;
+  animation: fadein 0.5s, fadeout 0.5s 3.5s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; bottom: 10px; }
+  to { opacity: 1; bottom: 30px; }
+}
+
+@keyframes fadeout {
+  from { opacity: 1; bottom: 30px; }
+  to { opacity: 0; bottom: 10px; }
+}
     </style>
 </head>
 <body>
+  
   <div class="wrapper">
     <header>
         <a href="index.php">Strona Główna</a>
@@ -235,7 +289,7 @@ form button:hover {
             <form action="" method="post">
             <input type="text" name="imie" placeholder="Twoje imię" required>
             <input type="email" name="email" placeholder="Twój email" required>
-            <textarea name="wiad" placeholder="Napisz tutaj swoje pytanie" required></textarea>
+            <textarea name="pytanie" placeholder="Napisz tutaj swoje pytanie" required></textarea>
             <button type="submit" name="submit" class="submit">Wyślij</button>
             </form>
             </section>
@@ -246,25 +300,64 @@ form button:hover {
                 info@buty.pl</p>
             </div>
         </div>
-        <?php
-        $con = mysqli_connect('localhost', 'root', '', 'buty');
-        $sql1="SELECT `imie`,`email`,`pytanie`,`email` FROM wiadomosci;";
-        $que=mysqli_query($con,$sql1);
-        if(isset($_POST['submit']) && $_POST['imie'] && isset($_POST['email']) && isset($_POST['wiad'])){
-            $imie = $_POST['imie'];
-            $email = $_POST['email'];
-            $wiad = $_POST['wiad'];
-            $sql = "INSERT INTO wiadomosci(`imie`,`email`,`pytanie`) VALUES ('" . $imie . "','" . $email . "','" . $wiad . "');";
-            $que = mysqli_query($con,$sql);
-        }
-        if ($que) {
-        echo "<script>alert('Wiadomość została wysłana do bazy danych!');</script>";
-        }
-        mysqli_close($con);
-        ?>
-      </main>
-    </div>
-    <footer style="background-color:#222; color: white; text-align: center; padding:10px;">
-        <p>&copy; 2025 Sklep z Butami | info@buty.pl</p>
+            <?php
+if (!empty($_SESSION['komunikat'])) {
+    $komunikat = $_SESSION['komunikat'];
+    $klasa = (strpos($komunikat, 'Błąd') !== false) ? 'blad' : '';
+
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const msg = document.getElementById('komunikat');
+            msg.className = '$klasa';
+            msg.innerText = " . json_encode($komunikat) . ";
+            msg.style.display = 'block';
+            setTimeout(() => { msg.style.display = 'none'; }, 4000);
+        });
+    </script>";
+
+    unset($_SESSION['komunikat']);
+}
+?>
+    </main>
+
+    <!-- Komunikat toastowy -->
+    <div id="komunikat"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>Kontakt</h3>
+                <p>Buty Opalacz Dziewit</p>
+                <p>ul. Kwiatowa 30, Mielec</p>
+                <p>Tel: <a href="tel:+48123456789"> +48 123 456 789</a></p>
+                <p>Email: <a href="mailto:kontakt@butyopalacz.pl">kontakt@butyopalacz.pl</a></p>
+            </div>
+            <div class="footer-column">
+                <h3>Godziny otwarcia</h3>
+                <p>Poniedziałek – Piątek: 9:00 – 18:00</p>
+                <p>Sobota: 10:00 – 14:00</p>
+                <p>Niedziela: nieczynne</p>
+            </div>
+            <div class="footer-column">
+                <h3>Śledź nas</h3>
+                <div class="social-icons">
+                    <a href="https://facebook.com/butyopalacz" target="_blank" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://instagram.com/butyopalacz" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://twitter.com/butyopalacz" target="_blank" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Buty Opalacz Dziewit. Wszelkie prawa zastrzeżone.</p>
+        </div>
     </footer>
+
 </body>
+</html>
