@@ -17,7 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    $sql_klienci = "SELECT id_klienta, nazwa_uzytkownika, haslo FROM klienci WHERE nazwa_uzytkownika = ?";
+    // Sprawdzenie klientów
+    $sql_klienci = "SELECT id_klienta, nazwa_uzytkownika, haslo, rola FROM klienci WHERE nazwa_uzytkownika = ?"; // Dodano rola
     $stmt_klienci = $polaczenie->prepare($sql_klienci);
 
     if ($stmt_klienci) {
@@ -26,63 +27,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $wynik_klienci = $stmt_klienci->get_result();
 
         if ($wynik_klienci->num_rows === 1) {
-            $uzytkownik = $wynik_klienci->fetch_assoc();
-            if ($password == $uzytkownik['haslo']) {
-                $_SESSION['username'] = htmlspecialchars($uzytkownik['nazwa_uzytkownika']);
-                $_SESSION['rola'] = 'klient';
-                $_SESSION['id_uzytkownika'] = $uzytkownik['id_klienta'];
-
-                $id_klienta = $_SESSION['id_uzytkownika'];
-                $sql_koszyk = "SELECT ez.*, p.cena, p.nazwa, p.url_zdjecia
-                              FROM elementy_zamowienia ez
-                              JOIN produkty p ON ez.id_produktu = p.id_produktu
-                              WHERE ez.id_klienta = ?";
-                $stmt_koszyk = $polaczenie->prepare($sql_koszyk);
-
-                if ($stmt_koszyk) {
-                    $stmt_koszyk->bind_param("i", $id_klienta);
-                    $stmt_koszyk->execute();
-                    $wynik_koszyk = $stmt_koszyk->get_result();
-                    $_SESSION['koszyk'] = $wynik_koszyk->fetch_all(MYSQLI_ASSOC);
-                }
-
+            $uzytkownik_klienci = $wynik_klienci->fetch_assoc();
+            if ($password == $uzytkownik_klienci['haslo']) {
+                $_SESSION['username'] = htmlspecialchars($uzytkownik_klienci['nazwa_uzytkownika']);
+                $_SESSION['rola'] = $uzytkownik_klienci['rola']; // Pobranie roli klienta
+                $_SESSION['id_uzytkownika'] = $uzytkownik_klienci['id_klienta'];
                 $_SESSION['zalogowano_pomyslnie'] = true;
+
+                // Pobierz koszyk klienta
+                if ($_SESSION['rola'] === 'klient') { // Sprawdzenie roli
+                    $id_klienta = $_SESSION['id_uzytkownika'];
+                    $sql_koszyk = "SELECT ez.*, p.cena, p.nazwa, p.url_zdjecia
+                                        FROM elementy_zamowienia ez
+                                        JOIN produkty p ON ez.id_produktu = p.id_produktu
+                                        WHERE ez.id_klienta = ?";
+                    $stmt_koszyk = $polaczenie->prepare($sql_koszyk);
+
+                    if ($stmt_koszyk) {
+                        $stmt_koszyk->bind_param("i", $id_klienta);
+                        $stmt_koszyk->execute();
+                        $wynik_koszyk = $stmt_koszyk->get_result();
+                        $_SESSION['koszyk'] = $wynik_koszyk->fetch_all(MYSQLI_ASSOC);
+                    }
+                }
             } else {
                 $wiadomosc_bledu = "Nieprawidłowe hasło.";
             }
         } else {
-            $wiadomosc_bledu = "Użytkownik nie istnieje.";
+            // Sprawdzenie pracowników
+            $sql_pracownicy = "SELECT id_pracownika, nazwa_uzytkownika, haslo, stanowisko FROM pracownicy WHERE nazwa_uzytkownika = ?";
+            $stmt_pracownicy = $polaczenie->prepare($sql_pracownicy);
+
+            if ($stmt_pracownicy) {
+                $stmt_pracownicy->bind_param("s", $username);
+                $stmt_pracownicy->execute();
+                $wynik_pracownicy = $stmt_pracownicy->get_result();
+
+                if ($wynik_pracownicy->num_rows === 1) {
+                    $uzytkownik_pracownicy = $wynik_pracownicy->fetch_assoc();
+                    if ($password == $uzytkownik_pracownicy['haslo']) {
+                        $_SESSION['username'] = htmlspecialchars($uzytkownik_pracownicy['nazwa_uzytkownika']);
+                        $_SESSION['rola'] = $uzytkownik_pracownicy['stanowisko']; // Pobranie stanowiska jako roli
+                        $_SESSION['id_uzytkownika'] = $uzytkownik_pracownicy['id_pracownika'];
+                        $_SESSION['zalogowano_pomyslnie'] = true;
+                        // Nie pobieramy koszyka dla pracowników
+                    } else {
+                        $wiadomosc_bledu = "Nieprawidłowe hasło.";
+                    }
+                } else {
+                    $wiadomosc_bledu = "Nieprawidłowy użytkownik.";
+                }
+                $stmt_pracownicy->close();
+            } else {
+                $wiadomosc_bledu = "Błąd w zapytaniu SQL (pracownicy).";
+            }
         }
         $stmt_klienci->close();
     } else {
         $wiadomosc_bledu = "Błąd w zapytaniu SQL (klienci).";
-    }
-
-    if (empty($_SESSION['username'])) {
-        $sql_pracownicy = "SELECT id_pracownika, nazwa_uzytkownika, haslo, stanowisko FROM pracownicy WHERE nazwa_uzytkownika = ?";
-        $stmt_pracownicy = $polaczenie->prepare($sql_pracownicy);
-
-        if ($stmt_pracownicy) {
-            $stmt_pracownicy->bind_param("s", $username);
-            $stmt_pracownicy->execute();
-            $wynik_pracownicy = $stmt_pracownicy->get_result();
-
-            if ($wynik_pracownicy->num_rows === 1) {
-                $uzytkownik = $wynik_pracownicy->fetch_assoc();
-                if ($password == $uzytkownik['haslo']) {
-                    $_SESSION['username'] = htmlspecialchars($uzytkownik['nazwa_uzytkownika']);
-                    $_SESSION['rola'] = $uzytkownik['stanowisko'];
-                    $_SESSION['zalogowano_pomyslnie'] = true;
-                } else {
-                    $wiadomosc_bledu = "Nieprawidłowe hasło.";
-                }
-            } else {
-                $wiadomosc_bledu = "Nieprawidłowy użytkownik.";
-            }
-            $stmt_pracownicy->close();
-        } else {
-            $wiadomosc_bledu = "Błąd w zapytaniu SQL (pracownicy).";
-        }
     }
 }
 
@@ -196,7 +198,7 @@ $polaczenie->close();
     </style>
 </head>
 <body>
-    <div class="wrapper">
+     <div class="wrapper">
         <header>
             <a href="index.php">Strona Główna</a>
             <a href="sklep.php">Sklep</a>
@@ -223,7 +225,14 @@ $polaczenie->close();
             </div>
             <script>
                 setTimeout(() => {
-                    window.location.href = 'index.php';
+                    // Przekierowanie w zależności od roli
+                    <?php if ($_SESSION['rola'] === 'klient'): ?>
+                        window.location.href = 'index.php';
+                    <?php elseif (isset($_SESSION['rola']) && (strtolower($_SESSION['rola']) === 'szef' || strtolower($_SESSION['rola']) === 'admin' || strtolower($_SESSION['rola']) === 'kierownik' || strtolower($_SESSION['rola']) === 'pracownik sklepu')): ?>
+                        window.location.href = 'index.php'; // Zmień na odpowiedni panel admina
+                    <?php else: ?>
+                        window.location.href = 'index.php'; // Domyślne przekierowanie
+                    <?php endif; ?>
                 }, 2000);
             </script>
             <?php unset($_SESSION['zalogowano_pomyslnie']); ?>
