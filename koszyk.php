@@ -16,7 +16,6 @@ $zalogowany = isset($_SESSION['username']);
 $rola = $_SESSION['rola'] ?? 'gość';
 $id_klienta = $_SESSION['id_uzytkownika'] ?? null;
 
-// Pobierz koszyk z bazy danych
 function pobierz_koszyk_z_bazy($polaczenie, $id_klienta) {
     $koszyk = [];
     if ($id_klienta) {
@@ -46,7 +45,7 @@ function pobierz_koszyk_z_bazy($polaczenie, $id_klienta) {
 function dodaj_do_koszyka_w_bazie($polaczenie, $id_klienta, $id_produktu, $rozmiar, $ilosc = 1) {
     $sql = "INSERT INTO koszyki (id_klienta, id_produktu, rozmiar, ilosc) VALUES (?, ?, ?, ?)";
     $stmt = $polaczenie->prepare($sql);
-    $stmt->bind_param("iisi", $id_klienta, $id_produktu, $rozmiar, $ilosc); // ✅ MOD: poprawiony typ 's' dla rozmiaru
+    $stmt->bind_param("iisi", $id_klienta, $id_produktu, $rozmiar, $ilosc);
     $stmt->execute();
     return $polaczenie->insert_id;
 }
@@ -68,7 +67,7 @@ function usun_z_koszyka_w_bazie($polaczenie, $id_koszyka) {
 if ($zalogowany) {
     $_SESSION['koszyk'] = pobierz_koszyk_z_bazy($polaczenie, $id_klienta);
 }
-// Dodawanie do koszyka
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['dodaj_do_koszyka'])) {
     if (!$zalogowany) {
         header('Location: login.php');
@@ -93,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['dodaj_do_koszyka'])) 
 
     if (!$produkt_istnieje) {
         $id_koszyka = dodaj_do_koszyka_w_bazie($polaczenie, $id_klienta, $id_produktu, $rozmiar);
-        $nowy_produkt = [
+        $_SESSION['koszyk'][] = [
             'id_produktu' => $id_produktu,
             'nazwa' => $nazwa,
             'cena' => $cena,
@@ -102,14 +101,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['dodaj_do_koszyka'])) 
             'ilosc' => 1,
             'id_koszyka' => $id_koszyka
         ];
-        $_SESSION['koszyk'][] = $nowy_produkt;
     }
 
     header('Location: koszyk.php');
     exit;
 }
 
-// Aktualizacja ilości
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aktualizuj_koszyk']) && $zalogowany) {
     if (isset($_POST['ilosc']) && is_array($_POST['ilosc'])) {
         foreach ($_POST['ilosc'] as $i => $ilosc) {
@@ -122,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aktualizuj_koszyk']) 
     exit;
 }
 
-// Usuwanie produktu
 if (isset($_GET['usun']) && $zalogowany) {
     $indeks = intval($_GET['usun']);
     if (isset($_SESSION['koszyk'][$indeks])) {
@@ -138,16 +134,14 @@ function oblicz_sume_koszyka() {
     $suma = 0;
     if (isset($_SESSION['koszyk'])) {
         foreach ($_SESSION['koszyk'] as $produkt) {
-    $suma += (float)$produkt['cena'] * (int)$produkt['ilosc'];
-}
-
+            $suma += (float)$produkt['cena'] * (int)$produkt['ilosc'];
+        }
     }
     return $suma;
 }
 
 $koszyk = $_SESSION['koszyk'] ?? [];
 
-// ✅ MOD: Poprawiony zapis zamówienia
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalogowany) {
     $id_uzytkownika = $_SESSION['id_uzytkownika'];
     $data_zamowienia = date('Y-m-d H:i:s');
@@ -160,21 +154,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalo
     $stmt_zamowienie->close();
 
     foreach ($_SESSION['koszyk'] as $produkt) {
-        $id_produktu = $produkt['id_produktu'];
-        $ilosc = $produkt['ilosc'];
-        $cena_jednostkowa = $produkt['cena'];
-        $rozmiar = $produkt['rozmiar'];
-        $id_klienta = $id_uzytkownika;
-
         $stmt_element = $polaczenie->prepare("
             INSERT INTO elementy_zamowienia (id_zamowienia, id_produktu, ilosc, cena_jednostkowa, id_klienta, rozmiar)
             VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt_element->bind_param("iiidis", $id_zamowienia, $id_produktu, $ilosc, $cena_jednostkowa, $id_klienta, $rozmiar);
+        $stmt_element->bind_param("iiidis", $id_zamowienia, $produkt['id_produktu'], $produkt['ilosc'], $produkt['cena'], $id_uzytkownika, $produkt['rozmiar']);
         $stmt_element->execute();
         $stmt_element->close();
     }
 
-    // ✅ MOD: Usunięcie koszyka użytkownika z bazy
     $stmt_clear = $polaczenie->prepare("DELETE FROM koszyki WHERE id_klienta = ?");
     $stmt_clear->bind_param("i", $id_uzytkownika);
     $stmt_clear->execute();
@@ -182,10 +169,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalo
 
     $_SESSION['koszyk'] = [];
 
-    echo "<script>alert('Dziękujemy za złożenie zamówienia!'); window.location.href='index.php';</script>";
+    // ✅ Niestandardowy alert zamiast alert()
+    echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Dziękujemy</title>
+    <style>
+        .alert-box {
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #0c7a43;
+            color: white;
+            padding: 30px 40px;
+            font-size: 1.3rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s ease;
+            z-index: 9999;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+    </style>
+    </head><body>
+    <div class="alert-box">Dziękujemy za złożenie zamówienia!<br>Przekierowuję na stronę główną...</div>
+    <script>
+        setTimeout(() => { window.location.href = "index.php"; }, 2500);
+    </script>
+    </body></html>';
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pl">
