@@ -129,9 +129,9 @@ $product_image = "img/Adidas/Campus/campus.png"
                         class="main-img" />
                     <div class="thumbnails">
           <img src="img/Adidas/Campus/campus.png" alt="Zdjęcie 1" />
-          <img src="img/Adidas/Campus/campus2.png" alt="Zdjęcie 2" />
-          <img src="img/Adidas/Campus/campus3.png" alt="Zdjęcie 3" />
-          <img src="img/Adidas/Campus/campus4.png" alt="Zdjęcie 4" />
+          <img src="img/Adidas/Campus/campus2.jpg" alt="Zdjęcie 2" />
+          <img src="img/Adidas/Campus/campus3.jpg" alt="Zdjęcie 3" />
+          <img src="img/Adidas/Campus/campus4.jpg" alt="Zdjęcie 4" />
         </div>
       </div>
            <div class="product-details">
