@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssssds", $nazwa_uzytkownika, $haslo, $email, $stanowisko, $pensja, $data_zatrudnienia);
 
     if ($stmt->execute()) {
-        header("Location: pracownicy.php"); // Przekierowanie po dodaniu
+        header("Location: zarzadzaj_pracownikami"); // Przekierowanie po dodaniu
         exit;
     } else {
         $error = "Błąd dodawania pracownika: " . $stmt->error;
@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="date" class="form-control" id="data_zatrudnienia" name="data_zatrudnienia" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Dodaj</button>
-                    <a href="pracownicy.php" class="btn btn-secondary">Anuluj</a>
+                    <a href="zarzadzaj_pracownikami.php" class="btn btn-secondary">Anuluj</a>
                 </form>
             </div>
         </div>
