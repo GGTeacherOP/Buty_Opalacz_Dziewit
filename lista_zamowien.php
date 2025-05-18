@@ -1,13 +1,9 @@
 <?php
-
-
 session_start();
 
 include 'auth_utils.php';
 $zalogowany = isset($_SESSION['username']);
 $rola = $_SESSION['rola'];
-
-
 
 $conn = new mysqli("localhost", "root", "", "buty");
 if ($conn->connect_error) {
@@ -24,7 +20,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <title>Zamówienia klientów</title>
-<style>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -85,6 +81,23 @@ $result = $conn->query($sql);
             text-align:center;
             margin-bottom:20px;
         }
+        
+        .back-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +107,6 @@ $result = $conn->query($sql);
 </div>
 
 <h2>Lista Zamówien</h2>
-
 
 <?php
 if ($result->num_rows > 0) {
@@ -115,6 +127,8 @@ if ($result->num_rows > 0) {
 }
 $conn->close();
 ?>
+
+<a href="panel_pracownikow.php" class="back-button">Powrót do panelu</a>
 
 </body>
 </html>
