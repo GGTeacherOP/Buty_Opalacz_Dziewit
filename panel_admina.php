@@ -1,23 +1,104 @@
 <?php
 session_start();
 include 'auth_utils.php';
-sprawdz_i_przekieruj(['admin', 'szef'], 'index.php', 'Brak uprawnień Admina!');
 
-$polaczenie = new mysqli('localhost', 'root', '', 'buty');
-if ($polaczenie->connect_error) {
-    die("Błąd połączenia: " . $polaczenie->connect_error);
+if (!czy_ma_role(['admin', 'szef'])) {
+    header("Location: index.php");
+    exit;
 }
 
-echo "<h1>Panel Admina</h1>";
-echo "<p>Witaj, Adminie! Zarządzaj produktami i zamówieniami.</p>";
+$conn = new mysqli("localhost", "root", "", "buty");
+if ($conn->connect_error) {
+    die("Błąd połączenia z bazą danych: " . $conn->connect_error);
+}
 
-// Funkcje Admina
-echo "<h2>Zarządzanie Produktami</h2>";
-echo "<a href='dodaj_produkt.php'>Dodaj Produkt</a> | ";
-echo "<a href='lista_produktow.php'>Lista Produktów</a><br>";
+?>
 
-echo "<h2>Zarządzanie Zamówieniami</h2>";
-echo "<a href='lista_zamowien.php'>Lista Zamówień</a><br>";
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administratora</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            border-radius: 1rem 1rem 0 0;
+            padding: 1rem;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+        .list-group-item {
+            border: none;
+            padding: 1rem;
+            text-align: center;
+        }
+        .list-group-item:hover {
+            background-color: #e9ecef;
+        }
+        .list-group-item.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Panel Administratora</h2>
+                <p>Witaj w panelu administratora. Zarządzaj sklepem i jego użytkownikami.</p>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="zarzadzaj_uzytkownikami.php" class="list-group-item list-group-item-action">
+                        Zarządzaj Użytkownikami (Klienci)
+                    </a>
+                    <a href="zarzadzaj_pracownikami.php" class="list-group-item list-group-item-action">
+                        Zarządzaj Pracownikami
+                    </a>
+                    <a href="zarzadzaj_produktami.php" class="list-group-item list-group-item-action">
+                        Zarządzaj Produktami
+                    </a>
+                    <a href="zarzadzaj_zamowieniami.php" class="list-group-item list-group-item-action">
+                        Zarządzaj Zamówieniami
+                    </a>
+                    <a href="moderuj_opinie.php" class="list-group-item list-group-item-action">
+                        Moderuj Opinie
+                    </a>
+                    <a href="index.php" class="list-group-item list-group-item-action">
+                        Wróć na stronę główną
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 
-$polaczenie->close();
+<?php
+$conn->close();
 ?>
