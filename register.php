@@ -18,22 +18,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["username"];
     $email = $_POST["email"];
     $password = $_POST["password"];
-    $rola = $_POST["rola"]; // Added semicolon here
 
     // Zapisz hasło bez hashowania (TYLKO DO NAUKI)
-    $sql = "INSERT INTO uzytkownicy (nazwa_uzytkownika, email, haslo, rola) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO klienci (nazwa_uzytkownika, email, haslo) VALUES (?, ?, ?)";
     $stmt = $polaczenie->prepare($sql);
 
     if (!$stmt) {
         die("Błąd zapytania: " . $polaczenie->error);
     }
 
-    $stmt->bind_param("ssss", $username, $email, $password, $rola); // Changed "sss" to "ssss" to match four parameters
+    $stmt->bind_param("sss", $username, $email, $password);
 
     if ($stmt->execute()) {
-        echo "Użytkownik zarejestrowany pomyślnie! Możesz się teraz <a href='login.php'>zalogować</a>.";
+        echo '
+        <style>
+            .success-alert {
+                max-width: 500px;
+                margin: 50px auto;
+                padding: 20px 25px;
+                background-color: #e6ffed;
+                border: 1px solid #b7eb8f;
+                border-radius: 8px;
+                color: #2f855a;
+                font-family: Arial, sans-serif;
+                font-size: 16px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+                position: relative;
+            }
+            .success-alert::before {
+                content: "✔";
+                font-size: 20px;
+                position: absolute;
+                left: 15px;
+                top: 18px;
+            }
+            .success-alert .message {
+                padding-left: 30px;
+            }
+        </style>
+        <div class="success-alert">
+            <div class="message">
+                 Użytkownik zarejestrowany pomyślnie! Możesz się teraz <a href="login.php">zalogować</a>.
+            </div>
+        </div>';
     } else {
-        echo "Błąd rejestracji: " . $stmt->error;
+        echo "Błąd podczas rejestracji: " . $stmt->error;
     }
 
     $stmt->close();
@@ -156,10 +185,7 @@ $polaczenie->close();
             <input type="text" name="username" placeholder="Nazwa użytkownika" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Hasło" required>
-             <select name="rola">
-                <option value="klient" selected>Klient</option>
-                <option value="pracownik">Pracownik</option>
-            </select>
+        
             <button type="submit">Zarejestruj się</button>
         </form>
     </div>
