@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 18, 2025 at 04:44 PM
+-- Generation Time: Maj 18, 2025 at 06:21 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -77,7 +77,11 @@ INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `i
 (48, 36, 1, 2, 499.00, 29, '42'),
 (49, 38, 1, 1, 499.00, 29, '38'),
 (50, 39, 1, 1, 499.00, 29, '39'),
-(51, 40, 1, 3, 499.00, 29, '43');
+(51, 40, 1, 3, 499.00, 29, '43'),
+(52, 41, 2, 1, 1249.00, 29, '40'),
+(53, 41, 4, 1, 529.00, 29, '41'),
+(54, 41, 7, 3, 899.00, 29, '42'),
+(55, 41, 1, 1, 499.00, 29, '39');
 
 -- --------------------------------------------------------
 
@@ -149,10 +153,7 @@ CREATE TABLE `koszyki` (
 
 INSERT INTO `koszyki` (`id_koszyka`, `id_klienta`, `id_produktu`, `rozmiar`, `ilosc`) VALUES
 (29, NULL, 1, '40', 1),
-(30, NULL, 1, '40', 1),
-(39, 29, 2, '40', 1),
-(40, 29, 4, '41', 1),
-(41, 29, 7, '42', 3);
+(30, NULL, 1, '40', 1);
 
 -- --------------------------------------------------------
 
@@ -180,7 +181,8 @@ INSERT INTO `opinie` (`id_opinii`, `id_produktu`, `imie`, `ocena`, `komentarz`, 
 (4, 12, 'andrzej', 4, 'haslo123', '2025-05-17 21:12:33'),
 (5, 1, 'aura', 5, 'bomba', '2025-05-17 21:12:51'),
 (6, 1, 'fasfa', 5, 'fasafsfaasfsf', '2025-05-18 11:49:54'),
-(7, 12, 'andrzej', 5, 'Buty fajne', '2025-05-18 14:43:21');
+(7, 12, 'andrzej', 5, 'Buty fajne', '2025-05-18 14:43:21'),
+(8, 1, 'fasaf', 2, 'sfafassfasfasfasfafsfasfa', '2025-05-18 16:18:20');
 
 -- --------------------------------------------------------
 
@@ -288,7 +290,8 @@ INSERT INTO `wiadomosci` (`id`, `imie`, `email`, `pytanie`) VALUES
 (9, 'Michgał', 'michal@ga.com', ''),
 (10, 'fasfsfaf', 'fsaffs@gg', ''),
 (11, 'fasfs', 'fsaasf@ggasgs', '@fasfaafsff'),
-(12, 'fsaasf', 'fsasaf@ff', 'fsasfa');
+(12, 'fsaasf', 'fsasaf@ff', 'fsasfa'),
+(13, 'michal', 'Michal55@gmail.com', 'sfafafs');
 
 -- --------------------------------------------------------
 
@@ -326,6 +329,13 @@ CREATE TABLE `widok_najlepsze_produkty` (
 -- (See below for the actual view)
 --
 CREATE TABLE `widok_opinie_z_danymi` (
+`id_opinii` int(11)
+,`ocena` int(11)
+,`komentarz` text
+,`data_opinii` timestamp
+,`klient` varchar(50)
+,`produkt` varchar(255)
+,`marka` varchar(100)
 );
 
 -- --------------------------------------------------------
@@ -373,22 +383,6 @@ CREATE TABLE `widok_statystyki_produktow` (
 ,`liczba_zamowien` bigint(21)
 ,`laczna_ilosc` decimal(32,0)
 ,`laczna_wartosc` decimal(42,2)
-);
-
--- --------------------------------------------------------
-
---
--- Zastąpiona struktura widoku `widok_szczegoly_zamowien`
--- (See below for the actual view)
---
-CREATE TABLE `widok_szczegoly_zamowien` (
-`id_elementu_zamowienia` int(11)
-,`id_zamowienia` int(11)
-,`produkt` varchar(255)
-,`marka` varchar(100)
-,`ilosc` int(11)
-,`cena_jednostkowa` decimal(10,2)
-,`wartosc_czesciowa` decimal(20,2)
 );
 
 -- --------------------------------------------------------
@@ -458,7 +452,8 @@ INSERT INTO `zamowienia` (`id_zamowienia`, `id_klienta`, `data_zamowienia`, `kwo
 (37, 29, '2025-05-18 11:30:38', 0.00),
 (38, 29, '2025-05-18 11:30:44', 499.00),
 (39, 29, '2025-05-18 11:30:50', 499.00),
-(40, 29, '2025-05-18 11:33:27', 1497.00);
+(40, 29, '2025-05-18 11:33:27', 1497.00),
+(41, 29, '2025-05-18 16:16:10', 4974.00);
 
 -- --------------------------------------------------------
 
@@ -467,7 +462,7 @@ INSERT INTO `zamowienia` (`id_zamowienia`, `id_klienta`, `data_zamowienia`, `kwo
 --
 DROP TABLE IF EXISTS `widok_najaktywniejsi_klienci`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_najaktywniejsi_klienci`  AS SELECT `k`.`id_klienta` AS `id_klienta`, `k`.`nazwa_uzytkownika` AS `nazwa_uzytkownika`, `k`.`email` AS `email`, count(`z`.`id_zamowienia`) AS `liczba_zamowien`, sum(`z`.`kwota_calkowita`) AS `laczna_wartosc` FROM (`klienci` `k` join `zamowienia` `z` on(`k`.`id_klienta` = `z`.`id_klienta`)) GROUP BY `k`.`id_klienta`, `k`.`nazwa_uzytkownika`, `k`.`email` ORDER BY sum(`z`.`kwota_calkowita`) DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_najaktywniejsi_klienci`  AS SELECT `k`.`id_klienta` AS `id_klienta`, `k`.`nazwa_uzytkownika` AS `nazwa_uzytkownika`, `k`.`email` AS `email`, count(`z`.`id_zamowienia`) AS `liczba_zamowien`, sum(`z`.`kwota_calkowita`) AS `laczna_wartosc` FROM (`klienci` `k` left join `zamowienia` `z` on(`k`.`id_klienta` = `z`.`id_klienta`)) GROUP BY `k`.`id_klienta`, `k`.`nazwa_uzytkownika`, `k`.`email` ORDER BY sum(`z`.`kwota_calkowita`) DESC ;
 
 -- --------------------------------------------------------
 
@@ -476,7 +471,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `widok_najlepsze_produkty`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_najlepsze_produkty`  AS SELECT `p`.`id_produktu` AS `id_produktu`, `p`.`nazwa` AS `nazwa`, `p`.`marka` AS `marka`, count(`ez`.`id_elementu_zamowienia`) AS `liczba_zamowien`, sum(`ez`.`ilosc`) AS `laczna_ilosc`, sum(`ez`.`ilosc` * `ez`.`cena_jednostkowa`) AS `laczna_wartosc` FROM (`produkty` `p` join `elementy_zamowienia` `ez` on(`p`.`id_produktu` = `ez`.`id_produktu`)) GROUP BY `p`.`id_produktu`, `p`.`nazwa`, `p`.`marka` ORDER BY sum(`ez`.`ilosc` * `ez`.`cena_jednostkowa`) DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_najlepsze_produkty`  AS SELECT `p`.`id_produktu` AS `id_produktu`, `p`.`nazwa` AS `nazwa`, `p`.`marka` AS `marka`, count(`ez`.`id_elementu_zamowienia`) AS `liczba_zamowien`, sum(`ez`.`ilosc`) AS `laczna_ilosc`, sum(`ez`.`ilosc` * `ez`.`cena_jednostkowa`) AS `laczna_wartosc` FROM (`produkty` `p` left join `elementy_zamowienia` `ez` on(`p`.`id_produktu` = `ez`.`id_produktu`)) GROUP BY `p`.`id_produktu`, `p`.`nazwa`, `p`.`marka` ORDER BY sum(`ez`.`ilosc` * `ez`.`cena_jednostkowa`) DESC ;
 
 -- --------------------------------------------------------
 
@@ -485,7 +480,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `widok_opinie_z_danymi`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_opinie_z_danymi`  AS SELECT `o`.`id_opinii` AS `id_opinii`, `o`.`ocena` AS `ocena`, `o`.`komentarz` AS `komentarz`, `o`.`data_opinii` AS `data_opinii`, `k`.`nazwa_uzytkownika` AS `klient`, `p`.`nazwa` AS `produkt`, `p`.`marka` AS `marka` FROM ((`opinie` `o` join `klienci` `k` on(`o`.`id_klienta` = `k`.`id_klienta`)) join `produkty` `p` on(`o`.`id_produktu` = `p`.`id_produktu`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_opinie_z_danymi`  AS SELECT `o`.`id_opinii` AS `id_opinii`, `o`.`ocena` AS `ocena`, `o`.`komentarz` AS `komentarz`, `o`.`data_opinii` AS `data_opinii`, `o`.`imie` AS `klient`, `p`.`nazwa` AS `produkt`, `p`.`marka` AS `marka` FROM (`opinie` `o` join `produkty` `p` on(`o`.`id_produktu` = `p`.`id_produktu`)) ;
 
 -- --------------------------------------------------------
 
@@ -494,7 +489,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `widok_pele_zamowienia`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_pele_zamowienia`  AS SELECT `z`.`id_zamowienia` AS `id_zamowienia`, `z`.`data_zamowienia` AS `data_zamowienia`, `k`.`nazwa_uzytkownika` AS `klient`, `p`.`nazwa` AS `produkt`, `ez`.`ilosc` AS `ilosc`, `ez`.`cena_jednostkowa` AS `cena_jednostkowa`, `ez`.`ilosc`* `ez`.`cena_jednostkowa` AS `wartosc_czesciowa`, `z`.`kwota_calkowita` AS `kwota_calkowita` FROM (((`zamowienia` `z` join `klienci` `k` on(`z`.`id_klienta` = `k`.`id_klienta`)) join `elementy_zamowienia` `ez` on(`z`.`id_zamowienia` = `ez`.`id_zamowienia`)) join `produkty` `p` on(`ez`.`id_produktu` = `p`.`id_produktu`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_pele_zamowienia`  AS SELECT `z`.`id_zamowienia` AS `id_zamowienia`, `z`.`data_zamowienia` AS `data_zamowienia`, `k`.`nazwa_uzytkownika` AS `klient`, `p`.`nazwa` AS `produkt`, `ez`.`ilosc` AS `ilosc`, `ez`.`cena_jednostkowa` AS `cena_jednostkowa`, `ez`.`ilosc`* `ez`.`cena_jednostkowa` AS `wartosc_czesciowa`, `z`.`kwota_calkowita` AS `kwota_calkowita` FROM (((`zamowienia` `z` left join `klienci` `k` on(`z`.`id_klienta` = `k`.`id_klienta`)) join `elementy_zamowienia` `ez` on(`z`.`id_zamowienia` = `ez`.`id_zamowienia`)) join `produkty` `p` on(`ez`.`id_produktu` = `p`.`id_produktu`)) ;
 
 -- --------------------------------------------------------
 
@@ -513,15 +508,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `widok_statystyki_produktow`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_statystyki_produktow`  AS SELECT `p`.`id_produktu` AS `id_produktu`, `p`.`nazwa` AS `nazwa`, `p`.`marka` AS `marka`, `p`.`cena` AS `cena`, count(`ez`.`id_elementu_zamowienia`) AS `liczba_zamowien`, sum(`ez`.`ilosc`) AS `laczna_ilosc`, sum(`ez`.`ilosc` * `ez`.`cena_jednostkowa`) AS `laczna_wartosc` FROM (`produkty` `p` left join `elementy_zamowienia` `ez` on(`p`.`id_produktu` = `ez`.`id_produktu`)) GROUP BY `p`.`id_produktu`, `p`.`nazwa`, `p`.`marka`, `p`.`cena` ;
-
--- --------------------------------------------------------
-
---
--- Struktura widoku `widok_szczegoly_zamowien`
---
-DROP TABLE IF EXISTS `widok_szczegoly_zamowien`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `widok_szczegoly_zamowien`  AS SELECT `ez`.`id_elementu_zamowienia` AS `id_elementu_zamowienia`, `ez`.`id_zamowienia` AS `id_zamowienia`, `p`.`nazwa` AS `produkt`, `p`.`marka` AS `marka`, `ez`.`ilosc` AS `ilosc`, `ez`.`cena_jednostkowa` AS `cena_jednostkowa`, `ez`.`ilosc`* `ez`.`cena_jednostkowa` AS `wartosc_czesciowa` FROM (`elementy_zamowienia` `ez` join `produkty` `p` on(`ez`.`id_produktu` = `p`.`id_produktu`)) ;
 
 -- --------------------------------------------------------
 
@@ -603,7 +589,7 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `elementy_zamowienia`
 --
 ALTER TABLE `elementy_zamowienia`
-  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `klienci`
@@ -615,13 +601,13 @@ ALTER TABLE `klienci`
 -- AUTO_INCREMENT for table `koszyki`
 --
 ALTER TABLE `koszyki`
-  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `opinie`
 --
 ALTER TABLE `opinie`
-  MODIFY `id_opinii` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_opinii` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `pracownicy`
@@ -639,13 +625,13 @@ ALTER TABLE `produkty`
 -- AUTO_INCREMENT for table `wiadomosci`
 --
 ALTER TABLE `wiadomosci`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Constraints for dumped tables
