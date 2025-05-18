@@ -1,3 +1,5 @@
+
+
 <?php
 session_start();
 include 'auth_utils.php';
@@ -20,6 +22,25 @@ $product_id = 21; //
 $product_name = "Adidas Klapki Czarne";
 $product_price = 179.00;
 $product_image = "img/Adidas/KlapkiCzarne/1.avif";
+
+
+// Funkcja do pobierania opinii z bazy danych
+function pobierz_opinie($polaczenie, $id_produktu) {
+    $opinie = [];
+    $sql = "SELECT ocena, komentarz, imie FROM opinie WHERE id_produktu = ?";
+    $stmt = $polaczenie->prepare($sql);
+    $stmt->bind_param("i", $id_produktu);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $opinie[] = $row;
+    }
+    $stmt->close();
+    return $opinie;
+}
+
+$opinie_produktu = pobierz_opinie($polaczenie, $product_id);
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +49,7 @@ $product_image = "img/Adidas/KlapkiCzarne/1.avif";
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sklep z Butami – Nike Air Force 1</title>
+    <title>Sklep z Butami – Adidas Klapki Czarne</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
@@ -130,7 +151,7 @@ $product_image = "img/Adidas/KlapkiCzarne/1.avif";
                         class="main-img" />
                     <div class="thumbnails">
                         <img src="img/Adidas/KlapkiCzarne/1.avif" alt="Zdjęcie 1" />
-                        <img src="img/Adidas/KlapkiCzarne/3.avif" alt="Zdjęcie 2" />
+                        <img src="img/Adidas/KlapkiCzarne/2.avif" alt="Zdjęcie 2" />
                         <img src="img/Adidas/KlapkiCzarne/3.avif" alt="Zdjęcie 3" />
                         <img src="img/Adidas/KlapkiCzarne/4.avif" alt="Zdjęcie 4" />
                     </div>
@@ -138,7 +159,7 @@ $product_image = "img/Adidas/KlapkiCzarne/1.avif";
                 <div class="product-details">
                     <h1><?= htmlspecialchars($product_name) ?></h1>
                     <p class="price"><?= number_format($product_price, 2) ?> zł</p>
-                    <p>Stylowe sneakersy</p>
+                    <p>Stylowe i wygodne klapki</p>
 
                     <form action="koszyk.php" method="POST">
                         <label>Rozmiar:
@@ -166,85 +187,97 @@ $product_image = "img/Adidas/KlapkiCzarne/1.avif";
                                 <p>Musisz być <a href="login.php">zalogowany</a>, aby dodać produkt do koszyka.</p>
                             <?php endif; ?>
 
-                      
+                       
                     </div>
                 </form>
             </div>
         </div>
 
-        <section class="opinie-produktu">
-            <form id="formularz-opinii">
-  <h3>Dodaj swoją opinię: </h3>
-  <label>Ocena:</label>
-  <div id="gwiazdki">
-    <span data-value="1">★</span>
-    <span data-value="2">★</span>
-    <span data-value="3">★</span>
-    <span data-value="4">★</span>
-    <span data-value="5">★</span>
-  </div>
   
-  <label for="imie">Imię:</label>
-  <input type="text" id="imie" required>
-  <label for="opinia">Opinia:</label>
-  <textarea id="opinia" rows="4" required></textarea><br>
-  <button type="submit">Dodaj opinię</button>
-</form>
-    <h2>Opinie: </h2>
-        <blockquote>⭐️⭐️⭐️⭐️⭐️ "Cudnie wyglądają, bardzo polecam!" – Agnieszka</blockquote><br>
-        <blockquote>⭐️⭐️⭐️⭐️ "But dotarł w idealnym stanie, dostawa natychmiastowa." – Elżbieta</blockquote><br>
-        <?php
-        ?>
-<script>
-  const gwiazdki = document.querySelectorAll('#gwiazdki span');
-  let wybranaOcena = 0;
+   <section class="opinie-produktu">
+                <form id="formularz-opinii">
+                    <h3>Dodaj swoją opinię: </h3>
+                    <label>Ocena:</label>
+                    <div id="gwiazdki">
+                        <span data-value="1">★</span>
+                        <span data-value="2">★</span>
+                        <span data-value="3">★</span>
+                        <span data-value="4">★</span>
+                        <span data-value="5">★</span>
+                    </div>
 
-  gwiazdki.forEach(star => {
-    star.style.cursor = 'pointer';
-    star.style.fontSize = '24px';
-    
-    star.addEventListener('click', () => {
-      wybranaOcena = parseInt(star.dataset.value);
-      aktualizujGwiazdki();
-    });
-  });
+                    <label for="imie">Imię:</label>
+                    <input type="text" id="imie" required>
+                    <label for="opinia">Opinia:</label>
+                    <textarea id="opinia" rows="4" required></textarea><br>
+                    <button type="submit">Dodaj opinię</button>
+                </form>
+                <h2>Opinie: </h2>
+                <?php if (!empty($opinie_produktu)): ?>
+                    <?php foreach ($opinie_produktu as $opinia): ?>
+                        <blockquote><?= str_repeat('⭐️', $opinia['ocena']) ?>
+                            "<?= htmlspecialchars($opinia['komentarz']) ?>" – <?= htmlspecialchars($opinia['imie']) ?>
+                        </blockquote><br>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Brak opinii dla tego produktu.</p>
+                <?php endif; ?>
 
-  function aktualizujGwiazdki() {
-    gwiazdki.forEach(star => {
-      if (parseInt(star.dataset.value) <= wybranaOcena) {
-        star.style.color = 'gold';
-      } else {
-        star.style.color = 'gray';
-      }
-    });
-  }
+                <script>
+                    const gwiazdki = document.querySelectorAll('#gwiazdki span');
+                    let wybranaOcena = 0;
 
-  document.getElementById('formularz-opinii').addEventListener('submit', function(e) {
-    e.preventDefault();
+                    gwiazdki.forEach(star => {
+                        star.style.cursor = 'pointer';
+                        star.style.fontSize = '24px';
 
-    const imie = document.getElementById('imie').value.trim();
-    const opinia = document.getElementById('opinia').value.trim();
+                        star.addEventListener('click', () => {
+                            wybranaOcena = parseInt(star.dataset.value);
+                            aktualizujGwiazdki();
+                        });
+                    });
 
-    if (wybranaOcena === 0 || !opinia || !imie) {
-      alert('Uzupełnij wszystkie pola i wybierz ocenę.');
-      return;
-    }
+                    function aktualizujGwiazdki() {
+                        gwiazdki.forEach(star => {
+                            if (parseInt(star.dataset.value) <= wybranaOcena) {
+                                star.style.color = 'gold';
+                            } else {
+                                star.style.color = 'gray';
+                            }
+                        });
+                    }
 
-    const section = document.querySelector('.opinie-produktu');
-    const blockquote = document.createElement('blockquote');
-    blockquote.innerHTML = `${'⭐️'.repeat(wybranaOcena)}"${opinia}" – ${imie}`;
-    
-    section.appendChild(blockquote);
+                    document.getElementById('formularz-opinii').addEventListener('submit', function (e) {
+                        e.preventDefault();
 
-    // Reset
-    document.getElementById('imie').value = '';
-    document.getElementById('opinia').value = '';
-    wybranaOcena = 0;
-    aktualizujGwiazdki();
-  });
-</script>
-            
-        </section>
+                        const imie = document.getElementById('imie').value.trim();
+                        const opinia = document.getElementById('opinia').value.trim();
+
+                        if (wybranaOcena === 0 || !opinia || !imie) {
+                            alert('Uzupełnij wszystkie pola i wybierz ocenę.');
+                            return;
+                        }
+
+                        // Send data to the server
+                        fetch('zapisz_opinie.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `id_produktu=<?= $product_id ?>&ocena=${wybranaOcena}&imie=${encodeURIComponent(imie)}&opinia=${encodeURIComponent(opinia)}`
+                        })
+                            .then(response => response.text())
+                            .then(data => {
+                                console.log(data);
+                                // Handle response if needed (e.g., show a success message)
+                                // Po dodaniu opinii, odśwież stronę, aby wyświetlić nową opinię
+                                location.reload();
+                            })
+                            .catch(error => console.error('Error:', error));
+                    });
+                </script>
+
+            </section>
     </main>
 
       <footer class="footer">
