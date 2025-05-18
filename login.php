@@ -165,6 +165,34 @@ $polaczenie->close();
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
+        .register-link {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+.register-link p {
+    margin: 0;
+    color: #333;
+}
+
+.register-link a {
+    display: inline-block;
+    margin-top: 0.3rem;
+    color: #0c7a43;
+    font-weight: bold;
+    text-decoration: none;
+    border: 1px solid #0c7a43;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    transition: 0.3s ease;
+}
+
+.register-link a:hover {
+    background-color: #0c7a43;
+    color: white;
+}
+
     </style>
 </head>
 <body>
@@ -211,7 +239,10 @@ $polaczenie->close();
                 <input type="password" name="password" placeholder="Hasło" required />
                 <button type="submit">Zaloguj</button>
             </form>
-            <p>Nie masz konta? <a href="register.php">Zarejestruj się</a></p>
+            <div class="register-link">
+    <p>Nie masz konta?</p>
+    <a href="register.php">Zarejestruj się</a>
+</div>
         </div>
     </div>
 
