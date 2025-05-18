@@ -1,24 +1,28 @@
 
 
 <?php
-session_start();
-include 'auth_utils.php';
+session_start(); // Rozpoczęcie sesji
+include 'auth_utils.php'; // Dołączenie pliku z funkcjami uwierzytelniania
 
+// Sprawdzenie, czy użytkownik jest zalogowany
 $zalogowany = isset($_SESSION['username']);
-$rola = $_SESSION['rola'] ?? 'gość';
+$rola = $_SESSION['rola'] ?? 'gość';  // Ustawienie domyślnej roli jako "gość"
 
+// Dane logowania do bazy danych
 $host = "localhost";
 $uzytkownik_db = "root";
 $haslo_db = "";
 $nazwa_bazy = "buty";
 
+// Nawiązanie połączenia z bazą danych
 $polaczenie = new mysqli($host, $uzytkownik_db, $haslo_db, $nazwa_bazy);
 
 if ($polaczenie->connect_error) {
     die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error);
 }
 
-$product_id = 1; // Stałe ID produktu dla tej strony
+// Informacje o produkcie (stałe ID i dane produktu)
+$product_id = 1;
 $product_name = "Nike Air Force 1 Białe";
 $product_price = 499.00;
 $product_image = "img/Nike/AF1/AF1white.jpg";
@@ -33,7 +37,7 @@ function pobierz_opinie($polaczenie, $id_produktu) {
     $result = $stmt->get_result();
 
     while ($row = $result->fetch_assoc()) {
-        $opinie[] = $row;
+        $opinie[] = $row; // Dodanie każdej opinii do tablicy
     }
     $stmt->close();
     return $opinie;
@@ -53,6 +57,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
+    <!-- Dodatkowe style formularza opinii -->
     <style>
         .stars {
             cursor: pointer;
@@ -120,6 +125,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
             <a href="kontakt.php">Kontakt</a>
             <a href="opinie.php">Opinie</a>
             <a href="aktualnosci.php">Aktualności</a>
+            <!-- Pokazanie użytkownika jeśli zalogowany -->
             <?php if ($zalogowany): ?>
                 <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
                     Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
@@ -129,7 +135,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                 <a href="login.php" class="zg">Zaloguj</a>
                 <a href="register.php" class="zg">Zarejestruj</a>
             <?php endif; ?>
-
+            <!-- Panele zarządzania na podstawie roli -->
            <?php if (czy_ma_role(['szef'])): ?>
         <a href="panel_szefa.php">Panel Szefa</a>
     <?php endif; ?>
@@ -154,19 +160,22 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                     <img src="<?= htmlspecialchars($product_image) ?>" alt="<?= htmlspecialchars($product_name) ?>"
                          class="main-img" />
                     <div class="thumbnails">
+                        <!-- Miniaturki -->
                         <img src="img/Nike/AF1/AF1white.jpg" alt="Zdjęcie 1" />
                         <img src="img/Nike/AF1/AF1white2.jpg" alt="Zdjęcie 2" />
                         <img src="img/Nike/AF1/AF1white3.jpg" alt="Zdjęcie 3" />
                         <img src="img/Nike/AF1/AF1white4.jpg" alt="Zdjęcie 4" />
                     </div>
                 </div>
+                <!-- Szczegóły produktu -->
                 <div class="product-details">
                     <h1><?= htmlspecialchars($product_name) ?></h1>
                     <p class="price"><?= number_format($product_price, 2) ?> zł</p>
                     <p>Stylowe sneakersy</p>
-
+                    <!-- Formularz dodawania do koszyka -->
                     <form action="koszyk.php" method="POST">
                         <label>Rozmiar:
+                            <!-- Lista dostępnych rozmiarów -->
                             <select id="product-size" name="rozmiar" required>
                                 <option value="">Wybierz rozmiar</option>
                                 <option value="38">38</option>
@@ -181,6 +190,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
 
                         <div class="buttons">
                             <?php if ($zalogowany): ?>
+                                <!-- Ukryte dane produktu do wysłania do koszyka -->
                                 <input type="hidden" name="id_produktu" value="<?= $product_id ?>">
                                 <input type="hidden" name="nazwa" value="<?= htmlspecialchars($product_name) ?>">
                                 <input type="hidden" name="cena" value="<?= $product_price ?>">
@@ -195,9 +205,10 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                 </div>
             </div>
             </form>
-
+            <!-- Sekcja opinii -->
             <section class="opinie-produktu">
                 <form id="formularz-opinii">
+                    <!-- Ocena w gwiazdkach -->
                     <h3>Dodaj swoją opinię: </h3>
                     <label>Ocena:</label>
                     <div id="gwiazdki">
@@ -208,13 +219,14 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                         <span data-value="5">★</span>
                     </div>
 
-
+                    <!-- Imię i komentarz -->
                     <label for="imie">Imię:</label>
                     <input type="text" id="imie" required>
                     <label for="opinia">Opinia:</label>
                     <textarea id="opinia" rows="4" required></textarea><br>
                     <button type="submit">Dodaj opinię</button>
                 </form>
+                <!-- Wyświetlanie istniejących opinii -->
                 <h2>Opinie: </h2>
                 <?php if (!empty($opinie_produktu)): ?>
                     <?php foreach ($opinie_produktu as $opinia): ?>
@@ -225,11 +237,11 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                 <?php else: ?>
                     <p>Brak opinii dla tego produktu.</p>
                 <?php endif; ?>
-
+                <!-- Obsługa JS formularza opinii -->
                 <script>
                     const gwiazdki = document.querySelectorAll('#gwiazdki span');
                     let wybranaOcena = 0;
-
+                    // Zaznaczanie gwiazdek po kliknięciu
                     gwiazdki.forEach(star => {
                         star.style.cursor = 'pointer';
                         star.style.fontSize = '24px';
@@ -239,7 +251,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                             aktualizujGwiazdki();
                         });
                     });
-
+                    // Funkcja aktualizacji kolorów gwiazdek
                     function aktualizujGwiazdki() {
                         gwiazdki.forEach(star => {
                             if (parseInt(star.dataset.value) <= wybranaOcena) {
@@ -249,7 +261,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                             }
                         });
                     }
-
+                    // Wysyłka formularza opinii AJAX-em
                     document.getElementById('formularz-opinii').addEventListener('submit', function (e) {
                         e.preventDefault();
 
@@ -283,7 +295,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
             </section>
 
         </main>
-
+        <!-- Stopka strony -->
         <footer class="footer">
             <div class="footer-container">
                 <div class="footer-column">
@@ -318,7 +330,7 @@ $opinie_produktu = pobierz_opinie($polaczenie, $product_id);
                 <p>&copy; 2025 Buty Opalacz Dziewit. Wszelkie prawa zastrzeżone.</p>
             </div>
         </footer>
-
+        <!-- Skrypt do zmiany głównego zdjęcia -->
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const thumbnails = document.querySelectorAll(".thumbnails img");

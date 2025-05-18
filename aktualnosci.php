@@ -1,7 +1,7 @@
 <?php
 session_start(); // Uruchomienie sesji
-include 'auth_utils.php';
-$zalogowany = isset($_SESSION['username']);
+include 'auth_utils.php'; // Dołączenie pliku z funkcjami autoryzacyjnymi
+$zalogowany = isset($_SESSION['username']); // Dołączenie pliku z funkcjami autoryzacyjnymi
 $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
 ?>
 <!DOCTYPE html>
@@ -14,6 +14,7 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
+    <!-- Stylizacja sekcji aktualności -->
     <style>
         .news-section {
       max-width: 1200px;
@@ -75,22 +76,25 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
 <body>
   <div class="wrapper">
       <header>
+        <!-- Nawigacja -->
         <a href="index.php">Strona Główna</a>
             <a href="sklep.php">Sklep</a>
             <a href="koszyk.php">Koszyk</a>
             <a href="kontakt.php">Kontakt</a>
             <a href="opinie.php">Opinie</a>
             <a href="aktualnosci.php" class="active">Aktualności</a>
+            <!-- Jeśli użytkownik jest zalogowany -->
                    <?php if ($zalogowany): ?>
                 <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
                     Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
                 </span>
                 <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
             <?php else: ?>
+              <!-- Linki dla niezalogowanych -->
                 <a href="login.php" class="zg">Zaloguj</a>
                 <a href="register.php" class="zg">Zarejestruj</a>
             <?php endif; ?>
-
+            <!-- Dostęp do paneli w zależności od roli -->
          <?php if (czy_ma_role(['szef'])): ?>
         <a href="panel_szefa.php">Panel Szefa</a>
     <?php endif; ?>
@@ -108,12 +112,14 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     <?php endif; ?>
 
     </header>
+    <!-- Krótkie przywitanie -->
     <nav>
         <p>Sprawdź co nowego u nas!</p>
     </nav>
     <main class="news-section">
         <h1 class="news-title">📰 Najnowsze aktualności</h1>
         <div class="news-cards">
+          <!-- Krótkie przywitanie -->
           <a href="aktualnosciCampusy.php" style="text-decoration: none; color: inherit; display: block;">
       <div class="news-card">
         <img src="img/aktualnosci/2.png" class="nowosc" alt="Przykładowe zdjęcie">
@@ -126,6 +132,7 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
         </div>
     
   <br>
+  <!-- Karta aktualności - Jordan & Nike -->
     <a href="aktualnosciJordany.php" style="text-decoration: none; color: inherit; display: block;">
       <div class="news-card">
         <img src="img/aktualnosci/3.png" class="nowosc" alt="Buty Jordan">
@@ -138,7 +145,7 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     </a>
     
   <br>
-  
+  <!-- Karta aktualności - Klapki -->
   <a href="aktualnosciKlapki.php" style="text-decoration: none; color: inherit; display: block;">
     <div class="news-card">
         <img src="img/aktualnosci/5.png" alt="klapki">
@@ -151,6 +158,7 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
       </a>
       </main>
     </div>
+    <!-- Stopka strony -->
    <footer class="footer">
       <div class="footer-container">
         <div class="footer-column">
@@ -160,12 +168,14 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
           <p>Tel: <a href="tel:+48123456789">+48 123 456 789</a></p>
           <p>Email: <a href="mailto:kontakt@butyopalacz.pl">kontakt@butyopalacz.pl</a></p>
         </div>
+        <!-- Kolumna z godzinami otwarcia -->
         <div class="footer-column">
           <h3>Godziny otwarcia</h3>
           <p>Poniedziałek – Piątek: 9:00 – 18:00</p>
           <p>Sobota: 10:00 – 14:00</p>
           <p>Niedziela: nieczynne</p>
         </div>
+        <!-- Kolumna z linkami do social mediów -->
         <div class="footer-column">
           <h3>Śledź nas</h3>
           <div class="social-icons">
