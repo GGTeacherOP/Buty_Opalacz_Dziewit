@@ -240,7 +240,7 @@ $selectedType = isset($_GET['type']) ? $_GET['type'] : '';
             <img src="img/VANS/VansSk8/VansSk81.avif" alt="Vans Sk8-Hi">
             <h3>Vans Sk8-Hi Biało-Czarne</h3>
             <p class="cena">429 zł</p>
-            <a href="VansOld.php" class="btn-zobacz">Zobacz</a>
+            <a href="VansSk8.php" class="btn-zobacz">Zobacz</a>
         </div>
 
 
