@@ -80,6 +80,23 @@ $result = $conn->query($sql);
             text-align:center;
             margin-bottom:20px;
         }
+        
+        .back-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -108,6 +125,8 @@ if ($result && $result->num_rows > 0) {
 }
 $conn->close();
 ?>
+
+<a href="panel_pracownikow.php" class="back-button">Powrót do panelu</a>
 
 </body>
 </html>
