@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 18, 2025 at 06:21 PM
+-- Generation Time: Maj 18, 2025 at 10:34 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -81,7 +81,9 @@ INSERT INTO `elementy_zamowienia` (`id_elementu_zamowienia`, `id_zamowienia`, `i
 (52, 41, 2, 1, 1249.00, 29, '40'),
 (53, 41, 4, 1, 529.00, 29, '41'),
 (54, 41, 7, 3, 899.00, 29, '42'),
-(55, 41, 1, 1, 499.00, 29, '39');
+(55, 41, 1, 1, 499.00, 29, '39'),
+(56, 42, 1, 3, 499.00, 29, '42'),
+(57, 42, 1, 4, 499.00, 29, '41');
 
 -- --------------------------------------------------------
 
@@ -131,7 +133,8 @@ INSERT INTO `klienci` (`id_klienta`, `nazwa_uzytkownika`, `haslo`, `email`, `dat
 (35, 'Paweł', 'Pablo55', 'Pablo@Pablo.pl', '2025-05-18 10:32:06', 'klient'),
 (37, 'Piotrek', 'Pitero55', 'piter@wp.pl', '2025-05-18 10:34:29', 'klient'),
 (38, 'Andrzejff', 'haslo123', 'fsafsa@ggg.com', '2025-05-18 11:44:22', 'klient'),
-(39, 'fsasfa', 'fasf', 'fsasfafasfsafas@fafs', '2025-05-18 11:49:20', 'klient');
+(39, 'fsasfa', 'fasf', 'fsasfafasfsafas@fafs', '2025-05-18 11:49:20', 'klient'),
+(41, 'Oskar', 'oskar123', 'oskar55@gmail.com', '2025-05-18 18:16:42', 'klient');
 
 -- --------------------------------------------------------
 
@@ -175,14 +178,11 @@ CREATE TABLE `opinie` (
 --
 
 INSERT INTO `opinie` (`id_opinii`, `id_produktu`, `imie`, `ocena`, `komentarz`, `data_opinii`) VALUES
-(1, 1, 'Mistrz', 4, 'Fajny but', '2025-05-17 21:00:24'),
-(2, 1, 'Fajny but', 3, 'kaska', '2025-05-17 21:03:19'),
 (3, 1, 'kaska', 2, 'faaffsff', '2025-05-17 21:04:39'),
-(4, 12, 'andrzej', 4, 'haslo123', '2025-05-17 21:12:33'),
-(5, 1, 'aura', 5, 'bomba', '2025-05-17 21:12:51'),
 (6, 1, 'fasfa', 5, 'fasafsfaasfsf', '2025-05-18 11:49:54'),
-(7, 12, 'andrzej', 5, 'Buty fajne', '2025-05-18 14:43:21'),
-(8, 1, 'fasaf', 2, 'sfafassfasfasfasfafsfasfa', '2025-05-18 16:18:20');
+(9, 2, 'fasf', 4, 'fsafsasf', '2025-05-18 16:23:12'),
+(10, 1, 'fsafsasfa', 3, 'fassfsaf', '2025-05-18 16:55:46'),
+(12, NULL, 'Anna ', NULL, 'fasf', '2025-05-18 20:31:34');
 
 -- --------------------------------------------------------
 
@@ -291,7 +291,8 @@ INSERT INTO `wiadomosci` (`id`, `imie`, `email`, `pytanie`) VALUES
 (10, 'fasfsfaf', 'fsaffs@gg', ''),
 (11, 'fasfs', 'fsaasf@ggasgs', '@fasfaafsff'),
 (12, 'fsaasf', 'fsasaf@ff', 'fsasfa'),
-(13, 'michal', 'Michal55@gmail.com', 'sfafafs');
+(13, 'michal', 'Michal55@gmail.com', 'sfafafs'),
+(14, 'saffas', 'fafsf@wp.pl', 'fassfa');
 
 -- --------------------------------------------------------
 
@@ -403,6 +404,42 @@ CREATE TABLE `widok_zamowienia_z_klientami` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `wydatki`
+--
+
+CREATE TABLE `wydatki` (
+  `id_wydatku` int(11) NOT NULL,
+  `data_wydatku` date NOT NULL,
+  `kategoria_wydatku` varchar(100) NOT NULL,
+  `kwota_wydatku` decimal(10,2) NOT NULL,
+  `opis_wydatku` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `wydatki`
+--
+
+INSERT INTO `wydatki` (`id_wydatku`, `data_wydatku`, `kategoria_wydatku`, `kwota_wydatku`, `opis_wydatku`) VALUES
+(1, '2025-05-20', 'Materiały biurowe', 150.00, 'Zakup papieru i długopisów'),
+(2, '2025-05-20', 'Reklama', 300.00, 'Kampania reklamowa w Internecie'),
+(3, '2025-05-21', 'Naprawa sprzętu', 250.00, 'Naprawa drukarki'),
+(4, '2025-05-15', 'Czynsz za lokal', 5000.00, 'Miesięczny czynsz za sklep'),
+(5, '2025-05-18', 'Media', 800.00, 'Opłaty za prąd i wodę'),
+(6, '2025-05-22', 'Prowizje od sprzedaży', 1200.00, 'Prowizje dla pracowników'),
+(7, '2025-05-25', 'Transport', 350.00, 'Koszty dostawy towaru'),
+(8, '2025-05-28', 'Marketing', 1000.00, 'Kampania reklamowa w mediach społecznościowych'),
+(9, '2025-05-30', 'Ubezpieczenia', 600.00, 'Ubezpieczenie sklepu'),
+(10, '2025-06-01', 'Materiały biurowe', 200.00, 'Zakup materiałów biurowych'),
+(11, '2025-06-05', 'Naprawy', 400.00, 'Naprawa klimatyzacji'),
+(12, '2025-06-10', 'Szkolenia', 700.00, 'Szkolenie dla pracowników'),
+(13, '2025-06-15', 'Obsługa klienta', 2000.00, 'Koszty związane z obsługą klienta'),
+(14, '2025-06-18', 'Licencje i opłaty', 300.00, 'Opłaty licencyjne'),
+(15, '2025-06-22', 'Amortyzacja', 1500.00, 'Amortyzacja sprzętu'),
+(16, '2025-06-25', 'Inne wydatki', 500.00, 'Różne drobne wydatki');
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `zamowienia`
 --
 
@@ -453,7 +490,8 @@ INSERT INTO `zamowienia` (`id_zamowienia`, `id_klienta`, `data_zamowienia`, `kwo
 (38, 29, '2025-05-18 11:30:44', 499.00),
 (39, 29, '2025-05-18 11:30:50', 499.00),
 (40, 29, '2025-05-18 11:33:27', 1497.00),
-(41, 29, '2025-05-18 16:16:10', 4974.00);
+(41, 29, '2025-05-18 16:16:10', 4974.00),
+(42, 29, '2025-05-18 17:47:30', 3493.00);
 
 -- --------------------------------------------------------
 
@@ -575,6 +613,12 @@ ALTER TABLE `wiadomosci`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeksy dla tabeli `wydatki`
+--
+ALTER TABLE `wydatki`
+  ADD PRIMARY KEY (`id_wydatku`);
+
+--
 -- Indeksy dla tabeli `zamowienia`
 --
 ALTER TABLE `zamowienia`
@@ -589,31 +633,31 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT for table `elementy_zamowienia`
 --
 ALTER TABLE `elementy_zamowienia`
-  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id_elementu_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT for table `klienci`
 --
 ALTER TABLE `klienci`
-  MODIFY `id_klienta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id_klienta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `koszyki`
 --
 ALTER TABLE `koszyki`
-  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id_koszyka` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `opinie`
 --
 ALTER TABLE `opinie`
-  MODIFY `id_opinii` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_opinii` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pracownicy`
 --
 ALTER TABLE `pracownicy`
-  MODIFY `id_pracownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_pracownika` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `produkty`
@@ -625,13 +669,19 @@ ALTER TABLE `produkty`
 -- AUTO_INCREMENT for table `wiadomosci`
 --
 ALTER TABLE `wiadomosci`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `wydatki`
+--
+ALTER TABLE `wydatki`
+  MODIFY `id_wydatku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id_zamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- Constraints for dumped tables
