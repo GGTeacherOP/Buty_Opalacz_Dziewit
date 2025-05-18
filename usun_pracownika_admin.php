@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_pracownika'])) {
     }
 }
 
-header("Location: pracownicy_admin.php"); // Powrót do listy pracowników
+header("Location: zarzadzaj_pracownikami.php"); // Powrót do listy pracowników
 exit;
 
 $conn->close();
