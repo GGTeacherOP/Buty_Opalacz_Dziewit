@@ -1,37 +1,44 @@
 <?php
-session_start();
-include 'auth_utils.php';
+session_start(); // Rozpoczęcie sesji PHP, aby móc korzystać ze zmiennych sesyjnych.
+include 'auth_utils.php'; // Dołączenie pliku z funkcjami autoryzacji, w tym 'czy_ma_role()'.
 
+// Sprawdzenie, czy zalogowany użytkownik ma rolę 'admin' lub 'szef'.
 if (!czy_ma_role(['admin', 'szef'])) {
-    header("Location: index.php");
-    exit;
+    header("Location: index.php"); // Jeśli nie ma odpowiedniej roli, przekieruj na stronę główną.
+    exit; // Zakończ wykonywanie skryptu po przekierowaniu.
 }
 
+// Nawiązanie połączenia z bazą danych MySQL.
 $conn = new mysqli("localhost", "root", "", "buty");
+// Sprawdzenie, czy wystąpił błąd podczas łączenia z bazą danych.
 if ($conn->connect_error) {
-    die("Błąd połączenia z bazą danych: " . $conn->connect_error);
+    die("Błąd połączenia z bazą danych: " . $conn->connect_error); // Wyświetlenie błędu i zatrzymanie skryptu.
 }
 
-// Obsługa usuwania opinii
+// Obsługa usuwania opinii po naciśnięciu przycisku "Usuń".
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['usun_opinie'])) {
-    $id_opinii = $_POST['id_opinii'];
+    $id_opinii = $_POST['id_opinii']; // Pobranie ID opinii do usunięcia z formularza.
 
+    // Zapytanie SQL usuwające opinię z tabeli 'opinie' na podstawie jej ID.
     $sql = "DELETE FROM opinie WHERE id_opinii = $id_opinii";
+    // Wykonanie zapytania SQL.
     if ($conn->query($sql) === TRUE) {
+        // Jeśli usunięcie się powiodło, ustaw komunikat w sesji.
         $_SESSION['komunikat'] = "Opinia została usunięta.";
-        header("Location: moderuj_opinie_szef.php");
-        exit;
+        header("Location: moderuj_opinie_szef.php"); // Przekieruj z powrotem na stronę moderowania opinii.
+        exit; // Zakończ wykonywanie skryptu po przekierowaniu.
     } else {
+        // Jeśli wystąpił błąd podczas usuwania, zapisz komunikat o błędzie.
         $error = "Błąd usuwania opinii: " . $conn->error;
     }
 }
 
-// Pobierz listę opinii
+// Zapytanie SQL pobierające listę wszystkich opinii wraz z nazwą produktu.
 $sql = "SELECT o.id_opinii, o.komentarz, o.data_opinii, o.imie, p.nazwa AS nazwa_produktu
         FROM opinie o
         JOIN produkty p ON o.id_produktu = p.id_produktu
-        ORDER BY o.data_opinii DESC";
-$result = $conn->query($sql);
+        ORDER BY o.data_opinii DESC"; // Sortowanie opinii od najnowszej.
+$result = $conn->query($sql); // Wykonanie zapytania.
 
 ?>
 
@@ -85,7 +92,7 @@ $result = $conn->query($sql);
 
                 <?php if (isset($_SESSION['komunikat'])): ?>
                     <div class="alert alert-success"><?= $_SESSION['komunikat'] ?></div>
-                    <?php unset($_SESSION['komunikat']); ?>
+                    <?php unset($_SESSION['komunikat']); // Usunięcie komunikatu z sesji po wyświetleniu ?>
                 <?php endif; ?>
 
                 <?php if (isset($error)): ?>
@@ -105,20 +112,22 @@ $result = $conn->query($sql);
                     </thead>
                     <tbody>
                         <?php
+                        // Sprawdzenie, czy pobrano jakieś opinie z bazy danych.
                         if ($result->num_rows > 0) {
+                            // Iteracja po każdej opinii.
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>";
                                 echo "<td>" . $row["id_opinii"] . "</td>";
                                 echo "<td>" . $row["nazwa_produktu"] . "</td>";
-                                echo "<td>" . $row["imie"] . "</td>"; // Użyj imie z tabeli opinie
-                                echo "<td>" . $row["komentarz"] . "</td>";  // Użyj komentarz zamiast tresc
+                                echo "<td>" . $row["imie"] . "</td>"; // Wyświetlenie imienia autora opinii.
+                                echo "<td>" . $row["komentarz"] . "</td>";  // Wyświetlenie treści komentarza.
                                 echo "<td>" . $row["data_opinii"] . "</td>";
                                 echo "<td>
                                         <form method='post' style='display:inline-block;'>
                                             <input type='hidden' name='id_opinii' value='" . $row["id_opinii"] . "'>
                                             <button type='submit' name='usun_opinie' class='btn btn-danger btn-sm' onclick=\"return confirm('Czy na pewno chcesz usunąć tę opinię?')\">Usuń</button>
                                         </form>
-                                      </td>";
+                                    </td>";
                                 echo "</tr>";
                             }
                         } else {
@@ -136,5 +145,5 @@ $result = $conn->query($sql);
 </html>
 
 <?php
-$conn->close();
+$conn->close(); // Zamknięcie połączenia z bazą danych.
 ?>

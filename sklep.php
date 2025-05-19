@@ -1,10 +1,10 @@
 <?php
-session_start();
-include 'auth_utils.php';
-$zalogowany = isset($_SESSION['username']);
-$rola = $_SESSION['rola'] ?? 'gość';
+session_start(); // Rozpoczęcie sesji PHP, umożliwiającej dostęp do zmiennych sesyjnych.
+include 'auth_utils.php'; // Dołączenie pliku z funkcjami autoryzacji (np. sprawdzanie roli użytkownika).
+$zalogowany = isset($_SESSION['username']); // Sprawdzenie, czy w sesji istnieje zmienna 'username', co oznacza, że użytkownik jest zalogowany.
+$rola = $_SESSION['rola'] ?? 'gość'; // Pobranie roli użytkownika z sesji. Jeśli nie jest ustawiona, domyślnie przypisana jest rola 'gość'.
 
-// Pobierz parametr type z URL
+// Pobierz parametr 'type' z URL. Jeśli istnieje, przypisz go do zmiennej $selectedType, w przeciwnym razie przypisz pusty ciąg.
 $selectedType = isset($_GET['type']) ? $_GET['type'] : '';
 ?>
 <!DOCTYPE html>
@@ -17,20 +17,21 @@ $selectedType = isset($_GET['type']) ? $_GET['type'] : '';
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="img/favi2.png" type="image/png">
   <style>
+    /* Style CSS specyficzne dla tej strony */
     .zbior a.active-category {
-      color: #007bff;
-      font-weight: bold;
-      text-decoration: underline;
+      color: #007bff; /* Niebieski kolor aktywnej kategorii */
+      font-weight: bold; /* Pogrubiona czcionka aktywnej kategorii */
+      text-decoration: underline; /* Podkreślenie aktywnej kategorii */
     }
     .prz {
-      margin-bottom: 10px;
-      font-weight: bold;
+      margin-bottom: 10px; /* Dolny margines dla elementu z opisem filtra */
+      font-weight: bold; /* Pogrubiona czcionka opisu filtra */
     }
     .type-filter {
-      margin-top: 15px;
+      margin-top: 15px; /* Górny margines dla filtrów typu butów */
     }
     .filtry-container {
-      margin-top: 20px;
+      margin-top: 20px; /* Górny margines dla całego kontenera filtrów */
     }
   </style>
 </head>
@@ -38,63 +39,58 @@ $selectedType = isset($_GET['type']) ? $_GET['type'] : '';
   <div class="wrapper">
     <header>
       <a href="index.php">Strona Główna</a>
-      <a href="sklep.php" class="active">Sklep</a>
-      <a href="koszyk.php">Koszyk</a>
+      <a href="sklep.php" class="active">Sklep</a> <a href="koszyk.php">Koszyk</a>
       <a href="kontakt.php">Kontakt</a>
       <a href="opinie.php">Opinie</a>
       <a href="aktualnosci.php">Aktualności</a>
-         <?php if ($zalogowany): ?>
-                <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
-                    Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
-                </span>
-                <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
-            <?php else: ?>
-                <a href="login.php" class="zg">Zaloguj</a>
-                <a href="register.php" class="zg">Zarejestruj</a>
-            <?php endif; ?>
+          <?php if ($zalogowany): ?>
+            <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
+              Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
+            </span>
+            <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
+          <?php else: ?>
+            <a href="login.php" class="zg">Zaloguj</a>
+            <a href="register.php" class="zg">Zarejestruj</a>
+          <?php endif; ?>
 
-           <?php if (czy_ma_role(['szef'])): ?>
+          <?php if (czy_ma_role(['szef'])): ?>
         <a href="panel_szefa.php">Panel Szefa</a>
-    <?php endif; ?>
+      <?php endif; ?>
 
-    <?php if (czy_ma_role(['admin', 'szef'])): ?>
-        <a href="panel_admina.php">Panel Admina</a> 
-    <?php endif; ?>
+      <?php if (czy_ma_role(['admin', 'szef'])): ?>
+        <a href="panel_admina.php">Panel Admina</a>
+      <?php endif; ?>
 
-    <?php if (czy_ma_role(['kierownik', 'admin', 'szef'])): ?>
+      <?php if (czy_ma_role(['kierownik', 'admin', 'szef'])): ?>
         <a href="panel_kierownika.php">Panel Kierownika</a>
-    <?php endif; ?>
+      <?php endif; ?>
 
-    <?php if (czy_ma_role(['Pracownik sklepu', 'kierownik', 'admin', 'szef'])): ?>
+      <?php if (czy_ma_role(['Pracownik sklepu', 'kierownik', 'admin', 'szef'])): ?>
         <a href="panel_pracownikow.php">Panel Pracownika</a>
-    <?php endif; ?>
+      <?php endif; ?>
 
     </header>
 
    <nav>
     <div class="prz">Marki</div>
-    <div class="zbior brand-filter"> <!-- Dodaj klasę brand-filter -->
-        <a href="#" data-brand="">Wszystkie</a> 
-        <a href="#" data-brand="Nike">Nike</a>
-        <a href="#" data-brand="Adidas">Adidas</a>
-        <a href="#" data-brand="Jordan">Jordan</a>
-        <a href="#" data-brand="Vans">Vans</a>
-        <a href="#" data-brand="Under">Under Armour</a>
-        <a href="#" data-brand="Converse">Converse</a>
+    <div class="zbior brand-filter"> <a href="#" data-brand="">Wszystkie</a>
+      <a href="#" data-brand="Nike">Nike</a>
+      <a href="#" data-brand="Adidas">Adidas</a>
+      <a href="#" data-brand="Jordan">Jordan</a>
+      <a href="#" data-brand="Vans">Vans</a>
+      <a href="#" data-brand="Under">Under Armour</a>
+      <a href="#" data-brand="Converse">Converse</a>
     </div>
-    
+
     <div class="prz" style="margin-top: 20px;"></div>
-    <div class="zbior type-filter">
-        
-        <a href="#" data-type="Sneakersy">Sneakersy</a>
-        <a href="#" data-type="Trampki">Trampki</a>
-        <a href="#" data-type="Klapki">Klapki</a>
-        <a href="#" data-type="Treningowe">Treningowe</a>
-        <a href="#" data-type="Biegania">Do biegania</a>
+    <div class="zbior type-filter"> <a href="#" data-type="Sneakersy">Sneakersy</a>
+      <a href="#" data-type="Trampki">Trampki</a>
+      <a href="#" data-type="Klapki">Klapki</a>
+      <a href="#" data-type="Treningowe">Treningowe</a>
+      <a href="#" data-type="Biegania">Do biegania</a>
     </div>
 </nav>
 
-    <!-- Filtry -->
     <div class="filtry-container">
       <input type="text" id="searchInput" placeholder="Szukaj butów..." />
 
@@ -134,169 +130,168 @@ $selectedType = isset($_GET['type']) ? $_GET['type'] : '';
    <section class="bestsellery">
     <h2>Nasze Produkty</h2>
     <div class="produkty-grid" id="productList">
-      
-        <div class="produkt-card" data-brand="Nike" data-price="499" data-type="Sneakersy">
-            <img src="img/Nike/AF1/AF1white.jpg" alt="Air Force 1 Białe" />
-            <h3>Nike Air Force 1 Białe</h3>
-            <p class="cena">499 zł</p>
-            <a href="A1ForceBiale.php" class="btn-zobacz">Zobacz</a>
+      <div class="produkt-card" data-brand="Nike" data-price="499" data-type="Sneakersy">
+          <img src="img/Nike/AF1/AF1white.jpg" alt="Air Force 1 Białe" />
+          <h3>Nike Air Force 1 Białe</h3>
+          <p class="cena">499 zł</p>
+          <a href="A1ForceBiale.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Jordan" data-price="1249" data-type="Sneakersy">
-            <img src="img/Jordan/Mocha/Mocha1.jpeg" alt="Jordan 1 Mocha" />
-            <h3>Jordan 1 Mocha</h3>
-            <p class="cena">1249 zł</p>
-            <a href="J1Mocha.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Jordan/Mocha/Mocha1.jpeg" alt="Jordan 1 Mocha" />
+          <h3>Jordan 1 Mocha</h3>
+          <p class="cena">1249 zł</p>
+          <a href="J1Mocha.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Adidas" data-price="529" data-type="Sneakersy">
-            <img src="img/Adidas/Campus/1.avif" alt="Adidas Campus 00s" />
-            <h3>Adidas Campus 00s Beżowe</h3>
-            <p class="cena">529 zł</p>
-            <a href="Campusy.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Adidas/Campus/1.avif" alt="Adidas Campus 00s" />
+          <h3>Adidas Campus 00s Beżowe</h3>
+          <p class="cena">529 zł</p>
+          <a href="Campusy.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Adidas" data-price="529" data-type="Sneakersy">
-            <img src="img/Adidas/Campus/campus1.jpg" alt="Adidas Campus 00s Czarne" />
-            <h3>Adidas Campus 00s Czarne</h3>
-            <p class="cena">529 zł</p>
-            <a href="Campusy2.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Adidas/Campus/campus1.jpg" alt="Adidas Campus 00s Czarne" />
+          <h3>Adidas Campus 00s Czarne</h3>
+          <p class="cena">529 zł</p>
+          <a href="Campusy2.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Adidas" data-price="429" data-type="Sneakersy">
-            <img src="img/Adidas/Samba/samba1.jpg" alt="Adidas Samba OG White" />
-            <h3>Adidas Samba OG</h3>
-            <p class="cena">429 zł</p>
-            <a href="Samba.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Adidas/Samba/samba1.jpg" alt="Adidas Samba OG White" />
+          <h3>Adidas Samba OG</h3>
+          <p class="cena">429 zł</p>
+          <a href="Samba.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Jordan" data-price="1399" data-type="Sneakersy">
-            <img src="img/Jordan/Military/Military1.jpg" alt="Jordan 4 Military Black" />
-            <h3>Jordan 4 Military Black</h3>
-            <p class="cena">1399 zł</p>
-            <a href="JordanMilitary.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Jordan/Military/Military1.jpg" alt="Jordan 4 Military Black" />
+          <h3>Jordan 4 Military Black</h3>
+          <p class="cena">1399 zł</p>
+          <a href="JordanMilitary.php" class="btn-zobacz">Zobacz</a>
         </div>
         <div class="produkt-card" data-brand="Nike" data-price="899" data-type="Biegania">
-            <img src="img/Nike/Nike Pegasus Premium/pegasusprem1.png" alt="Nike Pegasus Premium" />
-            <h3>Nike Pegasus Premium</h3>
-            <p class="cena">899 zł</p>
-            <a href="NikePegasusPrem.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Nike/Nike Pegasus Premium/pegasusprem1.png" alt="Nike Pegasus Premium" />
+          <h3>Nike Pegasus Premium</h3>
+          <p class="cena">899 zł</p>
+          <a href="NikePegasusPrem.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Nike" data-price="649" data-type="Sneakersy">
-            <img src="img/Nike/AIR MAX/MAX1.png" alt="Nike Air Max 90" />
-            <h3>Nike Air Max 90</h3>
-            <p class="cena">649 zł</p>
-            <a href="AirMax.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Nike/AIR MAX/MAX1.png" alt="Nike Air Max 90" />
+          <h3>Nike Air Max 90</h3>
+          <p class="cena">649 zł</p>
+          <a href="AirMax.php" class="btn-zobacz">Zobacz</a>
         </div>
         <div class="produkt-card" data-brand="Reebok" data-price="250" data-type="Biegania">
-            <img src="img/Reebook/Reebok FIORI/Rebook FIORI1.jpg" alt="Reebook FIORI "/>
-            <h3>Reebook FIORI</h3>
-            <p class="cena">250 zł</p>
-            <a href="RebookFiori.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Reebook/Reebok FIORI/Rebook FIORI1.jpg" alt="Reebook FIORI "/>
+          <h3>Reebook FIORI</h3>
+          <p class="cena">250 zł</p>
+          <a href="RebookFiori.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Converse" data-price="349" data-type="Trampki">
-            <img src="img/Converse/ConverseAllStar/ConverseALLStar1.jpg" alt="Converse All Star">
-            <h3>Converse Chuck Taylor All Star</h3>
-            <p class="cena">349 zł</p>
-            <a href="ConvAllStar.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Converse/ConverseAllStar/ConverseALLStar1.jpg" alt="Converse All Star">
+          <h3>Converse Chuck Taylor All Star</h3>
+          <p class="cena">349 zł</p>
+          <a href="ConvAllStar.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Converse" data-price="399" data-type="Trampki">
-            <img src="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg" alt="Converse All Star Platform">
-            <h3>Converse All Star Platform Czarny</h3>
-            <p class="cena">399 zł</p>
-            <a href="ConvPlatform.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Converse/ConversePlatform/ConversePlatform1 (1).jpg" alt="Converse All Star Platform">
+          <h3>Converse All Star Platform Czarny</h3>
+          <p class="cena">399 zł</p>
+          <a href="ConvPlatform.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Adidas" data-price="499" data-type="Sneakersy">
-            <img src="img/Adidas/ForumBlack/Forum1.jpg" alt="Adidas Forum Low" />
-            <h3>Adidas Forum Low</h3>
-            <p class="cena">499 zł</p>
-            <a href="AdidasFor.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Adidas/ForumBlack/Forum1.jpg" alt="Adidas Forum Low" />
+          <h3>Adidas Forum Low</h3>
+          <p class="cena">499 zł</p>
+          <a href="AdidasFor.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Jordan" data-price="1599" data-type="Sneakersy">
-            <img src="img/Jordan/J1Chicago/J1Chicago1.jpg" alt="Jordan 1 Chicago" />
-            <h3>Jordan 1 Chicago</h3>
-            <p class="cena">1599 zł</p>
-            <a href="Jordan1Chi.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Jordan/J1Chicago/J1Chicago1.jpg" alt="Jordan 1 Chicago" />
+          <h3>Jordan 1 Chicago</h3>
+          <p class="cena">1599 zł</p>
+          <a href="Jordan1Chi.php" class="btn-zobacz">Zobacz</a>
         </div>
         <div class="produkt-card" data-brand="Adidas" data-price="350" data-type="Treningowe">
-            <img src="img/Adidas/COPA PURE 2 CLUB IN/add1.jpg" alt="COPA PURE" />
-            <h3>Adidas COPA PURE 2</h3>
-            <p class="cena">350 zł</p>
-            <a href="CopaPure.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Adidas/COPA PURE 2 CLUB IN/add1.jpg" alt="COPA PURE" />
+          <h3>Adidas COPA PURE 2</h3>
+          <p class="cena">350 zł</p>
+          <a href="CopaPure.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Vans" data-price="379" data-type="Trampki">
-            <img src="img/VANS/VansOld/VansOld1.avif" alt="Vans Old Skool">
-            <h3>Vans Old Skool Czarny</h3>
-            <p class="cena">379 zł</p>
-            <a href="VansOld.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/VANS/VansOld/VansOld1.avif" alt="Vans Old Skool">
+          <h3>Vans Old Skool Czarny</h3>
+          <p class="cena">379 zł</p>
+          <a href="VansOld.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Vans" data-price="429" data-type="Trampki">
-            <img src="img/VANS/VansSk8/VansSk81.avif" alt="Vans Sk8-Hi">
-            <h3>Vans Sk8-Hi Biało-Czarne</h3>
-            <p class="cena">429 zł</p>
-            <a href="VansSk8.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/VANS/VansSk8/VansSk81.avif" alt="Vans Sk8-Hi">
+          <h3>Vans Sk8-Hi Biało-Czarne</h3>
+          <p class="cena">429 zł</p>
+          <a href="VansSk8.php" class="btn-zobacz">Zobacz</a>
         </div>
 
 
         <div class="produkt-card" data-brand="Nike" data-price="199" data-type="Klapki">
-            <img src="img/Nike/KlapkiBiale/1.avif" alt="Nike Klapki Białe" />
-            <h3>Nike Klapki Białe</h3>
-            <p class="cena">199 zł</p>
-            <a href="klapkiNikeB.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Nike/KlapkiBiale/1.avif" alt="Nike Klapki Białe" />
+          <h3>Nike Klapki Białe</h3>
+          <p class="cena">199 zł</p>
+          <a href="klapkiNikeB.php" class="btn-zobacz">Zobacz</a>
         </div>
         <div class="produkt-card" data-brand="Nike" data-price="199" data-type="Klapki">
-            <img src="img/Nike/KlpakiCzarne/1.avif" alt="Nike Klapki Czarne" />
-            <h3>Nike Klapki Czarne</h3>
-            <p class="cena">199 zł</p>
-            <a href="klapkiNikeC.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Nike/KlpakiCzarne/1.avif" alt="Nike Klapki Czarne" />
+          <h3>Nike Klapki Czarne</h3>
+          <p class="cena">199 zł</p>
+          <a href="klapkiNikeC.php" class="btn-zobacz">Zobacz</a>
         </div>
 
 
-        <div class="produkt-card" data-brand="Under" data-price="699" data-type="biegania">
-            <img src="img/UnderArmour/Infinite/UA_W_Infinite_Elite_2_1.png" alt="Under Armour Infinite" />
-            <h3>Under Armour Infinite</h3>
-            <p class="cena">699 zł</p>
-            <a href="UnderArmourInf.php" class="btn-zobacz">Zobacz</a>
+        <div class="produkt-card" data-brand="Under" data-price="699" data-type="Biegania">
+          <img src="img/UnderArmour/Infinite/UA_W_Infinite_Elite_2_1.png" alt="Under Armour Infinite" />
+          <h3>Under Armour Infinite</h3>
+          <p class="cena">699 zł</p>
+          <a href="UnderArmourInf.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Adidas" data-price="179" data-type="Klapki">
-            <img src="img/Adidas/KlapkiBiale/1.avif" alt="Adidas Klapki Białe" />
-            <h3>Adidas Klapki Białe</h3>
-            <p class="cena">179 zł</p>
-            <a href="AdidasKlapkiB.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Adidas/KlapkiBiale/1.avif" alt="Adidas Klapki Białe" />
+          <h3>Adidas Klapki Białe</h3>
+          <p class="cena">179 zł</p>
+          <a href="AdidasKlapkiB.php" class="btn-zobacz">Zobacz</a>
         </div>
         <div class="produkt-card" data-brand="Adidas" data-price="179" data-type="Klapki">
-            <img src="img/Adidas/KlapkiCzarne/1.avif" alt="Adidas Klapki Czarne" />
-            <h3>Adidas Klapki Czarne</h3>
-            <p class="cena">179 zł</p>
-            <a href="AdidasKlapkiC.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Adidas/KlapkiCzarne/1.avif" alt="Adidas Klapki Czarne" />
+          <h3>Adidas Klapki Czarne</h3>
+          <p class="cena">179 zł</p>
+          <a href="AdidasKlapkiC.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Jordan" data-price="250" data-type="Klapki">
-            <img src="img/Jordan/KlapkiCzarne/1.avif" alt="Jordan Klapki Czarne" />
-            <h3>Jordan Klapki Czarne</h3>
-            <p class="cena">250 zł</p>
-            <a href="JordanKlapkiC.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Jordan/KlapkiCzarne/1.avif" alt="Jordan Klapki Czarne" />
+          <h3>Jordan Klapki Czarne</h3>
+          <p class="cena">250 zł</p>
+          <a href="JordanKlapkiC.php" class="btn-zobacz">Zobacz</a>
         </div>
 
         <div class="produkt-card" data-brand="Under" data-price="299" data-type="Treningowe">
-            <img src="img/UnderArmour/Magnetico/UA_Magnetico_Elite_4Fg_1.png" alt="Under Armour Magnetico" />
-            <h3>Under Armour Magnetico</h3>
-            <p class="cena">299 zł</p>
-            <a href="UAMagnetico.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/UnderArmour/Magnetico/UA_Magnetico_Elite_4Fg_1.png" alt="Under Armour Magnetico" />
+          <h3>Under Armour Magnetico</h3>
+          <p class="cena">299 zł</p>
+          <a href="UAMagnetico.php" class="btn-zobacz">Zobacz</a>
         </div>
         <div class="produkt-card" data-brand="Jordan" data-price="250" data-type="Klapki">
-            <img src="img/Jordan/KlapkiBiale/1.avif" alt="Jordan Klapki Białe" />
-            <h3>Jordan Klapki Białe</h3>
-            <p class="cena">250 zł</p>
-            <a href="JordanKlapkiB.php" class="btn-zobacz">Zobacz</a>
+          <img src="img/Jordan/KlapkiBiale/1.avif" alt="Jordan Klapki Białe" />
+          <h3>Jordan Klapki Białe</h3>
+          <p class="cena">250 zł</p>
+          <a href="JordanKlapkiB.php" class="btn-zobacz">Zobacz</a>
         </div>
 
     </div>
@@ -338,7 +333,7 @@ $selectedType = isset($_GET['type']) ? $_GET['type'] : '';
     </footer>
   </div>
 
-   <script>
+  <script>
     // Pobieranie elementów
     const poleWyszukiwania = document.getElementById("searchInput");
     const filtrMarka = document.getElementById("filterBrand");
@@ -347,136 +342,137 @@ $selectedType = isset($_GET['type']) ? $_GET['type'] : '';
     const wartoscCeny = document.getElementById("priceValue");
     const sortowanieCeny = document.getElementById("sortOrder");
     const listaProduktow = document.getElementById("productList");
-    const wszystkieProdukty = Array.from(listaProduktow.querySelectorAll(".produkt-card"));
-    const brandLinks = document.querySelectorAll('.brand-filter a');
-    const typeLinks = document.querySelectorAll('.type-filter a');
+    const wszystkieProdukty = Array.from(listaProduktow.querySelectorAll(".produkt-card")); // Pobranie wszystkich produktów
+    const brandLinks = document.querySelectorAll('.brand-filter a'); // Pobranie linków do filtrowania po marce
+    const typeLinks = document.querySelectorAll('.type-filter a');   // Pobranie linków do filtrowania po typie
 
-    // Aktualizacja tekstu przy suwaku
+    // Aktualizacja tekstu przy suwaku ceny
     suwakCeny.addEventListener("input", () => {
-      wartoscCeny.textContent = suwakCeny.value + " zł";
-      filtrujProdukty();
+      wartoscCeny.textContent = suwakCeny.value + " zł"; // Wyświetlanie aktualnej wartości suwaka
+      filtrujProdukty(); // Wywołanie funkcji filtrującej po zmianie wartości suwaka
     });
 
-    // Nasłuchiwanie zmian na filtrach
+    // Nasłuchiwanie zmian na filtrach (wyszukiwanie, marka, rodzaj, sortowanie)
     [poleWyszukiwania, filtrMarka, filtrRodzaj, sortowanieCeny].forEach(element => {
-      element.addEventListener("change", filtrujProdukty);
+      element.addEventListener("change", filtrujProdukty); // Dla każdego filtra dodajemy listener na zdarzenie 'change'
     });
 
-    // Obsługa kliknięcia w markę
+    // Obsługa kliknięcia w markę (filtry w menu bocznym)
     brandLinks.forEach(link => {
       link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const brand = link.dataset.brand;
-        filtrMarka.value = brand;
-        filtrRodzaj.value = '';
-        resetujPozostaleFiltry();
-        filtrujProdukty();
-        aktualizujAktywneLinki();
+        e.preventDefault(); // Zapobieganie przeładowaniu strony
+        const brand = link.dataset.brand; // Pobranie wartości atrybutu data-brand
+        filtrMarka.value = brand;         // Ustawienie wartości selecta z marką
+        filtrRodzaj.value = '';           // Reset filtra rodzaju
+        resetujPozostaleFiltry();        // Reset pozostałych filtrów
+        filtrujProdukty();             // Wywołanie funkcji filtrującej
+        aktualizujAktywneLinki();      // Aktualizacja wyglądu aktywnych linków
       });
     });
 
-    // Obsługa kliknięcia w rodzaj buta
+    // Obsługa kliknięcia w rodzaj buta (filtry w menu bocznym)
     typeLinks.forEach(link => {
       link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const type = link.dataset.type;
-        filtrRodzaj.value = type;
-        filtrMarka.value = '';
-        resetujPozostaleFiltry();
-        filtrujProdukty();
-        aktualizujAktywneLinki();
+        e.preventDefault(); // Zapobieganie przeładowaniu strony
+        const type = link.dataset.type; // Pobranie wartości atrybutu data-type
+        filtrRodzaj.value = type;         // Ustawienie wartości selecta z rodzajem
+        filtrMarka.value = '';           // Reset filtra marki
+        resetujPozostaleFiltry();        // Reset pozostałych filtrów
+        filtrujProdukty();             // Wywołanie funkcji filtrującej
+        aktualizujAktywneLinki();      // Aktualizacja wyglądu aktywnych linków
       });
     });
 
-    // Funkcja resetująca pozostałe filtry
+    // Funkcja resetująca pozostałe filtry (wyszukiwanie, cena, sortowanie)
     function resetujPozostaleFiltry() {
-      poleWyszukiwania.value = '';
-      suwakCeny.value = '2000';
-      wartoscCeny.textContent = '2000 zł';
-      sortowanieCeny.value = '';
+      poleWyszukiwania.value = '';       // Reset pola wyszukiwania
+      suwakCeny.value = '2000';         // Reset suwaka ceny
+      wartoscCeny.textContent = '2000 zł'; // Reset tekstu wyświetlanego przy suwaku
+      sortowanieCeny.value = '';         // Reset sortowania
     }
 
-    // Funkcja aktualizująca aktywne linki
+    // Funkcja aktualizująca wygląd aktywnych linków w menu bocznym
     function aktualizujAktywneLinki() {
-      // Resetuj wszystkie linki
+      // Resetuj wszystkie linki (usuwa klasę active-category)
       brandLinks.forEach(link => link.classList.remove('active-category'));
       typeLinks.forEach(link => link.classList.remove('active-category'));
 
-      // Ustaw aktywne linki na podstawie filtrów
+      // Ustaw aktywne linki na podstawie wybranych filtrów
       const wybranaMarka = filtrMarka.value;
       const wybranyRodzaj = filtrRodzaj.value;
 
-      // Aktywuj link marki
+      // Aktywuj link marki, jeśli marka jest wybrana
       if (wybranaMarka) {
         document.querySelector(`.brand-filter a[data-brand="${wybranaMarka}"]`).classList.add('active-category');
       } else {
-        document.querySelector('.brand-filter a[data-brand=""]').classList.add('active-category');
+        document.querySelector('.brand-filter a[data-brand=""]').classList.add('active-category'); // Aktywny link "Wszystkie"
       }
 
-      // Aktywuj link rodzaju
+      // Aktywuj link rodzaju buta, jeśli rodzaj jest wybrany
       if (wybranyRodzaj) {
         document.querySelector(`.type-filter a[data-type="${wybranyRodzaj}"]`).classList.add('active-category');
       } else {
-        document.querySelector('.type-filter a[data-type=""]').classList.add('active-category');
+        document.querySelector('.type-filter a[data-type=""]').classList.add('active-category'); // Aktywny link "Wszystkie"
       }
     }
 
-    // Główna funkcja filtrująca
+    // Główna funkcja filtrująca produkty
     function filtrujProdukty() {
-      const tekstWyszukiwania = poleWyszukiwania.value.toLowerCase();
-      const wybranaMarka = filtrMarka.value;
-      const wybranyRodzaj = filtrRodzaj.value;
-      const maksCena = parseInt(suwakCeny.value);
-      const kolejnoscSortowania = sortowanieCeny.value;
+      const tekstWyszukiwania = poleWyszukiwania.value.toLowerCase(); // Pobranie tekstu z pola wyszukiwania i zmiana na małe litery
+      const wybranaMarka = filtrMarka.value;                     // Pobranie wybranej marki
+      const wybranyRodzaj = filtrRodzaj.value;                   // Pobranie wybranego rodzaju buta
+      const maksCena = parseInt(suwakCeny.value);                 // Pobranie maksymalnej ceny jako liczba
+      const kolejnoscSortowania = sortowanieCeny.value;           // Pobranie kolejności sortowania
 
-      // Filtrowanie produktów
+      // Filtrowanie produktów na podstawie wprowadzonych kryteriów
       let pasujaceProdukty = wszystkieProdukty.filter(produkt => {
-        const nazwa = produkt.querySelector("h3").textContent.toLowerCase();
-        const marka = produkt.dataset.brand;
-        const rodzaj = produkt.dataset.type;
-        const cena = parseInt(produkt.dataset.price);
+        const nazwa = produkt.querySelector("h3").textContent.toLowerCase(); // Pobranie nazwy produktu i zmiana na małe litery
+        const marka = produkt.dataset.brand;             // Pobranie marki produktu z atrybutu data-brand
+        const rodzaj = produkt.dataset.type;           // Pobranie rodzaju produktu z atrybutu data-type
+        const cena = parseInt(produkt.dataset.price);     // Pobranie ceny produktu z atrybutu data-price
 
+        // Sprawdzenie, czy produkt spełnia wszystkie kryteria
         return (
-          nazwa.includes(tekstWyszukiwania) &&
-          (!wybranaMarka || marka === wybranaMarka) &&
-          (!wybranyRodzaj || rodzaj === wybranyRodzaj) &&
-          cena <= maksCena
+          nazwa.includes(tekstWyszukiwania) &&       // Czy nazwa produktu zawiera szukany tekst
+          (!wybranaMarka || marka === wybranaMarka) && // Czy marka produktu pasuje do wybranej marki (lub brak wybranej marki)
+          (!wybranyRodzaj || rodzaj === wybranyRodzaj) && // Czy rodzaj produktu pasuje do wybranego rodzaju (lub brak wybranego rodzaju)
+          cena <= maksCena                           // Czy cena produktu jest mniejsza lub równa maksymalnej cenie
         );
       });
 
-      // Sortowanie cen
+      // Sortowanie produktów
       if (kolejnoscSortowania === "asc") {
-        pasujaceProdukty.sort((a, b) => a.dataset.price - b.dataset.price);
+        pasujaceProdukty.sort((a, b) => a.dataset.price - b.dataset.price); // Sortowanie rosnąco
       } else if (kolejnoscSortowania === "desc") {
-        pasujaceProdukty.sort((a, b) => b.dataset.price - a.dataset.price);
+        pasujaceProdukty.sort((a, b) => b.dataset.price - a.dataset.price); // Sortowanie malejąco
       }
 
-      // Aktualizacja widoku
-      listaProduktow.innerHTML = "";
-      pasujaceProdukty.forEach(produkt => listaProduktow.appendChild(produkt));
-      
-      // Aktualizacja aktywnych linków
+      // Aktualizacja widoku listy produktów
+      listaProduktow.innerHTML = ""; // Wyczyść aktualną listę produktów
+      pasujaceProdukty.forEach(produkt => listaProduktow.appendChild(produkt)); // Dodaj przefiltrowane produkty do listy
+
+      // Aktualizacja wyglądu aktywnych linków w menu bocznym
       aktualizujAktywneLinki();
     }
 
-    // Inicjalizacja - pierwsze wywołanie na starcie
+    // Inicjalizacja strony - wykonuje się po załadowaniu DOM
     document.addEventListener('DOMContentLoaded', function() {
       // Sprawdź parametry URL
       const urlParams = new URLSearchParams(window.location.search);
       const selectedType = urlParams.get('type');
       const selectedBrand = urlParams.get('brand');
-      
-      // Ustaw filtry na podstawie URL
+
+      // Ustaw filtry na podstawie parametrów URL, jeśli istnieją
       if (selectedType) filtrRodzaj.value = selectedType;
       if (selectedBrand) filtrMarka.value = selectedBrand;
-      
-      // Pierwsze filtrowanie
+
+      // Wywołaj funkcję filtrującą, aby wyświetlić produkty na starcie
       filtrujProdukty();
-      
-      // Przewiń do sekcji produktów jeśli są parametry
+
+      // Przewiń do sekcji produktów, jeśli przekazano parametry w URL
       if (selectedType || selectedBrand) {
         document.querySelector('.bestsellery').scrollIntoView({
-          behavior: 'smooth'
+          behavior: 'smooth' // Płynne przewijanie
         });
       }
     });

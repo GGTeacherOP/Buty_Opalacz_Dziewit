@@ -1,94 +1,104 @@
 <?php
-session_start();
+session_start(); // Rozpoczęcie sesji PHP, umożliwiającej przechowywanie danych użytkownika między żądaniami.
 
+// Dane do połączenia z bazą danych.
 $host = 'localhost';
 $uzytkownik = 'root';
 $haslo_db = '';
 $nazwa_bazy = 'buty';
 
+// Nawiązanie połączenia z bazą danych MySQL.
 $polaczenie = new mysqli($host, $uzytkownik, $haslo_db, $nazwa_bazy);
+// Sprawdzenie, czy wystąpił błąd podczas łączenia z bazą danych.
 if ($polaczenie->connect_error) {
-    die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error);
+    die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error); // Wyświetlenie błędu i zatrzymanie skryptu.
 }
 
-$wiadomosc_bledu = "";
+$wiadomosc_bledu = ""; // Inicjalizacja zmiennej na komunikaty o błędach logowania.
 
+// Sprawdzenie, czy formularz logowania został wysłany metodą POST.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
+    $username = $_POST["username"]; // Pobranie nazwy użytkownika z formularza.
+    $password = $_POST["password"]; // Pobranie hasła z formularza.
 
-    // Sprawdzenie klientów
-    $sql_klienci = "SELECT id_klienta, nazwa_uzytkownika, haslo, rola FROM klienci WHERE nazwa_uzytkownika = ?"; // Dodano rola
-    $stmt_klienci = $polaczenie->prepare($sql_klienci);
+    // Sprawdzenie danych logowania w tabeli klientów.
+    $sql_klienci = "SELECT id_klienta, nazwa_uzytkownika, haslo, rola FROM klienci WHERE nazwa_uzytkownika = ?"; // Zapytanie SQL wybierające dane klienta po nazwie użytkownika. Dodano 'rola'.
+    $stmt_klienci = $polaczenie->prepare($sql_klienci); // Przygotowanie zapytania SQL.
 
     if ($stmt_klienci) {
-        $stmt_klienci->bind_param("s", $username);
-        $stmt_klienci->execute();
-        $wynik_klienci = $stmt_klienci->get_result();
+        $stmt_klienci->bind_param("s", $username); // Powiązanie nazwy użytkownika z parametrem zapytania.
+        $stmt_klienci->execute(); // Wykonanie zapytania.
+        $wynik_klienci = $stmt_klienci->get_result(); // Pobranie wyników zapytania.
 
+        // Sprawdzenie, czy znaleziono dokładnie jednego klienta o podanej nazwie użytkownika.
         if ($wynik_klienci->num_rows === 1) {
-            $uzytkownik_klienci = $wynik_klienci->fetch_assoc();
+            $uzytkownik_klienci = $wynik_klienci->fetch_assoc(); // Pobranie wiersza wyniku jako tablicy asocjacyjnej.
+            // Sprawdzenie, czy wprowadzone hasło zgadza się z hasłem w bazie danych.
             if ($password == $uzytkownik_klienci['haslo']) {
-                $_SESSION['username'] = htmlspecialchars($uzytkownik_klienci['nazwa_uzytkownika']);
-                $_SESSION['rola'] = $uzytkownik_klienci['rola']; // Pobranie roli klienta
-                $_SESSION['id_uzytkownika'] = $uzytkownik_klienci['id_klienta'];
-                $_SESSION['zalogowano_pomyslnie'] = true;
+                // Ustawienie zmiennych sesji po pomyślnym zalogowaniu klienta.
+                $_SESSION['username'] = htmlspecialchars($uzytkownik_klienci['nazwa_uzytkownika']); // Bezpieczne zapisanie nazwy użytkownika.
+                $_SESSION['rola'] = $uzytkownik_klienci['rola']; // Pobranie i zapisanie roli klienta w sesji.
+                $_SESSION['id_uzytkownika'] = $uzytkownik_klienci['id_klienta']; // Zapisanie ID klienta w sesji.
+                $_SESSION['zalogowano_pomyslnie'] = true; // Flaga informująca o pomyślnym zalogowaniu.
 
-                // Pobierz koszyk klienta
-                if ($_SESSION['rola'] === 'klient') { // Sprawdzenie roli
-                    $id_klienta = $_SESSION['id_uzytkownika'];
+                // Pobierz koszyk klienta z bazy danych.
+                if ($_SESSION['rola'] === 'klient') { // Sprawdzenie, czy zalogowana osoba to klient.
+                    $id_klienta = $_SESSION['id_uzytkownika']; // Pobranie ID klienta z sesji.
                     $sql_koszyk = "SELECT ez.*, p.cena, p.nazwa, p.url_zdjecia
-                                        FROM elementy_zamowienia ez
-                                        JOIN produkty p ON ez.id_produktu = p.id_produktu
-                                        WHERE ez.id_klienta = ?";
-                    $stmt_koszyk = $polaczenie->prepare($sql_koszyk);
+                                     FROM elementy_zamowienia ez
+                                     JOIN produkty p ON ez.id_produktu = p.id_produktu
+                                     WHERE ez.id_klienta = ?"; // Zapytanie SQL pobierające elementy koszyka klienta.
+                    $stmt_koszyk = $polaczenie->prepare($sql_koszyk); // Przygotowanie zapytania.
 
                     if ($stmt_koszyk) {
-                        $stmt_koszyk->bind_param("i", $id_klienta);
-                        $stmt_koszyk->execute();
-                        $wynik_koszyk = $stmt_koszyk->get_result();
-                        $_SESSION['koszyk'] = $wynik_koszyk->fetch_all(MYSQLI_ASSOC);
+                        $stmt_koszyk->bind_param("i", $id_klienta); // Powiązanie ID klienta z parametrem.
+                        $stmt_koszyk->execute(); // Wykonanie zapytania.
+                        $wynik_koszyk = $stmt_koszyk->get_result(); // Pobranie wyników.
+                        $_SESSION['koszyk'] = $wynik_koszyk->fetch_all(MYSQLI_ASSOC); // Zapisanie koszyka klienta w sesji.
                     }
                 }
             } else {
-                $wiadomosc_bledu = "Nieprawidłowe hasło.";
+                $wiadomosc_bledu = "Nieprawidłowe hasło."; // Ustawienie komunikatu o błędnym haśle.
             }
         } else {
-            // Sprawdzenie pracowników
-            $sql_pracownicy = "SELECT id_pracownika, nazwa_uzytkownika, haslo, stanowisko FROM pracownicy WHERE nazwa_uzytkownika = ?";
-            $stmt_pracownicy = $polaczenie->prepare($sql_pracownicy);
+            // Jeśli nie znaleziono klienta, sprawdź w tabeli pracowników.
+            $sql_pracownicy = "SELECT id_pracownika, nazwa_uzytkownika, haslo, stanowisko FROM pracownicy WHERE nazwa_uzytkownika = ?"; // Zapytanie SQL dla pracowników.
+            $stmt_pracownicy = $polaczenie->prepare($sql_pracownicy); // Przygotowanie zapytania.
 
             if ($stmt_pracownicy) {
-                $stmt_pracownicy->bind_param("s", $username);
-                $stmt_pracownicy->execute();
-                $wynik_pracownicy = $stmt_pracownicy->get_result();
+                $stmt_pracownicy->bind_param("s", $username); // Powiązanie nazwy użytkownika.
+                $stmt_pracownicy->execute(); // Wykonanie zapytania.
+                $wynik_pracownicy = $stmt_pracownicy->get_result(); // Pobranie wyników.
 
+                // Sprawdzenie, czy znaleziono pracownika.
                 if ($wynik_pracownicy->num_rows === 1) {
-                    $uzytkownik_pracownicy = $wynik_pracownicy->fetch_assoc();
+                    $uzytkownik_pracownicy = $wynik_pracownicy->fetch_assoc(); // Pobranie danych pracownika.
+                    // Sprawdzenie hasła pracownika.
                     if ($password == $uzytkownik_pracownicy['haslo']) {
+                        // Ustawienie zmiennych sesji dla zalogowanego pracownika.
                         $_SESSION['username'] = htmlspecialchars($uzytkownik_pracownicy['nazwa_uzytkownika']);
-                        $_SESSION['rola'] = $uzytkownik_pracownicy['stanowisko']; // Pobranie stanowiska jako roli
+                        $_SESSION['rola'] = $uzytkownik_pracownicy['stanowisko']; // Ustawienie stanowiska jako roli.
                         $_SESSION['id_uzytkownika'] = $uzytkownik_pracownicy['id_pracownika'];
                         $_SESSION['zalogowano_pomyslnie'] = true;
-                        // Nie pobieramy koszyka dla pracowników
+                        // Nie pobieramy koszyka dla pracowników.
                     } else {
-                        $wiadomosc_bledu = "Nieprawidłowe hasło.";
+                        $wiadomosc_bledu = "Nieprawidłowe hasło."; // Błędne hasło pracownika.
                     }
                 } else {
-                    $wiadomosc_bledu = "Nieprawidłowy użytkownik.";
+                    $wiadomosc_bledu = "Nieprawidłowy użytkownik."; // Nie znaleziono użytkownika ani w klientach, ani w pracownikach.
                 }
-                $stmt_pracownicy->close();
+                $stmt_pracownicy->close(); // Zamknięcie zapytania dla pracowników.
             } else {
-                $wiadomosc_bledu = "Błąd w zapytaniu SQL (pracownicy).";
+                $wiadomosc_bledu = "Błąd w zapytaniu SQL (pracownicy)."; // Błąd przygotowania zapytania dla pracowników.
             }
         }
-        $stmt_klienci->close();
+        $stmt_klienci->close(); // Zamknięcie zapytania dla klientów.
     } else {
-        $wiadomosc_bledu = "Błąd w zapytaniu SQL (klienci).";
+        $wiadomosc_bledu = "Błąd w zapytaniu SQL (klienci)."; // Błąd przygotowania zapytania dla klientów.
     }
 }
 
-$polaczenie->close();
+$polaczenie->close(); // Zamknięcie połączenia z bazą danych.
 ?>
 
 <!DOCTYPE html>
@@ -100,6 +110,7 @@ $polaczenie->close();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="icon" href="img/favi2.png" type="image/png" />
     <style>
+        /* Style CSS dla kontenera logowania */
         .auth-container {
             max-width: 400px;
             margin: 4rem auto;
@@ -142,6 +153,7 @@ $polaczenie->close();
             margin-bottom: 1rem;
         }
 
+        /* Styl dla modalnego okienka po pomyślnym zalogowaniu */
         .modal {
             position: fixed;
             top: 0; left: 0;
@@ -167,38 +179,39 @@ $polaczenie->close();
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
+        /* Style dla linku do rejestracji */
         .register-link {
-    text-align: center;
-    margin-top: 1rem;
-    font-size: 0.95rem;
-}
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
 
-.register-link p {
-    margin: 0;
-    color: #333;
-}
+        .register-link p {
+            margin: 0;
+            color: #333;
+        }
 
-.register-link a {
-    display: inline-block;
-    margin-top: 0.3rem;
-    color: #0c7a43;
-    font-weight: bold;
-    text-decoration: none;
-    border: 1px solid #0c7a43;
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-    transition: 0.3s ease;
-}
+        .register-link a {
+            display: inline-block;
+            margin-top: 0.3rem;
+            color: #0c7a43;
+            font-weight: bold;
+            text-decoration: none;
+            border: 1px solid #0c7a43;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: 0.3s ease;
+        }
 
-.register-link a:hover {
-    background-color: #0c7a43;
-    color: white;
-}
+        .register-link a:hover {
+            background-color: #0c7a43;
+            color: white;
+        }
 
     </style>
 </head>
 <body>
-     <div class="wrapper">
+    <div class="wrapper">
         <header>
             <a href="index.php">Strona Główna</a>
             <a href="sklep.php">Sklep</a>
@@ -224,18 +237,19 @@ $polaczenie->close();
                 </div>
             </div>
             <script>
+                // Skrypt JavaScript do przekierowania po pomyślnym zalogowaniu
                 setTimeout(() => {
-                    // Przekierowanie w zależności od roli
+                    // Przekierowanie w zależności od roli użytkownika
                     <?php if ($_SESSION['rola'] === 'klient'): ?>
-                        window.location.href = 'index.php';
+                        window.location.href = 'index.php'; // Klient wraca na stronę główną
                     <?php elseif (isset($_SESSION['rola']) && (strtolower($_SESSION['rola']) === 'szef' || strtolower($_SESSION['rola']) === 'admin' || strtolower($_SESSION['rola']) === 'kierownik' || strtolower($_SESSION['rola']) === 'pracownik sklepu')): ?>
-                        window.location.href = 'index.php'; // Zmień na odpowiedni panel admina
+                        window.location.href = 'index.php'; // Pracownicy i administracja na stronę główną (można zmienić na panel)
                     <?php else: ?>
-                        window.location.href = 'index.php'; // Domyślne przekierowanie
+                        window.location.href = 'index.php'; // Domyślne przekierowanie na stronę główną
                     <?php endif; ?>
-                }, 2000);
+                }, 2000); // Przekierowanie po 2 sekundach
             </script>
-            <?php unset($_SESSION['zalogowano_pomyslnie']); ?>
+            <?php unset($_SESSION['zalogowano_pomyslnie']); // Usunięcie flagi zalogowania z sesji ?>
         <?php endif; ?>
 
         <div class="auth-container">
@@ -249,9 +263,9 @@ $polaczenie->close();
                 <button type="submit">Zaloguj</button>
             </form>
             <div class="register-link">
-    <p>Nie masz konta?</p>
-    <a href="register.php">Zarejestruj się</a>
-</div>
+                <p>Nie masz konta?</p>
+                <a href="register.php">Zarejestruj się</a>
+            </div>
         </div>
     </div>
 

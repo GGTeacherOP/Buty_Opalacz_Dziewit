@@ -1,33 +1,43 @@
 <?php
-session_start();
-include 'auth_utils.php';
+session_start(); // Rozpoczęcie sesji PHP, umożliwiającej przechowywanie danych użytkownika.
+include 'auth_utils.php'; // Dołączenie pliku z funkcjami autoryzacji (np. sprawdzania ról).
 
+// Dane do połączenia z bazą danych.
 $host = 'localhost';
 $uzytkownik_db = 'root';
 $haslo_db = '';
 $nazwa_bazy = 'buty';
 
+// Nawiązanie połączenia z bazą danych MySQL.
 $polaczenie = new mysqli($host, $uzytkownik_db, $haslo_db, $nazwa_bazy);
+// Sprawdzenie, czy wystąpił błąd podczas łączenia z bazą danych.
 if ($polaczenie->connect_error) {
-    die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error);
+    die("Błąd połączenia z bazą danych: " . $polaczenie->connect_error); // Wyświetlenie błędu i zatrzymanie skryptu.
 }
 
+// Sprawdzenie, czy użytkownik jest zalogowany poprzez istnienie zmiennej 'username' w sesji.
 $zalogowany = isset($_SESSION['username']);
+// Pobranie roli użytkownika z sesji. Jeśli nie istnieje, ustawiana jest domyślna wartość 'gość'.
 $rola = $_SESSION['rola'] ?? 'gość';
+// Pobranie ID zalogowanego użytkownika z sesji. Jeśli nie istnieje, ustawiana jest wartość null.
 $id_klienta = $_SESSION['id_uzytkownika'] ?? null;
 
+// Funkcja do pobierania zawartości koszyka użytkownika z bazy danych.
 function pobierz_koszyk_z_bazy($polaczenie, $id_klienta) {
-    $koszyk = [];
-    if ($id_klienta) {
+    $koszyk = []; // Inicjalizacja pustej tablicy na koszyk.
+    if ($id_klienta) { // Sprawdzenie, czy ID klienta jest dostępne (użytkownik zalogowany).
+        // Zapytanie SQL pobierające dane koszyka wraz z informacjami o produkcie.
         $sql = "SELECT k.*, p.nazwa, p.cena, p.url_zdjecia AS zdjecie
-                FROM koszyki k
-                JOIN produkty p ON k.id_produktu = p.id_produktu
-                WHERE k.id_klienta = ?";
-        $stmt = $polaczenie->prepare($sql);
-        $stmt->bind_param("i", $id_klienta);
-        $stmt->execute();
-        $result = $stmt->get_result();
+                    FROM koszyki k
+                    JOIN produkty p ON k.id_produktu = p.id_produktu
+                    WHERE k.id_klienta = ?";
+        $stmt = $polaczenie->prepare($sql); // Przygotowanie zapytania SQL.
+        $stmt->bind_param("i", $id_klienta); // Powiązanie ID klienta z parametrem zapytania.
+        $stmt->execute(); // Wykonanie zapytania.
+        $result = $stmt->get_result(); // Pobranie wyników zapytania.
+        // Iteracja po każdym wierszu wyniku.
         while ($row = $result->fetch_assoc()) {
+            // Dodanie danych produktu do tablicy koszyka.
             $koszyk[] = [
                 'id_produktu' => $row['id_produktu'],
                 'nazwa' => $row['nazwa'],
@@ -39,60 +49,71 @@ function pobierz_koszyk_z_bazy($polaczenie, $id_klienta) {
             ];
         }
     }
-    return $koszyk;
+    return $koszyk; // Zwrócenie tablicy z zawartością koszyka.
 }
 
+// Funkcja do dodawania produktu do koszyka w bazie danych.
 function dodaj_do_koszyka_w_bazie($polaczenie, $id_klienta, $id_produktu, $rozmiar, $ilosc = 1) {
+    // Zapytanie SQL wstawiające nowy produkt do koszyka.
     $sql = "INSERT INTO koszyki (id_klienta, id_produktu, rozmiar, ilosc) VALUES (?, ?, ?, ?)";
-    $stmt = $polaczenie->prepare($sql);
-    $stmt->bind_param("iisi", $id_klienta, $id_produktu, $rozmiar, $ilosc);
-    $stmt->execute();
-    return $polaczenie->insert_id;
+    $stmt = $polaczenie->prepare($sql); // Przygotowanie zapytania.
+    $stmt->bind_param("iisi", $id_klienta, $id_produktu, $rozmiar, $ilosc); // Powiązanie parametrów.
+    $stmt->execute(); // Wykonanie zapytania.
+    return $polaczenie->insert_id; // Zwrócenie ID wstawionego wiersza.
 }
 
+// Funkcja do aktualizacji ilości produktu w koszyku w bazie danych.
 function aktualizuj_ilosc_w_bazie($polaczenie, $id_koszyka, $ilosc) {
+    // Zapytanie SQL aktualizujące ilość produktu w koszyku.
     $sql = "UPDATE koszyki SET ilosc = ? WHERE id_koszyka = ?";
-    $stmt = $polaczenie->prepare($sql);
-    $stmt->bind_param("ii", $ilosc, $id_koszyka);
-    $stmt->execute();
+    $stmt = $polaczenie->prepare($sql); // Przygotowanie zapytania.
+    $stmt->bind_param("ii", $ilosc, $id_koszyka); // Powiązanie parametrów.
+    $stmt->execute(); // Wykonanie zapytania.
 }
 
+// Funkcja do usuwania produktu z koszyka w bazie danych.
 function usun_z_koszyka_w_bazie($polaczenie, $id_koszyka) {
+    // Zapytanie SQL usuwające produkt z koszyka.
     $sql = "DELETE FROM koszyki WHERE id_koszyka = ?";
-    $stmt = $polaczenie->prepare($sql);
-    $stmt->bind_param("i", $id_koszyka);
-    $stmt->execute();
+    $stmt = $polaczenie->prepare($sql); // Przygotowanie zapytania.
+    $stmt->bind_param("i", $id_koszyka); // Powiązanie parametru.
+    $stmt->execute(); // Wykonanie zapytania.
 }
 
+// Jeśli użytkownik jest zalogowany, pobierz jego koszyk z bazy danych i zapisz w sesji.
 if ($zalogowany) {
     $_SESSION['koszyk'] = pobierz_koszyk_z_bazy($polaczenie, $id_klienta);
 }
 
+// Obsługa dodawania produktu do koszyka.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['dodaj_do_koszyka'])) {
-    if (!$zalogowany) {
+    if (!$zalogowany) { // Jeśli użytkownik nie jest zalogowany, przekieruj na stronę logowania.
         header('Location: login.php');
         exit;
     }
 
+    // Pobranie danych produktu z formularza i zabezpieczenie.
     $id_produktu = intval($_POST['id_produktu']);
     $nazwa = $_POST['nazwa'];
     $cena = floatval($_POST['cena']);
     $zdjecie = $_POST['zdjecie'];
     $rozmiar = trim($_POST['rozmiar']);
 
-    $produkt_istnieje = false;
+    $produkt_istnieje = false; // Flaga informująca, czy produkt o danym rozmiarze jest już w koszyku.
+    // Sprawdzenie, czy dany produkt o tym samym rozmiarze już istnieje w koszyku w sesji.
     foreach ($_SESSION['koszyk'] as $key => $item) {
         if ($item['id_produktu'] == $id_produktu && $item['rozmiar'] == $rozmiar) {
-            $_SESSION['koszyk'][$key]['ilosc']++;
+            $_SESSION['koszyk'][$key]['ilosc']++; // Zwiększenie ilości istniejącego produktu.
             $produkt_istnieje = true;
-            aktualizuj_ilosc_w_bazie($polaczenie, $item['id_koszyka'], $_SESSION['koszyk'][$key]['ilosc']);
+            aktualizuj_ilosc_w_bazie($polaczenie, $item['id_koszyka'], $_SESSION['koszyk'][$key]['ilosc']); // Aktualizacja ilości w bazie.
             break;
         }
     }
 
+    // Jeśli produkt nie istnieje w koszyku, dodaj go.
     if (!$produkt_istnieje) {
-        $id_koszyka = dodaj_do_koszyka_w_bazie($polaczenie, $id_klienta, $id_produktu, $rozmiar);
-        $_SESSION['koszyk'][] = [
+        $id_koszyka = dodaj_do_koszyka_w_bazie($polaczenie, $id_klienta, $id_produktu, $rozmiar); // Dodanie do bazy.
+        $_SESSION['koszyk'][] = [ // Dodanie do sesji.
             'id_produktu' => $id_produktu,
             'nazwa' => $nazwa,
             'cena' => $cena,
@@ -103,56 +124,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['dodaj_do_koszyka'])) 
         ];
     }
 
-    header('Location: koszyk.php');
+    header('Location: koszyk.php'); // Przekierowanie na stronę koszyka.
     exit;
 }
 
+// Obsługa aktualizacji ilości produktów w koszyku.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aktualizuj_koszyk']) && $zalogowany) {
+    // Sprawdzenie, czy przesłano tablicę z ilościami.
     if (isset($_POST['ilosc']) && is_array($_POST['ilosc'])) {
+        // Iteracja po każdej ilości w przesłanej tablicy.
         foreach ($_POST['ilosc'] as $i => $ilosc) {
-            $ilosc = max(1, intval($ilosc));
-            $_SESSION['koszyk'][$i]['ilosc'] = $ilosc;
-            aktualizuj_ilosc_w_bazie($polaczenie, $_SESSION['koszyk'][$i]['id_koszyka'], $ilosc);
+            $ilosc = max(1, intval($ilosc)); // Zapewnienie, że ilość jest co najmniej 1 i jest liczbą całkowitą.
+            $_SESSION['koszyk'][$i]['ilosc'] = $ilosc; // Aktualizacja ilości w sesji.
+            aktualizuj_ilosc_w_bazie($polaczenie, $_SESSION['koszyk'][$i]['id_koszyka'], $ilosc); // Aktualizacja ilości w bazie.
         }
     }
-    header('Location: koszyk.php');
+    header('Location: koszyk.php'); // Przekierowanie na stronę koszyka.
     exit;
 }
 
+// Obsługa usuwania produktu z koszyka.
 if (isset($_GET['usun']) && $zalogowany) {
-    $indeks = intval($_GET['usun']);
+    $indeks = intval($_GET['usun']); // Pobranie indeksu produktu do usunięcia.
+    // Sprawdzenie, czy dany indeks istnieje w koszyku w sesji.
     if (isset($_SESSION['koszyk'][$indeks])) {
-        usun_z_koszyka_w_bazie($polaczenie, $_SESSION['koszyk'][$indeks]['id_koszyka']);
-        unset($_SESSION['koszyk'][$indeks]);
-        $_SESSION['koszyk'] = array_values($_SESSION['koszyk']);
+        usun_z_koszyka_w_bazie($polaczenie, $_SESSION['koszyk'][$indeks]['id_koszyka']); // Usunięcie z bazy.
+        unset($_SESSION['koszyk'][$indeks]); // Usunięcie z sesji.
+        $_SESSION['koszyk'] = array_values($_SESSION['koszyk']); // Resetowanie indeksów tablicy koszyka w sesji.
     }
-    header('Location: koszyk.php');
+    header('Location: koszyk.php'); // Przekierowanie na stronę koszyka.
     exit;
 }
 
+// Funkcja do obliczania sumy wartości produktów w koszyku.
 function oblicz_sume_koszyka() {
-    $suma = 0;
-    if (isset($_SESSION['koszyk'])) {
+    $suma = 0; // Inicjalizacja sumy.
+    if (isset($_SESSION['koszyk'])) { // Sprawdzenie, czy koszyk istnieje w sesji.
+        // Iteracja po każdym produkcie w koszyku.
         foreach ($_SESSION['koszyk'] as $produkt) {
-            $suma += (float)$produkt['cena'] * (int)$produkt['ilosc'];
+            $suma += (float)$produkt['cena'] * (int)$produkt['ilosc']; // Dodanie do sumy ceny pomnożonej przez ilość.
         }
     }
-    return $suma;
+    return $suma; // Zwrócenie obliczonej sumy.
 }
 
+// Pobranie koszyka z sesji (jeśli istnieje) do lokalnej zmiennej.
 $koszyk = $_SESSION['koszyk'] ?? [];
 
+// Obsługa procesu zakupu (kliknięcie "Kup Teraz").
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalogowany) {
-    $id_uzytkownika = $_SESSION['id_uzytkownika'];
-    $data_zamowienia = date('Y-m-d H:i:s');
-    $suma_zamowienia = oblicz_sume_koszyka();
+    $id_uzytkownika = $_SESSION['id_uzytkownika']; // Pobranie ID zalogowanego użytkownika.
+    $data_zamowienia = date('Y-m-d H:i:s'); // Pobranie aktualnej daty i czasu zamówienia.
+    $suma_zamowienia = oblicz_sume_koszyka(); // Obliczenie całkowitej sumy zamówienia.
 
+    // Wstawienie nowego zamówienia do tabeli 'zamowienia'.
     $stmt_zamowienie = $polaczenie->prepare("INSERT INTO zamowienia (id_klienta, data_zamowienia, kwota_calkowita) VALUES (?, ?, ?)");
     $stmt_zamowienie->bind_param("isd", $id_uzytkownika, $data_zamowienia, $suma_zamowienia);
     $stmt_zamowienie->execute();
-    $id_zamowienia = $polaczenie->insert_id;
+    $id_zamowienia = $polaczenie->insert_id; // Pobranie ID wstawionego zamówienia.
     $stmt_zamowienie->close();
 
+    // Iteracja po każdym produkcie w koszyku w celu dodania go do 'elementy_zamowienia'.
     foreach ($_SESSION['koszyk'] as $produkt) {
         $stmt_element = $polaczenie->prepare("
             INSERT INTO elementy_zamowienia (id_zamowienia, id_produktu, ilosc, cena_jednostkowa, id_klienta, rozmiar)
@@ -162,14 +194,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalo
         $stmt_element->close();
     }
 
+    // Wyczyszczenie koszyka użytkownika w bazie danych.
     $stmt_clear = $polaczenie->prepare("DELETE FROM koszyki WHERE id_klienta = ?");
     $stmt_clear->bind_param("i", $id_uzytkownika);
     $stmt_clear->execute();
     $stmt_clear->close();
 
+    // Wyczyszczenie koszyka w sesji.
     $_SESSION['koszyk'] = [];
 
-    // ✅ Niestandardowy alert zamiast alert()
+    // ✅ Niestandardowy alert zamiast alert() - Wyświetlenie komunikatu o pomyślnym złożeniu zamówienia.
     echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Dziękujemy</title>
     <style>
         .alert-box {
@@ -194,10 +228,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalo
     </head><body>
     <div class="alert-box">Dziękujemy za złożenie zamówienia!<br>Przekierowuję na stronę główną...</div>
     <script>
-        setTimeout(() => { window.location.href = "index.php"; }, 2500);
+        setTimeout(() => { window.location.href = "index.php"; }, 2500); // Przekierowanie na stronę główną po 2.5 sekundy.
     </script>
     </body></html>';
-    exit;
+    exit; // Zakończenie skryptu po złożeniu zamówienia.
 }
 ?>
 
@@ -314,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalo
 
 <body>
 
-    <div class="wrapper">
+        <div class="wrapper">
         <header>
             <a href="index.php">Strona Główna</a>
             <a href="sklep.php">Sklep</a>
@@ -337,7 +371,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalo
     <?php endif; ?>
 
     <?php if (czy_ma_role(['admin', 'szef'])): ?>
-        <a href="panel_admina.php">Panel Admina</a> 
+        <a href="panel_admina.php">Panel Admina</a>
     <?php endif; ?>
 
     <?php if (czy_ma_role(['kierownik', 'admin', 'szef'])): ?>
@@ -438,12 +472,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['kup_teraz']) && $zalo
 </body>
 
 </html>
-
-
-
-
-
-
-
- 
-         

@@ -1,8 +1,12 @@
 <?php
+// Rozpoczęcie sesji PHP. Pozwala na przechowywanie danych użytkownika między różnymi żądaniami.
 session_start();
+// Dołączenie zewnętrznego pliku 'auth_utils.php'. Ten plik prawdopodobnie zawiera funkcje związane z autentykacją i autoryzacją.
 include 'auth_utils.php';
+// Sprawdzenie, czy w sesji istnieje zmienna 'username'. Jeśli tak, oznacza to, że użytkownik jest zalogowany. Wynik przypisywany jest do zmiennej $zalogowany.
 $zalogowany = isset($_SESSION['username']);
-$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
+// Pobranie roli użytkownika z sesji. Jeśli zmienna 'rola' nie istnieje (np. dla niezalogowanych), domyślnie ustawiana jest wartość 'gość'.
+$rola = $_SESSION['rola'] ?? 'gość';
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -12,10 +16,8 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sklep z Butami – Strona główna</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="img/favi2.png" type="image/png">
-
 </head>
 
 <body>
@@ -28,46 +30,44 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
             <a href="opinie.php">Opinie</a>
             <a href="aktualnosci.php">Aktualności</a>
 
-     
+            <?php if ($zalogowany): ?>
+                <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
+                    Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
+                </span>
+                <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
+            <?php else: ?>
+                <a href="login.php" class="zg">Zaloguj</a>
+                <a href="register.php" class="zg">Zarejestruj</a>
+            <?php endif; ?>
 
-    <?php if ($zalogowany): ?>
-        <span style="float:right; margin-left: 10px; color:#007bff; font-weight: bold;">
-            Witaj, <?= htmlspecialchars($_SESSION['username']) ?>! (<?= $rola ?>)
-        </span>
-        <a href="logout.php" style="float:right;" class="zg">Wyloguj</a>
-    <?php else: ?>
-        <a href="login.php" class="zg">Zaloguj</a>
-        <a href="register.php" class="zg">Zarejestruj</a>
-    <?php endif; ?>
+            <?php if (czy_ma_role(['szef'])): ?>
+                <a href="panel_szefa.php">Panel Szefa</a>
+            <?php endif; ?>
 
-    <?php if (czy_ma_role(['szef'])): ?>
-        <a href="panel_szefa.php">Panel Szefa</a>
-    <?php endif; ?>
+            <?php if (czy_ma_role(['admin', 'szef'])): ?>
+                <a href="panel_admina.php">Panel Admina</a>
+            <?php endif; ?>
 
-    <?php if (czy_ma_role(['admin', 'szef'])): ?>
-        <a href="panel_admina.php">Panel Admina</a> 
-    <?php endif; ?>
+            <?php if (czy_ma_role(['kierownik', 'admin', 'szef'])): ?>
+                <a href="panel_kierownika.php">Panel Kierownika</a>
+            <?php endif; ?>
 
-    <?php if (czy_ma_role(['kierownik', 'admin', 'szef'])): ?>
-        <a href="panel_kierownika.php">Panel Kierownika</a>
-    <?php endif; ?>
+            <?php if (czy_ma_role(['Pracownik sklepu', 'kierownik', 'admin', 'szef'])): ?>
+                <a href="panel_pracownikow.php">Panel Pracownika</a>
+            <?php endif; ?>
 
-    <?php if (czy_ma_role(['Pracownik sklepu', 'kierownik', 'admin', 'szef'])): ?>
-        <a href="panel_pracownikow.php">Panel Pracownika</a>
-    <?php endif; ?>
+        </header>
 
-</header>
-
-       <nav>
-    <p class="prz">Buty</p>
-    <div class="zbior">
-        <a href="sklep.php?type=Sneakersy">Sneakersy</a>
-        <a href="sklep.php?type=Trampki">Trampki</a>
-        <a href="sklep.php?type=Biegania">Buty do biegania</a>
-        <a href="sklep.php?type=Treningowe">Buty treningowe</a>
-        <a href="sklep.php?type=Klapki">Klapki</a>
-    </div>
-</nav>
+        <nav>
+            <p class="prz">Buty</p>
+            <div class="zbior">
+                <a href="sklep.php?type=Sneakersy">Sneakersy</a>
+                <a href="sklep.php?type=Trampki">Trampki</a>
+                <a href="sklep.php?type=Biegania">Buty do biegania</a>
+                <a href="sklep.php?type=Treningowe">Buty treningowe</a>
+                <a href="sklep.php?type=Klapki">Klapki</a>
+            </div>
+        </nav>
 
         <main>
             <div class="pokaz">
@@ -113,7 +113,6 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
                 </div>
             </section>
 
-
             <section class="why-us">
                 <h2>Dlaczego warto wybrać nas?</h2>
                 <div class="why-cards">
@@ -135,7 +134,6 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
                 </div>
             </section>
 
-
             <section class="partners">
                 <h2>Nasi Partnerzy</h2>
                 <div class="partner-logos">
@@ -148,25 +146,31 @@ $rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowany
         </main>
 
         <script>
-            var indeks = 1;
-            pok(indeks);
+            var indeks = 1; // Inicjalizacja indeksu pierwszego slajdu.
+            pok(indeks); // Wyświetlenie pierwszego slajdu po załadowaniu strony.
 
+            // Funkcja do zmiany slajdu (n - o ile slajdów przesunąć).
             function plus(n) {
-                pok(indeks += n);
+                pok(indeks += n); // Zwiększenie/zmniejszenie indeksu i wyświetlenie slajdu.
             }
 
+            // Funkcja wyświetlająca slajd o podanym indeksie (n).
             function pok(n) {
                 var i;
-                var x = document.getElementsByClassName("pokazslajdow");
+                var x = document.getElementsByClassName("pokazslajdow"); // Pobranie wszystkich elementów z klasą "pokazslajdow".
+                // Jeśli indeks jest większy niż liczba slajdów, wróć do pierwszego.
                 if (n > x.length) {
                     indeks = 1
                 }
+                // Jeśli indeks jest mniejszy niż 1, przejdź do ostatniego slajdu.
                 if (n < 1) {
                     indeks = x.length
                 }
+                // Ukrycie wszystkich slajdów.
                 for (i = 0; i < x.length; i++) {
                     x[i].style.display = "none";
                 }
+                // Wyświetlenie slajdu o aktualnym indeksie.
                 x[indeks - 1].style.display = "block";
             }
         </script>

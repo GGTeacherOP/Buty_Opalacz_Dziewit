@@ -1,15 +1,18 @@
 <?php
-session_start();
-include 'auth_utils.php';
+session_start(); // Rozpoczęcie sesji PHP.
+include 'auth_utils.php'; // Dołączenie pliku z funkcjami autoryzacji.
 
+// Sprawdzenie, czy zalogowany użytkownik ma rolę 'szef'.
 if (!czy_ma_role(['szef'])) {
-    header("Location: index.php");
-    exit;
+    header("Location: index.php"); // Jeśli nie ma roli 'szef', przekieruj na stronę główną.
+    exit; // Zakończ wykonywanie skryptu.
 }
 
+// Nawiązanie połączenia z bazą danych MySQL.
 $conn = new mysqli("localhost", "root", "", "buty");
+// Sprawdzenie, czy wystąpił błąd podczas łączenia z bazą danych.
 if ($conn->connect_error) {
-    die("Błąd połączenia z bazą danych: " . $conn->connect_error);
+    die("Błąd połączenia z bazą danych: " . $conn->connect_error); // Wyświetlenie błędu i zatrzymanie skryptu.
 }
 
 ?>
@@ -103,5 +106,5 @@ if ($conn->connect_error) {
 </html>
 
 <?php
-$conn->close();
+$conn->close(); // Zamknięcie połączenia z bazą danych.
 ?>

@@ -1,36 +1,44 @@
 <?php
 session_start(); // Uruchomienie sesji
-include 'auth_utils.php';
+include 'auth_utils.php'; // Dołączenie pliku z funkcjami autoryzacji
+
+// Sprawdzenie, czy użytkownik jest zalogowany i jaka jest jego rola
 $zalogowany = isset($_SESSION['username']);
-$rola = $_SESSION['rola'] ?? 'gość';  // Domyślnie 'gość' dla niezalogowanych
+$rola = $_SESSION['rola'] ?? 'gość';  // Jeśli nie podano roli, przypisz 'gość'
 
+// Obsługa formularza po jego wysłaniu (metoda POST)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $con = mysqli_connect("localhost", "root", "", "buty");
+    $con = mysqli_connect("localhost", "root", "", "buty"); // Połączenie z bazą danych
 
+    // Sprawdzenie połączenia z bazą
     if (!$con) {
         $_SESSION['komunikat'] = "Błąd połączenia z bazą danych.";
         header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
 
+    // Oczyszczenie danych z formularza przed zapisaniem do bazy
     $imie = mysqli_real_escape_string($con, $_POST["imie"]);
     $email = mysqli_real_escape_string($con, $_POST["email"]);
     $pytanie = mysqli_real_escape_string($con, $_POST["pytanie"]);
 
+    // Zapytanie SQL - dodanie wiadomości do bazy danych
     $insert_query = "INSERT INTO wiadomosci (imie, email, pytanie)
                      VALUES ('$imie', '$email', '$pytanie')";
 
+    // Sprawdzenie, czy zapytanie zostało wykonane
     if (mysqli_query($con, $insert_query)) {
         $_SESSION['komunikat'] = 'Wiadomość została wysłana! Dziękujemy za kontakt 😊';
     } else {
         $_SESSION['komunikat'] = 'Błąd podczas wysyłania wiadomości.';
     }
 
-    mysqli_close($con);
-    header("Location: " . $_SERVER['REQUEST_URI']);
+    mysqli_close($con); // Zamknięcie połączenia
+    header("Location: " . $_SERVER['REQUEST_URI']); // Odświeżenie strony po wysłaniu
     exit;
 }
 ?>
+
 
 
 
@@ -301,7 +309,8 @@ form button:hover {
                 info@buty.pl</p>
             </div>
         </div>
-            <?php
+<?php
+// Sprawdzenie czy jest komunikat i wyświetlenie go jako "toast"
 if (!empty($_SESSION['komunikat'])) {
     $komunikat = $_SESSION['komunikat'];
     $klasa = (strpos($komunikat, 'Błąd') !== false) ? 'blad' : '';
@@ -316,7 +325,7 @@ if (!empty($_SESSION['komunikat'])) {
         });
     </script>";
 
-    unset($_SESSION['komunikat']);
+    unset($_SESSION['komunikat']); // Wyczyszczenie komunikatu
 }
 ?>
     </main>
